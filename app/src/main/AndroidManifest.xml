@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.ruanmeng.village_arrival">
+
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <application
+        android:name="com.ruanmeng.Application"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".GuideActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RegisterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ForgetActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".BindActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".InfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".NicknameActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RealActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".WebActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AccountActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MarginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".WithdrawActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AccountDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".WithdrawResultActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".FeedbackActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AboutActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ProblemActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MessageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ApplyActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AddressActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AddressAddActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".GrabActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ShareActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".IssueActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".IssueDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".GrabDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".IssuePayActivity" />
+        <activity android:name=".IssueCommentActivity"></activity>
+    </application>
+
+</manifest>

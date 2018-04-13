@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">村村通</string>
+
+    <string name="checking">实名认证审核中，请耐心等待</string>
+    <string name="check_failed">认证失败：照片不清晰，请重新认证</string>
+    <string name="real_hint">我们将保护您的隐私，请务必确保真实、有效信息</string>
+    <string name="margin_hint">您的保证金状态为冻结中</string>
+    <string name="applying">认证审核中，请耐心等待</string>
+</resources>

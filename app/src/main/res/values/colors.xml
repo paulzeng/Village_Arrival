@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="colorPrimary">@android:color/white</color>
+    <color name="colorPrimaryDark">#1C1C1C</color>
+    <color name="colorAccent">#077AFA</color>
+    <color name="colorControlNormal">#CCCCCC</color>
+    <color name="background">#F1F1F1</color>
+    <color name="navigationBarColor">#000000</color>
+    <color name="divider">#E7E7E7</color>
+
+    <color name="black_dark">#000000</color>
+    <color name="black">#333333</color>
+    <color name="gray">#666666</color>
+    <color name="light">#999999</color>
+    <color name="lighter">#CCCCCC</color>
+    <color name="white">@android:color/white</color>
+    <color name="orange">#FF6600</color>
+    <color name="red">#F23030</color>
+    <color name="transparent">@android:color/transparent</color>
+
+</resources>

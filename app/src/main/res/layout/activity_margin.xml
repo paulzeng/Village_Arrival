@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <net.cachapa.expandablelayout.ExpandableLayout
+        android:id="@+id/margin_expand"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:el_duration="300"
+        app:el_expanded="true">
+
+        <TextView
+            android:id="@+id/margin_hint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFEDDF"
+            android:drawablePadding="@dimen/dimen_size_5"
+            android:drawableStart="@mipmap/per_cer_icon01"
+            android:padding="@dimen/dimen_size_10"
+            android:text="@string/margin_hint"
+            android:textColor="@color/orange" />
+
+    </net.cachapa.expandablelayout.ExpandableLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="@dimen/dimen_size_15">
+
+        <TextView
+            android:id="@+id/margin_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="冻结中"
+            android:textColor="@color/colorAccent" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="@dimen/dimen_size_30"
+            android:layout_marginBottom="@dimen/dimen_size_30"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/dimen_size_60"
+                android:layout_height="@dimen/dimen_size_60"
+                android:src="@mipmap/per_acc_icon03"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                style="@style/Font13_black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_size_10"
+                android:text="保证金(元)" />
+
+            <TextView
+                android:id="@+id/margin_total"
+                style="@style/Font14_black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_size_5"
+                android:text="0.00"
+                android:textSize="@dimen/sp_size_30" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_height"
+        android:background="@color/divider" />
+
+    <Button
+        android:id="@+id/bt_freeze"
+        style="@style/Font15_white"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/btn_height"
+        android:layout_margin="@dimen/dimen_size_20"
+        android:background="@drawable/rec_bg_blue_shade"
+        android:onClick="doClick"
+        android:text="冻结" />
+
+</LinearLayout>

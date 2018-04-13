@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/item_issue_divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_size_10" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_height"
+        android:background="@color/divider" />
+
+    <LinearLayout
+        android:id="@+id/item_issue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingEnd="@dimen/dimen_size_10"
+        android:paddingStart="@dimen/dimen_size_10">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line_height"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/item_issue_time"
+                style="@style/Font14_light"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="抢单时间：0分钟" />
+
+            <TextView
+                android:id="@+id/item_issue_status"
+                style="@style/Font14_light"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="进行中"
+                android:textColor="@color/colorAccent" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/divider_height"
+            android:background="@color/divider" />
+
+        <TextView
+            android:id="@+id/item_issue_name"
+            style="@style/Font15_black"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line_height"
+            android:gravity="center_vertical"
+            android:text="代买/顺风商品：名称" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/item_issue_img1"
+                    android:layout_width="@dimen/dimen_size_25"
+                    android:layout_height="@dimen/dimen_size_25"
+                    android:layout_marginEnd="@dimen/dimen_size_10"
+                    android:src="@mipmap/index_lab01"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/item_issue_addr1"
+                    style="@style/Font14_black"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="@dimen/dimen_size_3"
+                    android:text="地址" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/item_issue_name1"
+                style="@style/Font14_light"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dimen_size_35"
+                android:layout_marginTop="@dimen/dimen_size_5"
+                android:lineSpacingExtra="@dimen/dimen_size_3"
+                android:text="姓名    电话" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_size_10"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/item_issue_img2"
+                    android:layout_width="@dimen/dimen_size_25"
+                    android:layout_height="@dimen/dimen_size_25"
+                    android:layout_marginEnd="@dimen/dimen_size_10"
+                    android:src="@mipmap/index_lab02"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/item_issue_addr2"
+                    style="@style/Font14_black"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="@dimen/dimen_size_3"
+                    android:text="地址" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/item_issue_name2"
+                style="@style/Font14_light"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dimen_size_35"
+                android:layout_marginTop="@dimen/dimen_size_5"
+                android:lineSpacingExtra="@dimen/dimen_size_3"
+                android:text="姓名    电话" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/divider_height"
+            android:layout_marginTop="@dimen/dimen_size_15"
+            android:background="@color/divider" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dimen_size_10"
+            android:layout_marginTop="@dimen/dimen_size_10">
+
+            <TextView
+                style="@style/Font14_light"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="佣金：" />
+
+            <TextView
+                android:id="@+id/item_issue_yong"
+                style="@style/Font14_black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/red"
+                android:textSize="@dimen/sp_size_20" />
+
+            <TextView
+                style="@style/Font14_black"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="元"
+                android:textColor="@color/red" />
+
+            <TextView
+                android:id="@+id/item_issue_del"
+                style="@style/Font15_black"
+                android:layout_width="@dimen/dimen_size_90"
+                android:layout_height="@dimen/dimen_size_30"
+                android:layout_marginBottom="@dimen/dimen_size_1"
+                android:layout_marginTop="@dimen/dimen_size_1"
+                android:background="@drawable/rec_bg_trans_stroke_blue"
+                android:gravity="center"
+                android:text="取消订单"
+                android:textColor="@color/colorAccent" />
+
+            <TextView
+                android:id="@+id/item_issue_pay"
+                style="@style/Font15_black"
+                android:layout_width="@dimen/dimen_size_90"
+                android:layout_height="@dimen/dimen_size_30"
+                android:layout_marginBottom="@dimen/dimen_size_1"
+                android:layout_marginStart="@dimen/dimen_size_15"
+                android:layout_marginTop="@dimen/dimen_size_1"
+                android:background="@drawable/rec_bg_trans_stroke_blue"
+                android:gravity="center"
+                android:text="立即付款"
+                android:textColor="@color/colorAccent" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_height"
+        android:layout_marginBottom="@dimen/dimen_size_10"
+        android:background="@color/divider" />
+
+</LinearLayout>

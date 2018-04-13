@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <net.cachapa.expandablelayout.ExpandableLayout
+        android:id="@+id/apply_expand"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:el_duration="300"
+        app:el_expanded="false">
+
+        <TextView
+            android:id="@+id/apply_hint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFEDDF"
+            android:drawablePadding="@dimen/dimen_size_5"
+            android:drawableStart="@mipmap/per_cer_icon01"
+            android:padding="@dimen/dimen_size_10"
+            android:text="@string/applying"
+            android:textColor="@color/orange" />
+
+    </net.cachapa.expandablelayout.ExpandableLayout>
+
+    <com.allen.library.SuperTextView
+        android:id="@+id/apply_phone"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_size_46"
+        android:layout_marginTop="@dimen/dimen_size_10"
+        app:sBottomLineMargin="@dimen/dimen_size_10"
+        app:sLeftTextColor="@color/black"
+        app:sLeftTextMarginLeft="@dimen/dimen_size_10"
+        app:sLeftTextString="手机号码"
+        app:sLineShow="both"
+        app:sRightIconMarginRight="@dimen/dimen_size_10"
+        app:sRightTextColor="@color/light"
+        app:sRightTextMarginRight="@dimen/dimen_size_15"
+        app:sTopLineMargin="@dimen/dimen_size_10" />
+
+    <com.allen.library.SuperTextView
+        android:id="@+id/apply_gender"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_size_45.5"
+        app:sBottomLineMargin="@dimen/dimen_size_10"
+        app:sLeftTextColor="@color/black"
+        app:sLeftTextMarginLeft="@dimen/dimen_size_10"
+        app:sLeftTextString="性别"
+        app:sLineShow="bottom"
+        app:sRightIconMarginRight="@dimen/dimen_size_10"
+        app:sRightIconRes="@mipmap/per_ent"
+        app:sRightIconSize="@dimen/dimen_size_15"
+        app:sRightTextColor="@color/light"
+        app:sRightTextMarginRight="@dimen/dimen_size_30" />
+
+    <com.allen.library.SuperTextView
+        android:id="@+id/apply_real"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_size_45.5"
+        app:sBottomLineMargin="@dimen/dimen_size_10"
+        app:sLeftTextColor="@color/black"
+        app:sLeftTextMarginLeft="@dimen/dimen_size_10"
+        app:sLeftTextString="实名认证"
+        app:sLineShow="bottom"
+        app:sRightIconMarginRight="@dimen/dimen_size_10"
+        app:sRightIconRes="@mipmap/per_ent"
+        app:sRightIconSize="@dimen/dimen_size_15"
+        app:sRightTextColor="@color/light"
+        app:sRightTextMarginRight="@dimen/dimen_size_30"
+        app:sRightTextString="未认证" />
+
+    <com.allen.library.SuperTextView
+        android:id="@+id/apply_addr"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_size_45.5"
+        app:sBottomLineMargin="@dimen/dimen_size_0"
+        app:sLeftTextColor="@color/black"
+        app:sLeftTextMarginLeft="@dimen/dimen_size_10"
+        app:sLeftTextString="常用地址"
+        app:sLineShow="bottom"
+        app:sRightIconMarginRight="@dimen/dimen_size_10"
+        app:sRightIconRes="@mipmap/per_ent"
+        app:sRightIconSize="@dimen/dimen_size_15"
+        app:sRightTextColor="@color/light"
+        app:sRightTextMarginRight="@dimen/dimen_size_30"
+        app:sRightTextString="未添加"/>
+
+    <Button
+        android:id="@+id/bt_apply"
+        style="@style/Font15_white"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/btn_height"
+        android:layout_margin="@dimen/dimen_size_20"
+        android:background="@drawable/rec_bg_blue_shade"
+        android:onClick="doClick"
+        android:text="立即申请" />
+
+</LinearLayout>
