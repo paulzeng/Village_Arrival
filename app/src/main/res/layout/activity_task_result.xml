@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/task_img"
+        android:layout_width="@dimen/dimen_size_100"
+        android:layout_height="@dimen/dimen_size_100"
+        android:layout_marginTop="@dimen/dimen_size_100"
+        android:src="@mipmap/pay_success"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/task_hint"
+        style="@style/Font15_black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_size_10"
+        android:text="支付成功" />
+
+    <TextView
+        android:id="@+id/task_result"
+        style="@style/Font13_light"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dimen_size_30"
+        android:layout_marginStart="@dimen/dimen_size_30"
+        android:layout_marginTop="@dimen/dimen_size_10"
+        android:gravity="center"
+        android:lineSpacingExtra="@dimen/dimen_size_5"
+        android:text="接单中，请耐心等待" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_size_20">
+
+        <Button
+            android:id="@+id/task_cancel"
+            style="@style/Font15_light"
+            android:layout_width="@dimen/dimen_size_130"
+            android:layout_height="@dimen/btn_height"
+            android:background="@drawable/rec_bg_trans_stroke_lighter"
+            android:onClick="doClick"
+            android:text="取消订单" />
+
+        <Button
+            android:id="@+id/task_look"
+            style="@style/Font15_light"
+            android:layout_width="@dimen/dimen_size_130"
+            android:layout_height="@dimen/btn_height"
+            android:layout_marginStart="@dimen/dimen_size_30"
+            android:background="@drawable/rec_bg_trans_stroke_blue"
+            android:onClick="doClick"
+            android:text="查看订单"
+            android:textColor="@color/colorAccent" />
+
+    </LinearLayout>
+
+</LinearLayout>

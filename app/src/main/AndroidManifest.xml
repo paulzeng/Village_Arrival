@@ -105,7 +105,14 @@
             android:name=".GrabDetailActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".IssuePayActivity" />
-        <activity android:name=".IssueCommentActivity"></activity>
+        <activity android:name=".IssueCommentActivity" />
+        <activity android:name=".TaskActivity" />
+        <activity android:name=".TaskResultActivity" />
+        <activity android:name=".TaskGrabActivity" />
+        <activity android:name=".TaskContactActivity" />
+        <activity android:name=".LiveActivity" />
+        <activity android:name=".LiveMineActivity" />
+        <activity android:name=".LiveDetailActivity"></activity>
     </application>
 
 </manifest>

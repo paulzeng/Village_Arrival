@@ -1,17 +1,27 @@
 package com.ruanmeng.village_arrival
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.view.GravityCompat
+import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
+import android.widget.LinearLayout
 import com.amap.api.AMapLocationHelper
 import com.amap.api.maps.AMap
 import com.amap.api.maps.CameraUpdateFactory
 import com.amap.api.maps.model.LatLng
 import com.amap.api.maps.model.MyLocationStyle
+import com.flyco.animation.FadeEnter.FadeEnter
+import com.flyco.animation.FadeExit.FadeExit
+import com.flyco.dialog.widget.popup.BubblePopup
+import com.github.library.bubbleview.BubbleLinearLayout
 import com.ruanmeng.base.BaseActivity
 import com.ruanmeng.base.showToast
 import com.ruanmeng.base.startActivity
+import com.ruanmeng.utils.CommonUtil
+import com.ruanmeng.utils.DensityUtil
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity() {
@@ -82,6 +92,52 @@ class MainActivity : BaseActivity() {
         }
     }
 
+    @Suppress("DEPRECATION")
+    override fun doClick(v: View) {
+        super.doClick(v)
+        when (v.id) {
+            R.id.main_grab -> startActivity<TaskGrabActivity>()
+            R.id.main_issue -> {
+                val inflate = View.inflate(baseContext, R.layout.pop_main_issue, null)
+                val popBuy = inflate.findViewById<LinearLayout>(R.id.pop_buy)
+                val popGet = inflate.findViewById<LinearLayout>(R.id.pop_get)
+                val popBubble = inflate.findViewById<BubbleLinearLayout>(R.id.pop_bubble)
+
+                val width = CommonUtil.getScreenWidth(baseContext) - DensityUtil.dp2px(40f)
+                popBubble.layoutParams = ViewGroup.LayoutParams(width, ViewGroup.LayoutParams.WRAP_CONTENT)
+
+                val bubblePopup = BubblePopup(baseContext, inflate)
+                bubblePopup.anchorView(main_issue)
+                        .bubbleColor(resources.getColor(R.color.transparent))
+                        .showAnim(FadeEnter().duration(300))
+                        .dismissAnim(FadeExit().duration(300))
+                        .gravity(Gravity.TOP)
+                        .show()
+
+                popBuy.setOnClickListener {
+                    bubblePopup.dismiss()
+                    window.decorView.postDelayed({
+                        runOnUiThread {
+                            val intent = Intent(baseContext, TaskActivity::class.java)
+                            intent.putExtra("type", "buy")
+                            startActivity(intent)
+                        }
+                    }, 500)
+                }
+                popGet.setOnClickListener {
+                    bubblePopup.dismiss()
+                    window.decorView.postDelayed({
+                        runOnUiThread {
+                            val intent = Intent(baseContext, TaskActivity::class.java)
+                            intent.putExtra("type", "get")
+                            startActivity(intent)
+                        }
+                    }, 300)
+                }
+            }
+        }
+    }
+
     override fun onClick(v: View) {
         drawer.closeDrawer(GravityCompat.START)
 
@@ -98,12 +154,12 @@ class MainActivity : BaseActivity() {
                     R.id.nav_addr -> startActivity<AddressActivity>()
                     R.id.nav_status -> startActivity<ApplyActivity>()
                     R.id.nav_share -> startActivity<ShareActivity>()
-                    R.id.nav_live -> { }
+                    R.id.nav_live -> startActivity<LiveMineActivity>()
                 }
             }
         }, 300)
     }
-    
+
     private var exitTime: Long = 0
     override fun onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {

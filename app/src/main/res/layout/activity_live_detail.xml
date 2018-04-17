@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        layout="@layout/layout_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_height"
+        android:background="@color/divider" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dimen_size_8"
+            android:layout_marginEnd="@dimen/dimen_size_10"
+            android:layout_marginStart="@dimen/dimen_size_10"
+            android:layout_marginTop="@dimen/dimen_size_8"
+            android:background="@drawable/rec_bg_background"
+            android:gravity="center_vertical">
+
+            <EditText
+                android:id="@+id/comment_hint"
+                style="@style/Font14_black"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/transparent"
+                android:hint="我要回复"
+                android:lineSpacingExtra="@dimen/dimen_size_3"
+                android:minHeight="@dimen/btn_height"
+                android:paddingEnd="@dimen/dimen_size_10"
+                android:paddingStart="@dimen/dimen_size_10" />
+
+            <ImageView
+                android:layout_width="@dimen/line_height"
+                android:layout_height="@dimen/dimen_size_25"
+                android:src="@mipmap/ass_lab_icon08"
+                tools:ignore="ContentDescription" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</LinearLayout>

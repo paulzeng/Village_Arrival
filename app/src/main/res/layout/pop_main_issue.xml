@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.github.library.bubbleview.BubbleLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/pop_bubble"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="@dimen/dimen_size_20"
+    android:layout_marginStart="@dimen/dimen_size_20"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    app:angle="@dimen/dimen_size_5"
+    app:arrowCenter="true"
+    app:arrowHeight="@dimen/dimen_size_10"
+    app:arrowLocation="bottom"
+    app:arrowWidth="@dimen/dimen_size_15"
+    app:bubbleColor="@color/white">
+
+    <LinearLayout
+        android:id="@+id/pop_buy"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dimen_size_20"
+        android:layout_marginTop="@dimen/dimen_size_15"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:onClick="doClick">
+
+        <ImageView
+            android:layout_width="@dimen/dimen_size_50"
+            android:layout_height="@dimen/dimen_size_50"
+            android:src="@mipmap/index_lab03"
+            tools:ignore="ContentDescription" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_size_10"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/Font14_black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="代买" />
+
+            <TextView
+                style="@style/Font13_light"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_size_5"
+                android:text="1小时内送达" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/pop_get"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dimen_size_20"
+        android:layout_marginTop="@dimen/dimen_size_15"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:onClick="doClick">
+
+        <ImageView
+            android:layout_width="@dimen/dimen_size_50"
+            android:layout_height="@dimen/dimen_size_50"
+            android:src="@mipmap/index_lab04"
+            tools:ignore="ContentDescription" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_size_10"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/Font14_black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="顺风取送" />
+
+            <TextView
+                style="@style/Font13_light"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_size_5"
+                android:text="速度就是快" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.github.library.bubbleview.BubbleLinearLayout>
