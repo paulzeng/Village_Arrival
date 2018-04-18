@@ -23,11 +23,15 @@ public class SimpleBaseResponse implements Serializable {
 
     public int code;
     public String info;
+    public int msgcode;
+    public String msg;
 
     public BaseResponse toBaseResponse() {
         BaseResponse lzyResponse = new BaseResponse();
         lzyResponse.code = code;
         lzyResponse.info = info;
+        lzyResponse.msgcode = msgcode;
+        lzyResponse.msg = msg;
         return lzyResponse;
     }
 }

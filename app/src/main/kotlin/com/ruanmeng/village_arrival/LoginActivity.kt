@@ -17,7 +17,7 @@ class LoginActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        init_title("登录账号", "注册")
+        init_title("登录账号")
     }
 
     override fun init_title() {
@@ -42,8 +42,8 @@ class LoginActivity : BaseActivity() {
     override fun doClick(v: View) {
         super.doClick(v)
         when (v.id) {
-            R.id.tv_nav_right -> startActivity<RegisterActivity>()
             R.id.tv_forget -> startActivity<ForgetActivity>()
+            R.id.tv_register -> startActivity<RegisterActivity>()
             R.id.bt_login -> {
                 if (!CommonUtil.isMobile(et_name.text.toString())) {
                     et_name.requestFocus()
@@ -70,7 +70,7 @@ class LoginActivity : BaseActivity() {
 
                                 putBoolean("isLogin", true)
                                 putString("token", obj.optString("token"))
-                                putString("mobile", obj.optString("telephone"))
+                                putString("mobile", obj.optString("mobile"))
 
                                 startActivity<MainActivity>()
                                 ActivityStack.screenManager.popActivities(this@LoginActivity::class.java)
@@ -84,6 +84,12 @@ class LoginActivity : BaseActivity() {
     private fun clearData() {
         putBoolean("isLogin", false)
         putString("token", "")
+
+        putString("nickName", "")
+        putString("userhead", "")
+        putString("sex", "")
+        putString("pass", "")
+        putString("status", "")
     }
 
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {

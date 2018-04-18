@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.jude.rollviewpager.RollPagerView
+            android:id="@+id/live_banner"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_size_200"
+            app:rollviewpager_hint_gravity="center"
+            app:rollviewpager_play_delay="3000" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line_height"
+            android:layout_marginTop="@dimen/toolbar_padding_top">
+
+            <TextView
+                android:id="@id/tv_nav_title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="@dimen/dimen_size_45"
+                android:layout_marginStart="@dimen/dimen_size_45"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:text="城市"
+                android:textSize="@dimen/sp_size_18" />
+
+            <ImageView
+                android:id="@id/iv_nav_back"
+                android:layout_width="@dimen/dimen_size_90"
+                android:layout_height="@dimen/dimen_size_45"
+                android:layout_gravity="center_vertical"
+                android:onClick="doClick"
+                android:paddingEnd="@dimen/dimen_size_55"
+                android:paddingStart="@dimen/dimen_size_0"
+                android:src="@mipmap/nav_back_white"
+                tools:ignore="ContentDescription" />
+
+        </FrameLayout>
+
+    </FrameLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_height"
+        android:background="@color/divider" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:baselineAligned="false"
+        android:paddingBottom="@dimen/dimen_size_10"
+        android:paddingTop="@dimen/dimen_size_10">
+
+        <LinearLayout
+            android:id="@+id/live_tel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:onClick="doClick"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/dimen_size_55"
+                android:layout_height="@dimen/dimen_size_55"
+                android:src="@mipmap/ass_icon01"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                style="@style/Font13_black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_size_5"
+                android:text="常用电话" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/live_job"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:onClick="doClick"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/dimen_size_55"
+                android:layout_height="@dimen/dimen_size_55"
+                android:src="@mipmap/ass_icon02"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                style="@style/Font13_black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_size_5"
+                android:text="找工作" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/live_sale"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:onClick="doClick"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/dimen_size_55"
+                android:layout_height="@dimen/dimen_size_55"
+                android:src="@mipmap/ass_icon03"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                style="@style/Font13_black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_size_5"
+                android:text="促销" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:baselineAligned="false"
+        android:paddingBottom="@dimen/dimen_size_10">
+
+        <LinearLayout
+            android:id="@+id/live_second"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:onClick="doClick"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/dimen_size_55"
+                android:layout_height="@dimen/dimen_size_55"
+                android:src="@mipmap/ass_icon04"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                style="@style/Font13_black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_size_5"
+                android:text="二手信息" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/live_service"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:onClick="doClick"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/dimen_size_55"
+                android:layout_height="@dimen/dimen_size_55"
+                android:src="@mipmap/ass_icon05"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                style="@style/Font13_black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_size_5"
+                android:text="生活服务" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/live_more"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:onClick="doClick"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/dimen_size_55"
+                android:layout_height="@dimen/dimen_size_55"
+                android:src="@mipmap/ass_icon06"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                style="@style/Font13_black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_size_5"
+                android:text="更多服务" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_height"
+        android:background="@color/divider" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_height"
+        android:layout_marginTop="@dimen/dimen_size_10"
+        android:background="@color/divider" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_size_70"
+        android:background="@color/white">
+
+        <ImageView
+            android:layout_width="@dimen/dimen_size_40"
+            android:layout_height="@dimen/dimen_size_40"
+            android:layout_margin="@dimen/dimen_size_15"
+            android:src="@mipmap/ass_lab_icon01"
+            tools:ignore="ContentDescription" />
+
+        <com.ruanmeng.view.SwitcherTextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/dimen_size_15" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_height"
+        android:background="@color/divider" />
+
+    <com.allen.library.SuperTextView
+        android:id="@+id/live_rec"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_size_46"
+        android:layout_marginTop="@dimen/dimen_size_10"
+        app:sBothLineMargin="@dimen/dimen_size_0"
+        app:sLeftIconMarginLeft="@dimen/dimen_size_8"
+        app:sLeftIconRes="@mipmap/ass_icon07"
+        app:sLeftIconSize="@dimen/dimen_size_13"
+        app:sLeftTextColor="@color/black"
+        app:sLeftTextMarginLeft="@dimen/dimen_size_5"
+        app:sLeftTextString="推荐信息"
+        app:sLineShow="both"
+        app:sRightIconMarginRight="@dimen/dimen_size_10"
+        app:sRightIconRes="@mipmap/per_ent"
+        app:sRightIconSize="@dimen/dimen_size_15"
+        app:sRightTextColor="@color/gray"
+        app:sRightTextMarginRight="@dimen/dimen_size_25"
+        app:sRightTextSize="@dimen/sp_size_13"
+        app:sRightTextString="更多" />
+
+</LinearLayout>

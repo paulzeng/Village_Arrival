@@ -1,5 +1,6 @@
 package com.ruanmeng.village_arrival
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -11,18 +12,22 @@ import android.widget.LinearLayout
 import com.amap.api.AMapLocationHelper
 import com.amap.api.maps.AMap
 import com.amap.api.maps.CameraUpdateFactory
+import com.amap.api.maps.model.BitmapDescriptorFactory
 import com.amap.api.maps.model.LatLng
 import com.amap.api.maps.model.MyLocationStyle
 import com.flyco.animation.FadeEnter.FadeEnter
 import com.flyco.animation.FadeExit.FadeExit
 import com.flyco.dialog.widget.popup.BubblePopup
 import com.github.library.bubbleview.BubbleLinearLayout
-import com.ruanmeng.base.BaseActivity
-import com.ruanmeng.base.showToast
-import com.ruanmeng.base.startActivity
+import com.lzg.extend.StringDialogCallback
+import com.lzy.okgo.OkGo
+import com.lzy.okgo.model.Response
+import com.ruanmeng.base.*
+import com.ruanmeng.share.BaseHttp
 import com.ruanmeng.utils.CommonUtil
 import com.ruanmeng.utils.DensityUtil
 import kotlinx.android.synthetic.main.activity_main.*
+import org.json.JSONObject
 
 class MainActivity : BaseActivity() {
 
@@ -39,6 +44,11 @@ class MainActivity : BaseActivity() {
         startLocation()
     }
 
+    override fun onStart() {
+        super.onStart()
+        getPersonData()
+    }
+
     override fun init_title() {
         aMap = main_map.map
 
@@ -47,6 +57,7 @@ class MainActivity : BaseActivity() {
             interval(5000)
             strokeColor(Color.TRANSPARENT)
             radiusFillColor(Color.TRANSPARENT)
+            myLocationIcon(BitmapDescriptorFactory.fromResource(R.mipmap.index_pos))
         }
 
         aMap.isTrafficEnabled = false       //实时交通状况
@@ -96,7 +107,9 @@ class MainActivity : BaseActivity() {
     override fun doClick(v: View) {
         super.doClick(v)
         when (v.id) {
+            R.id.main_msg -> startActivity<MessageActivity>()
             R.id.main_grab -> startActivity<TaskGrabActivity>()
+            R.id.main_live -> startActivity<LiveActivity>()
             R.id.main_issue -> {
                 val inflate = View.inflate(baseContext, R.layout.pop_main_issue, null)
                 val popBuy = inflate.findViewById<LinearLayout>(R.id.pop_buy)
@@ -158,6 +171,39 @@ class MainActivity : BaseActivity() {
                 }
             }
         }, 300)
+    }
+
+    private fun getPersonData() {
+        OkGo.post<String>(BaseHttp.user_msg_data)
+                .tag(this@MainActivity)
+                .headers("token", getString("token"))
+                .execute(object : StringDialogCallback(baseContext, false) {
+
+                    @SuppressLint("SetTextI18n")
+                    override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
+
+                        val obj = JSONObject(response.body()).getJSONObject("userMsg") ?: JSONObject()
+                        putString("nickName", obj.getString("nickName"))
+                        putString("userhead", obj.getString("userhead"))
+                        putString("sex", obj.getString("sex"))
+                        putString("pass", obj.getString("pass"))
+                        putString("status", obj.getString("astatus"))
+
+                        nav_name.text = getString("nickName")
+                        nav_tel.text = "手机  ${CommonUtil.phoneReplaceWithStar(getString("mobile"))}"
+
+                        if (nav_img.getTag(R.id.nav_img) == null) {
+                            nav_img.loadImage(BaseHttp.baseImg + getString("userhead"))
+                            nav_img.setTag(R.id.nav_img, getString("userhead"))
+                        } else {
+                            if (nav_img.getTag(R.id.nav_img) != getString("userhead")) {
+                                nav_img.loadImage(BaseHttp.baseImg + getString("userhead"))
+                                nav_img.setTag(R.id.nav_img, getString("userhead"))
+                            }
+                        }
+                    }
+
+                })
     }
 
     private var exitTime: Long = 0

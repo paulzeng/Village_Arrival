@@ -18,6 +18,7 @@
         android:background="@color/white"
         android:gravity="top"
         android:hint="请输入您对我们的建议（150字以内）"
+        android:lineSpacingExtra="@dimen/dimen_size_3"
         android:maxLength="150"
         android:minLines="8"
         android:padding="@dimen/dimen_size_10" />

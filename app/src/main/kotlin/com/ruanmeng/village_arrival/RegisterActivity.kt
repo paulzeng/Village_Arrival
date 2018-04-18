@@ -79,7 +79,10 @@ class RegisterActivity : BaseActivity() {
 
                                 YZM = JSONObject(response.body()).optString("object")
                                 mTel = et_name.text.trim().toString()
-                                if (BuildConfig.LOG_DEBUG) et_yzm.setText(YZM)
+                                if (BuildConfig.LOG_DEBUG) {
+                                    et_yzm.setText(YZM)
+                                    et_yzm.setSelection(et_yzm.text.length)
+                                }
 
                                 bt_yzm.isClickable = false
                                 time_count = 180
@@ -116,10 +119,19 @@ class RegisterActivity : BaseActivity() {
                 OkGo.post<String>(BaseHttp.register_sub)
                         .tag(this@RegisterActivity)
                         .params("mobile", mTel)
+                        .params("loginType", "mobile")
                         .params("smscode", et_yzm.text.trim().toString())
                         .params("password", et_pwd.text.trim().toString())
                         .execute(object : StringDialogCallback(baseContext) {
-
+                            /*{
+                                "msg": "注册成功",
+                                "msgcode": 100,
+                                "object": { "token": "Q1IHRZHQP8XJE2HZIAV" },
+                                "success": true,
+                                "close": true,
+                                "type": "success",
+                                "refrsh": true
+                            }*/
                             override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
 
                                 showToast(msg)

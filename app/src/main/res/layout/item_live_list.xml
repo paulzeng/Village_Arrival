@@ -45,6 +45,7 @@
                     android:drawablePadding="@dimen/dimen_size_3"
                     android:drawableStart="@mipmap/ass_lab_icon05"
                     android:gravity="center_vertical"
+                    android:paddingTop="@dimen/dimen_size_10"
                     android:text="地区" />
 
                 <TextView
@@ -56,12 +57,13 @@
                     android:drawablePadding="@dimen/dimen_size_3"
                     android:drawableStart="@mipmap/ass_lab_icon06"
                     android:gravity="center_vertical"
+                    android:paddingTop="@dimen/dimen_size_10"
                     android:text="0分钟前" />
 
                 <View
                     android:layout_width="0dp"
                     android:layout_height="@dimen/dimen_size_1"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
 
                 <TextView
                     android:id="@+id/item_live_comment"
@@ -71,6 +73,7 @@
                     android:drawablePadding="@dimen/dimen_size_3"
                     android:drawableStart="@mipmap/ass_lab_icon07"
                     android:gravity="center_vertical"
+                    android:paddingTop="@dimen/dimen_size_10"
                     android:text="0" />
 
                 <TextView
@@ -78,11 +81,11 @@
                     style="@style/Font13_light"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dimen_size_20"
                     android:drawablePadding="@dimen/dimen_size_3"
                     android:drawableStart="@mipmap/ass_lab_icon04"
-                    android:layout_marginStart="@dimen/dimen_size_20"
-                    android:paddingTop="@dimen/dimen_size_10"
                     android:gravity="center_vertical"
+                    android:paddingTop="@dimen/dimen_size_10"
                     android:text="删除" />
 
                 <TextView
@@ -91,8 +94,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dimen_size_20"
-                    android:paddingTop="@dimen/dimen_size_10"
                     android:gravity="center_vertical"
+                    android:paddingTop="@dimen/dimen_size_10"
                     android:text="取消收藏" />
 
             </LinearLayout>
@@ -114,6 +117,12 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/divider_height"
         android:background="@color/divider"
+        android:visibility="gone" />
+
+    <View
+        android:id="@+id/item_live_divider4"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_size_10"
         android:visibility="gone" />
 
 </LinearLayout>

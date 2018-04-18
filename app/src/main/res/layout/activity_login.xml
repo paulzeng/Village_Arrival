@@ -29,7 +29,8 @@
                 android:layout_height="@dimen/dimen_size_25"
                 android:layout_marginEnd="@dimen/dimen_size_10"
                 android:adjustViewBounds="true"
-                android:src="@mipmap/log_icon01" />
+                android:src="@mipmap/log_icon01"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 style="@style/Font14_black"
@@ -76,7 +77,8 @@
                 android:layout_height="@dimen/dimen_size_25"
                 android:layout_marginEnd="@dimen/dimen_size_10"
                 android:adjustViewBounds="true"
-                android:src="@mipmap/log_icon03" />
+                android:src="@mipmap/log_icon03"
+                tools:ignore="ContentDescription" />
 
             <EditText
                 android:id="@+id/et_pwd"
@@ -106,26 +108,24 @@
         android:layout_marginTop="@dimen/dimen_size_10"
         android:gravity="center_vertical">
 
-        <CheckBox
-            android:id="@+id/cb_remember"
+        <TextView
+            android:id="@+id/tv_forget"
             style="@style/Font13_gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:button="@null"
-            android:drawablePadding="@dimen/dimen_size_5"
-            android:drawableStart="@drawable/cb_login_selector"
+            android:onClick="doClick"
             android:padding="@dimen/dimen_size_10"
-            android:text="记住密码" />
+            android:text="忘记密码？" />
 
         <TextView
-            android:id="@+id/tv_forget"
+            android:id="@+id/tv_register"
             style="@style/Font13_gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:onClick="doClick"
             android:padding="@dimen/dimen_size_10"
-            android:text="找回密码？" />
+            android:text="注册账号" />
 
     </RelativeLayout>
 

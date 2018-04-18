@@ -116,7 +116,7 @@ class ForgetActivity : BaseActivity() {
                         .tag(this@ForgetActivity)
                         .params("mobile", mTel)
                         .params("smscode", et_yzm.text.trim().toString())
-                        .params("password", et_pwd.text.trim().toString())
+                        .params("newpwd", et_pwd.text.trim().toString())
                         .execute(object : StringDialogCallback(baseContext) {
 
                             override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {

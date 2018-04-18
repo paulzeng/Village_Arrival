@@ -77,7 +77,8 @@
                 android:layout_height="@dimen/dimen_size_25"
                 android:layout_marginEnd="@dimen/dimen_size_10"
                 android:adjustViewBounds="true"
-                android:src="@mipmap/log_icon02" />
+                android:src="@mipmap/log_icon02"
+                tools:ignore="ContentDescription" />
 
             <EditText
                 android:id="@+id/et_yzm"
@@ -95,7 +96,6 @@
                 style="@style/Font13_light"
                 android:layout_width="100dp"
                 android:layout_height="@dimen/dimen_size_30"
-                android:layout_marginEnd="@dimen/dimen_size_10"
                 android:background="@drawable/rec_bg_trans_stroke_lighter"
                 android:gravity="center"
                 android:onClick="doClick"

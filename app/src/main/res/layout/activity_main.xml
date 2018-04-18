@@ -5,7 +5,7 @@
     android:id="@+id/drawer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:openDrawer="end">
+    tools:openDrawer="start">
 
     <FrameLayout
         android:id="@+id/main_view"
@@ -270,6 +270,14 @@
                         android:text="姓名"
                         android:textSize="@dimen/sp_size_16" />
 
+                    <TextView
+                        android:id="@+id/nav_tel"
+                        style="@style/Font14_white"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_size_10"
+                        android:text="手机" />
+
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -279,7 +287,8 @@
                         android:paddingBottom="@dimen/dimen_size_5"
                         android:paddingEnd="@dimen/dimen_size_15"
                         android:paddingStart="@dimen/dimen_size_15"
-                        android:paddingTop="@dimen/dimen_size_5">
+                        android:paddingTop="@dimen/dimen_size_5"
+                        android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/nav_rank"

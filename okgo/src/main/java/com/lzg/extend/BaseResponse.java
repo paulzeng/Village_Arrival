@@ -23,13 +23,17 @@ public class BaseResponse<T> implements Serializable {
 
     public int code;
     public String info;
+    public int msgcode;
+    public String msg;
     public T object;
 
     @Override
     public String toString() {
         return "BaseResponse{\n"
-                + "\tmsgcode=" + code + "\n"
-                + "\tsuccess='" + info + "\'\n"
-                + "\tdata=" + object + "\n" + '}';
+                + "\tcode=" + code + "\n"
+                + "\tinfo='" + info + "\'\n"
+                + "\tmsgcode='" + msgcode + "\'\n"
+                + "\tmsg='" + msg + "\'\n"
+                + "\tobject=" + object + "\n" + '}';
     }
 }

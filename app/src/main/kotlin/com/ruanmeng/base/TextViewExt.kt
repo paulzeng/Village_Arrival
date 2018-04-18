@@ -33,6 +33,9 @@ import android.text.Spanned
 import android.widget.TextView
 import com.ruanmeng.village_arrival.R
 
+/**
+ * 文本加载扩展类
+ */
 fun TextView.setColor(text: String, key: String) {
     @Suppress("DEPRECATION")
     setText(Html.fromHtml(text.replace(key, "<font color='${resources.getColor(R.color.colorAccent)}'>$key</font>")))

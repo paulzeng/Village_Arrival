@@ -66,7 +66,7 @@
                     android:drawableStart="@drawable/rb_task_selector1"
                     android:paddingStart="@dimen/dimen_size_30"
                     android:text="代买"
-                    android:textColor="@drawable/rb_task_selector_color" />
+                    android:textColor="@color/rb_task_selector_color" />
 
                 <View
                     android:layout_width="wrap_content"
@@ -84,7 +84,7 @@
                     android:drawableStart="@drawable/rb_task_selector2"
                     android:paddingStart="@dimen/dimen_size_16"
                     android:text="顺风取送"
-                    android:textColor="@drawable/rb_task_selector_color" />
+                    android:textColor="@color/rb_task_selector_color" />
 
                 <View
                     android:layout_width="wrap_content"
@@ -154,8 +154,8 @@
                         android:layout_weight="1"
                         android:minHeight="@dimen/line_height"
                         android:orientation="vertical"
-                        android:paddingBottom="@dimen/dimen_size_13"
-                        android:paddingTop="@dimen/dimen_size_13">
+                        android:paddingBottom="@dimen/dimen_size_14"
+                        android:paddingTop="@dimen/dimen_size_14">
 
                         <TextView
                             android:id="@+id/task_get_addr"
@@ -218,8 +218,8 @@
                         android:layout_weight="1"
                         android:minHeight="@dimen/line_height"
                         android:orientation="vertical"
-                        android:paddingBottom="@dimen/dimen_size_13"
-                        android:paddingTop="@dimen/dimen_size_13">
+                        android:paddingBottom="@dimen/dimen_size_14"
+                        android:paddingTop="@dimen/dimen_size_14">
 
                         <TextView
                             android:id="@+id/task_put_addr"
@@ -407,21 +407,19 @@
                     android:drawablePadding="@dimen/dimen_size_10"
                     android:drawableStart="@drawable/rb_pay_selector"
                     android:paddingStart="@dimen/dimen_size_10"
-                    android:text="是"
-                    android:textColor="@drawable/rb_task_selector_color" />
+                    android:text="是" />
 
                 <RadioButton
                     android:id="@+id/task_open2"
                     style="@style/Font15_black"
                     android:layout_width="@dimen/dimen_size_70"
                     android:layout_height="match_parent"
-                    android:background="@drawable/rb_task_selector3"
+                    android:background="@color/transparent"
                     android:button="@null"
                     android:drawablePadding="@dimen/dimen_size_10"
                     android:drawableStart="@drawable/rb_pay_selector"
                     android:paddingStart="@dimen/dimen_size_10"
-                    android:text="否"
-                    android:textColor="@drawable/rb_task_selector_color" />
+                    android:text="否" />
 
             </RadioGroup>
 

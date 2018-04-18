@@ -32,6 +32,8 @@ class LiveDetailActivity : BaseActivity() {
 
     override fun init_title() {
         super.init_title()
+        ivRight.visibility = View.VISIBLE
+
         swipe_refresh.refresh { getData(1) }
         recycle_list.load_Linear(baseContext, swipe_refresh) {
             if (!isLoadingMore) {
