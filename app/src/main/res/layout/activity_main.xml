@@ -39,6 +39,101 @@
                     android:src="@mipmap/index_pos"
                     tools:ignore="ContentDescription" />
 
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/dimen_size_70"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="@dimen/dimen_size_5"
+                    app:cardElevation="@dimen/dimen_size_3"
+                    app:contentPadding="@dimen/dimen_size_10">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                style="@style/Font13_light"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="我在  " />
+
+                            <TextView
+                                android:id="@+id/main_address"
+                                style="@style/Font14_black"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:maxLength="10"
+                                android:text="地址" />
+
+                            <TextView
+                                style="@style/Font13_light"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="  附近有" />
+
+                            <TextView
+                                android:id="@+id/main_order1"
+                                style="@style/Font13_light"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0单"
+                                android:textColor="@color/red" />
+
+                            <TextView
+                                style="@style/Font13_light"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="可抢" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dimen_size_5"
+                            android:gravity="center_vertical">
+
+                            <ImageView
+                                android:layout_width="@dimen/dimen_size_18"
+                                android:layout_height="@dimen/dimen_size_18"
+                                android:layout_marginEnd="@dimen/dimen_size_5"
+                                android:src="@mipmap/index_lab"
+                                tools:ignore="ContentDescription" />
+
+                            <TextView
+                                style="@style/Font13_black"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="您常用地址附近有" />
+
+                            <TextView
+                                android:id="@+id/main_order2"
+                                style="@style/Font13_black"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0单"
+                                android:textColor="@color/red" />
+
+                            <TextView
+                                style="@style/Font13_black"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="可抢" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
             </FrameLayout>
 
         </LinearLayout>

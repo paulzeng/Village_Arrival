@@ -84,6 +84,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     implementation 'com.android.support:appcompat-v7:' + versions.supportLibraryVersion
     implementation 'com.android.support:recyclerview-v7:' + versions.supportLibraryVersion
+    implementation 'com.android.support:cardview-v7:' + versions.supportLibraryVersion
     implementation 'com.android.support:design:' + versions.supportLibraryVersion
     implementation 'com.android.support:support-v4:' + versions.supportLibraryVersion
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:' + versions.kotlinPlugin
