@@ -5,7 +5,7 @@
     android:id="@+id/drawer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:openDrawer="start">
+    tools:openDrawer="end">
 
     <FrameLayout
         android:id="@+id/main_view"
@@ -22,10 +22,24 @@
                 android:layout_height="115dp"
                 android:background="@drawable/rec_bg_shade" />
 
-            <com.amap.api.maps.MapView
-                android:id="@+id/main_map"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent">
+
+                <com.amap.api.maps.MapView
+                    android:id="@+id/main_map"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <ImageView
+                    android:layout_width="@dimen/dimen_size_20"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:adjustViewBounds="true"
+                    android:src="@mipmap/index_pos"
+                    tools:ignore="ContentDescription" />
+
+            </FrameLayout>
 
         </LinearLayout>
 

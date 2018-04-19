@@ -21,5 +21,12 @@ public class BaseHttp {
 
     public static String user_msg_data = baseIp + "/user_msg_data.rm"; //个人资料√
     public static String userinfo_uploadhead_sub = baseIp + "/userinfo_uploadhead_sub.rm"; //修改头像√
+    public static String nickName_change_sub = baseIp + "/nickName_change_sub.rm"; //修改昵称√
+    public static String sex_change_sub = baseIp + "/sex_change_sub.rm"; //修改性别√
+    public static String certification_info = baseIp + "/certification_info.rm"; //实名信息√
+    public static String certification_sub = baseIp + "/certification_sub.rm"; //实名认证√
+    public static String my_account_info = baseIp + "/my_account_info.rm"; //我的账户√
     public static String my_commonaddress_list = baseIp + "/my_commonaddress_list.rm"; //地址列表√
+
+    public static String frist_index_data = baseIp + "/frist_index_data.rm"; //首页√
 }

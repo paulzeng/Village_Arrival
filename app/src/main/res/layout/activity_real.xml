@@ -17,16 +17,28 @@
             app:el_duration="300"
             app:el_expanded="false">
 
-            <TextView
-                android:id="@+id/real_hint"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#FFEDDF"
-                android:drawablePadding="@dimen/dimen_size_5"
-                android:drawableStart="@mipmap/per_cer_icon01"
-                android:padding="@dimen/dimen_size_10"
-                android:text="@string/checking"
-                android:textColor="@color/orange" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/real_hint"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#FFEDDF"
+                    android:drawablePadding="@dimen/dimen_size_5"
+                    android:drawableStart="@mipmap/per_cer_icon01"
+                    android:padding="@dimen/dimen_size_10"
+                    android:text="@string/checking"
+                    android:textColor="@color/orange" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/divider_height"
+                    android:background="@color/divider" />
+
+            </LinearLayout>
 
         </net.cachapa.expandablelayout.ExpandableLayout>
 
@@ -113,7 +125,7 @@
 
             <ImageView
                 android:id="@+id/real_hand"
-                android:layout_width="match_parent"
+                android:layout_width="@dimen/dimen_size_200"
                 android:layout_height="@dimen/dimen_size_120"
                 android:layout_marginTop="@dimen/dimen_size_15"
                 android:onClick="doClick"

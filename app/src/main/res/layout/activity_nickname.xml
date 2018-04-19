@@ -47,7 +47,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dimen_size_10"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="@dimen/dimen_size_8"
         android:text="好的名字可以让好友更好的记住你" />
 
     <Button
@@ -55,9 +55,7 @@
         style="@style/Font15_white"
         android:layout_width="match_parent"
         android:layout_height="@dimen/btn_height"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_margin="@dimen/dimen_size_20"
         android:background="@drawable/rec_bg_blue_shade"
         android:onClick="doClick"
         android:text="保存" />

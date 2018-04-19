@@ -3,6 +3,7 @@ package com.ruanmeng.village_arrival
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import com.flyco.dialog.widget.ActionSheetDialog
 import com.luck.picture.lib.PictureSelector
 import com.luck.picture.lib.config.PictureConfig
 import com.luck.picture.lib.config.PictureMimeType
@@ -31,8 +32,15 @@ class InfoActivity : BaseActivity() {
     override fun onStart() {
         super.onStart()
         info_name.setRightString(getString("nickName"))
+        info_real.setRightString(when (getString("pass")) {
+            "-1" -> "认证中"
+            "0" -> "未通过"
+            "1" -> "已认证"
+            else -> "未认证"
+        })
     }
 
+    @Suppress("DEPRECATION")
     override fun init_title() {
         super.init_title()
         loadUserHead(getString("userhead"))
@@ -40,12 +48,6 @@ class InfoActivity : BaseActivity() {
         info_gender.setRightString(when (getString("sex")) {
             "0" -> "女"
             else -> "男"
-        })
-        info_real.setRightString(when (getString("pass")) {
-            "-1" -> "认证中"
-            "0" -> "未通过"
-            "1" -> "已认证"
-            else -> "未认证"
         })
 
         info_img_ll.setOnClickListener {
@@ -108,10 +110,31 @@ class InfoActivity : BaseActivity() {
                     .previewEggs(true)
                     // 小于100kb的图片不压缩
                     .minimumCompressSize(100)
+                    // 是否可拖动裁剪框(固定)
+                    .isDragFrame(false)
                     // 结果回调onActivityResult code
                     .forResult(PictureConfig.CHOOSE_REQUEST)
         }
         info_name.setOnClickListener { startActivity<NicknameActivity>() }
+        info_gender.setOnClickListener {
+            val dialog = ActionSheetDialog(this, arrayOf("男", "女"), null)
+            dialog.isTitleShow(false)
+                    .lvBgColor(resources.getColor(R.color.white))
+                    .dividerColor(resources.getColor(R.color.divider))
+                    .dividerHeight(0.5f)
+                    .itemTextColor(resources.getColor(R.color.black))
+                    .itemHeight(40f)
+                    .itemTextSize(15f)
+                    .cancelText(resources.getColor(R.color.light))
+                    .cancelTextSize(15f)
+                    .layoutAnimation(null)
+                    .show()
+            dialog.setOnOperItemClickL { _, _, position, _ ->
+
+                dialog.dismiss()
+                window.decorView.postDelayed({ runOnUiThread { getSexData(position) } }, 300)
+            }
+        }
         info_real.setOnClickListener { startActivity<RealActivity>() }
     }
 
@@ -131,27 +154,48 @@ class InfoActivity : BaseActivity() {
                     // 3.media.getCompressPath();为压缩后path，需判断media.isCompressed();是否为true
                     // 如果裁剪并压缩了，已取压缩路径为准，因为是先裁剪后压缩的
 
-                    if (selectList[0].isCompressed) {
-
-                        OkGo.post<String>(BaseHttp.userinfo_uploadhead_sub)
-                                .tag(this@InfoActivity)
-                                .isMultipart(true)
-                                .headers("token", getString("token"))
-                                .params("img", File(selectList[0].compressPath))
-                                .execute(object : StringDialogCallback(baseContext) {
-
-                                    override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
-
-                                        showToast(msg)
-                                        val userhead = JSONObject(response.body()).getString("object")
-                                        putString("userhead", userhead)
-                                        loadUserHead(userhead)
-                                    }
-
-                                })
-                    }
+                    if (selectList[0].isCompressed) getHeadData()
                 }
             }
         }
+    }
+
+    private fun getHeadData() {
+        OkGo.post<String>(BaseHttp.userinfo_uploadhead_sub)
+                .tag(this@InfoActivity)
+                .isMultipart(true)
+                .headers("token", getString("token"))
+                .params("img", File(selectList[0].compressPath))
+                .execute(object : StringDialogCallback(baseContext) {
+
+                    override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
+
+                        showToast(msg)
+                        val userhead = JSONObject(response.body()).optString("object")
+                        putString("userhead", userhead)
+                        loadUserHead(userhead)
+                    }
+
+                })
+    }
+
+    private fun getSexData(position: Int) {
+        OkGo.post<String>(BaseHttp.sex_change_sub)
+                .tag(this@InfoActivity)
+                .headers("token", getString("token"))
+                .params("sex", 1 - position)
+                .execute(object : StringDialogCallback(baseContext) {
+
+                    override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
+
+                        showToast(msg)
+                        putString("sex", (1 - position).toString())
+                        info_gender.setRightString(when (getString("sex")) {
+                            "0" -> "女"
+                            else -> "男"
+                        })
+                    }
+
+                })
     }
 }

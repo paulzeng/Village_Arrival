@@ -12,27 +12,38 @@ import android.widget.LinearLayout
 import com.amap.api.AMapLocationHelper
 import com.amap.api.maps.AMap
 import com.amap.api.maps.CameraUpdateFactory
-import com.amap.api.maps.model.BitmapDescriptorFactory
-import com.amap.api.maps.model.LatLng
-import com.amap.api.maps.model.MyLocationStyle
+import com.amap.api.maps.model.*
+import com.amap.api.services.core.AMapException
+import com.amap.api.services.core.LatLonPoint
+import com.amap.api.services.geocoder.GeocodeResult
+import com.amap.api.services.geocoder.GeocodeSearch
+import com.amap.api.services.geocoder.RegeocodeQuery
+import com.amap.api.services.geocoder.RegeocodeResult
 import com.flyco.animation.FadeEnter.FadeEnter
 import com.flyco.animation.FadeExit.FadeExit
 import com.flyco.dialog.widget.popup.BubblePopup
 import com.github.library.bubbleview.BubbleLinearLayout
+import com.lzg.extend.BaseResponse
 import com.lzg.extend.StringDialogCallback
+import com.lzg.extend.jackson.JacksonDialogCallback
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 import com.ruanmeng.base.*
+import com.ruanmeng.model.CommonData
+import com.ruanmeng.model.CommonModel
 import com.ruanmeng.share.BaseHttp
 import com.ruanmeng.utils.CommonUtil
 import com.ruanmeng.utils.DensityUtil
 import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONObject
+import java.util.ArrayList
 
 class MainActivity : BaseActivity() {
 
+    private val list = ArrayList<CommonData>()
     private lateinit var aMap: AMap
     private var centerLatLng: LatLng? = null
+    private lateinit var geocoderSearch: GeocodeSearch
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +52,7 @@ class MainActivity : BaseActivity() {
         main_map.onCreate(savedInstanceState)
         init_title()
 
-        startLocation()
+        //startLocation()
     }
 
     override fun onStart() {
@@ -52,27 +63,81 @@ class MainActivity : BaseActivity() {
     override fun init_title() {
         aMap = main_map.map
 
-        aMap.myLocationStyle = MyLocationStyle().apply {
-            myLocationType(MyLocationStyle.LOCATION_TYPE_FOLLOW_NO_CENTER) //连续定位、蓝点不会移动到地图中心点，并且蓝点会跟随设备移动
-            interval(5000)
-            strokeColor(Color.TRANSPARENT)
-            radiusFillColor(Color.TRANSPARENT)
-            myLocationIcon(BitmapDescriptorFactory.fromResource(R.mipmap.index_pos))
+        aMap.apply {
+            myLocationStyle = MyLocationStyle().apply {
+                //连续定位、蓝点不会移动到地图中心点，并且蓝点会跟随设备移动
+                // myLocationType(MyLocationStyle.LOCATION_TYPE_FOLLOW_NO_CENTER)
+                myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE)
+                interval(5000)                     //设置连续定位模式下的定位间隔
+                strokeColor(Color.TRANSPARENT)     //设置定位蓝点精度圆圈的边框颜色
+                radiusFillColor(Color.TRANSPARENT) //设置定位蓝点精度圆圈的填充颜色
+                showMyLocation(true)               //设置是否显示定位小蓝点
+                //设置定位蓝点的icon图标方法
+                myLocationIcon(BitmapDescriptorFactory.fromResource(R.mipmap.gps_point))
+
+                setOnMyLocationChangeListener {
+                    centerLatLng = LatLng(it.latitude, it.longitude)
+                    aMap.animateCamera(CameraUpdateFactory.changeLatLng(centerLatLng))
+
+                    getNearData(it.latitude, it.longitude)
+                }
+            }
+
+            isTrafficEnabled = false       //实时交通状况
+            mapType = AMap.MAP_TYPE_NORMAL //矢量地图模式
+            isMyLocationEnabled = true     //触发定位并显示定位层
+            showIndoorMap(true)            //设置是否显示室内地图
+            moveCamera(CameraUpdateFactory.zoomTo(16f)) //缩放级别
+
+            setOnCameraChangeListener(object : AMap.OnCameraChangeListener {
+
+                override fun onCameraChangeFinish(position: CameraPosition) {
+                    geocoderSearch.getFromLocationAsyn(RegeocodeQuery(LatLonPoint(
+                            position.target.latitude, position.target.longitude),
+                            100f,
+                            GeocodeSearch.AMAP))
+                }
+
+                override fun onCameraChange(position: CameraPosition) {}
+
+            })
+
+            setOnMarkerClickListener {
+                return@setOnMarkerClickListener true
+            }
         }
 
-        aMap.isTrafficEnabled = false       //实时交通状况
-        aMap.mapType = AMap.MAP_TYPE_NORMAL //矢量地图模式
-        aMap.isMyLocationEnabled = true     //触发定位并显示定位层
-        aMap.moveCamera(CameraUpdateFactory.zoomTo(16f)) //缩放级别
+        aMap.uiSettings.apply {
+            isScaleControlsEnabled = false    //比例尺
+            isZoomControlsEnabled = false     //缩放按钮
+            isCompassEnabled = false          //指南针
+            isMyLocationButtonEnabled = false //定位按钮
+            isTiltGesturesEnabled = false     //倾斜手势
+            isRotateGesturesEnabled = false   //旋转手势
+            setLogoBottomMargin(-50)          //隐藏logo
+        }
 
-        val mUiSettings = aMap.uiSettings
-        mUiSettings.isScaleControlsEnabled = false    //比例尺
-        mUiSettings.isZoomControlsEnabled = false     //缩放按钮
-        mUiSettings.isCompassEnabled = false          //指南针
-        mUiSettings.isMyLocationButtonEnabled = false //定位按钮
-        mUiSettings.isTiltGesturesEnabled = false     //倾斜手势
-        mUiSettings.isRotateGesturesEnabled = false   //旋转手势
-        mUiSettings.setLogoBottomMargin(-50)          //隐藏logo
+        geocoderSearch = GeocodeSearch(baseContext)
+        geocoderSearch.setOnGeocodeSearchListener(object : GeocodeSearch.OnGeocodeSearchListener {
+
+            override fun onRegeocodeSearched(result: RegeocodeResult?, code: Int) {
+                if (code == AMapException.CODE_AMAP_SUCCESS) {
+                    if (result?.regeocodeAddress != null
+                            && result.regeocodeAddress.formatAddress != null) {
+
+                        val neighborhood = result.regeocodeAddress.neighborhood
+                        val building = result.regeocodeAddress.building
+                        val street = result.regeocodeAddress.streetNumber.street
+                        val township = result.regeocodeAddress.township
+
+                        main_title.text = result.regeocodeAddress.district
+                    }
+                }
+            }
+
+            override fun onGeocodeSearched(result: GeocodeResult, code: Int) {}
+
+        })
 
         main_center.setOnClickListener {
             if (drawer.isDrawerOpen(GravityCompat.START)) drawer.closeDrawer(GravityCompat.START)
@@ -182,7 +247,8 @@ class MainActivity : BaseActivity() {
                     @SuppressLint("SetTextI18n")
                     override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
 
-                        val obj = JSONObject(response.body()).getJSONObject("userMsg") ?: JSONObject()
+                        val obj = JSONObject(response.body()).getJSONObject("userMsg")
+                                ?: JSONObject()
                         putString("nickName", obj.getString("nickName"))
                         putString("userhead", obj.getString("userhead"))
                         putString("sex", obj.getString("sex"))
@@ -201,6 +267,51 @@ class MainActivity : BaseActivity() {
                                 nav_img.setTag(R.id.nav_img, getString("userhead"))
                             }
                         }
+                    }
+
+                })
+    }
+
+    private fun getNearData(lat: Double, lng: Double) {
+        OkGo.post<BaseResponse<CommonModel>>(BaseHttp.frist_index_data)
+                .tag(this@MainActivity)
+                .headers("token", getString("token"))
+                .params("nowlat", lat)
+                .params("nowlng", lng)
+                .execute(object : JacksonDialogCallback<BaseResponse<CommonModel>>(baseContext) {
+
+                    @SuppressLint("SetTextI18n")
+                    override fun onSuccess(response: Response<BaseResponse<CommonModel>>) {
+
+                        list.apply {
+                            clear()
+                            addItems(response.body().`object`.orders)
+                        }
+
+                        //绘制marker
+                        aMap.addMarker(MarkerOptions().position(LatLng(34.786758, 113.680852))
+                                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.index_xx01))
+                                .anchor(0.45f, 0.5f)
+                                .draggable(true))
+
+                        //绘制marker
+                        aMap.addMarker(MarkerOptions().position(LatLng(34.785867, 113.680980))
+                                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.index_xx02))
+                                .anchor(0.45f, 0.5f)
+                                .draggable(true))
+
+                        if (list.isNotEmpty()) {
+                            list.forEach {
+                                //绘制marker
+                                aMap.addMarker(MarkerOptions().position(LatLng(34.785867, 113.680852))
+                                        .icon(BitmapDescriptorFactory.fromResource(R.mipmap.gps_point))
+                                        .anchor(0.45f, 0.5f)
+                                        .draggable(true))
+                            }
+                        }
+
+                        main_grab_num.text = "有${response.body().`object`.nowCtn}个任务"
+                        main_live_num.text = "有${response.body().`object`.msgCtn}条消息"
                     }
 
                 })
