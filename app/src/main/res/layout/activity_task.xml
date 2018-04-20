@@ -39,7 +39,8 @@
                     android:paddingEnd="@dimen/dimen_size_15"
                     android:paddingStart="@dimen/dimen_size_15"
                     android:paddingTop="@dimen/dimen_size_5"
-                    android:text="附近有0人为您服务" />
+                    android:text="附近有0人为您服务"
+                    android:visibility="invisible" />
 
             </FrameLayout>
 
@@ -308,7 +309,7 @@
                             android:layout_height="@dimen/line_height"
                             android:layout_weight="1"
                             android:gravity="center_vertical"
-                            android:text="商品重量" />
+                            android:text="商品重量(默认2公斤以内)" />
 
                         <ImageView
                             android:layout_width="@dimen/dimen_size_15"

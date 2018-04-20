@@ -41,5 +41,14 @@ data class CommonData(
         var nickName: String = "",
         var telephone: String = "",
         var lat: String = "",
-        var lng: String = ""
+        var lng: String = "",
+        //附近订单
+        var goodsOrderId: String = "",
+        var goods: String = "",
+        var status: String = "",
+        var type: String = "",
+        var receiptLat: String = "",
+        var receiptLng: String = "",
+        var receiptAddress: String = "",
+        var buyAddress: String = ""
 ) : Serializable

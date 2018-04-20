@@ -27,9 +27,12 @@
  */
 package com.ruanmeng.utils
 
+import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.view.View
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import android.view.animation.DecelerateInterpolator
 import android.widget.TextView
 
@@ -117,5 +120,47 @@ inline fun <reified T : TextView> T.startIncreaseAnimator(to: Float, millisecond
         duration = milliseconds
         interpolator = DecelerateInterpolator()
         start()
+    }
+}
+
+/**
+ * 显示动画，默认300ms
+ */
+inline fun <reified T : View> T.visible() {
+    if (visibility == View.GONE || visibility == View.INVISIBLE) {
+        val appearAnimation = AlphaAnimation(0f, 1f)
+        appearAnimation.duration = 300
+        appearAnimation.setAnimationListener(object : Animation.AnimationListener {
+
+            override fun onAnimationRepeat(animation: Animation) {}
+            override fun onAnimationEnd(animation: Animation) {
+                visibility = View.VISIBLE
+            }
+
+            override fun onAnimationStart(animation: Animation) {}
+
+        })
+        startAnimation(appearAnimation)
+    }
+}
+
+/**
+ * 隐藏动画，默认300ms
+ */
+inline fun <reified T : View> T.gone() {
+    if (visibility == View.VISIBLE) {
+        val disappearAnimation = AlphaAnimation(1f, 0f)
+        disappearAnimation.duration = 300
+        disappearAnimation.setAnimationListener(object : Animation.AnimationListener {
+
+            override fun onAnimationRepeat(animation: Animation) {}
+            override fun onAnimationEnd(animation: Animation) {
+                visibility = View.GONE
+            }
+
+            override fun onAnimationStart(animation: Animation) {}
+
+        })
+        startAnimation(disappearAnimation)
     }
 }

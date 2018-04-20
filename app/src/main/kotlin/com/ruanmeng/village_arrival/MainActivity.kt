@@ -4,15 +4,19 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
 import android.support.v4.view.GravityCompat
+import android.text.Html
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.LinearInterpolator
 import android.widget.LinearLayout
-import com.amap.api.AMapLocationHelper
 import com.amap.api.maps.AMap
 import com.amap.api.maps.CameraUpdateFactory
 import com.amap.api.maps.model.*
+import com.amap.api.maps.model.animation.ScaleAnimation
 import com.amap.api.services.core.AMapException
 import com.amap.api.services.core.LatLonPoint
 import com.amap.api.services.geocoder.GeocodeResult
@@ -36,14 +40,36 @@ import com.ruanmeng.utils.CommonUtil
 import com.ruanmeng.utils.DensityUtil
 import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONObject
-import java.util.ArrayList
+import java.util.*
 
 class MainActivity : BaseActivity() {
 
     private val list = ArrayList<CommonData>()
+    private val listMaker = ArrayList<Marker>()
     private lateinit var aMap: AMap
     private var centerLatLng: LatLng? = null
     private lateinit var geocoderSearch: GeocodeSearch
+
+    private val listAddress = ArrayList<CommonData>() //常用地址
+    private var nowAddress = ""  //当前地址
+    private var nowCtn = ""      //当前位置抢单数
+    private var cyCtn = ""       //常用位置抢单数
+
+    @SuppressLint("HandlerLeak", "SetTextI18n")
+    private var handler = object : Handler() {
+        @Suppress("DEPRECATION")
+        override fun handleMessage(msg: Message) {
+            super.handleMessage(msg)
+            main_order1.text = "${nowCtn}单"
+            main_address.text = nowAddress
+
+            if (listAddress.isEmpty()) main_order2.text = "您还没有添加常用地址"
+            else {
+                val hint = "您常用地址附近有<font color='${resources.getColor(R.color.red)}'>${nowCtn}单</font>可抢"
+                main_order2.text = Html.fromHtml(hint)
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,13 +77,12 @@ class MainActivity : BaseActivity() {
         transparentStatusBar(false)
         main_map.onCreate(savedInstanceState)
         init_title()
-
-        //startLocation()
     }
 
     override fun onStart() {
         super.onStart()
         getPersonData()
+        getAddressData()
     }
 
     override fun init_title() {
@@ -65,8 +90,7 @@ class MainActivity : BaseActivity() {
 
         aMap.apply {
             myLocationStyle = MyLocationStyle().apply {
-                //连续定位、蓝点不会移动到地图中心点，并且蓝点会跟随设备移动
-                // myLocationType(MyLocationStyle.LOCATION_TYPE_FOLLOW_NO_CENTER)
+                //定位一次，且将视角移动到地图中心点
                 myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE)
                 interval(5000)                     //设置连续定位模式下的定位间隔
                 strokeColor(Color.TRANSPARENT)     //设置定位蓝点精度圆圈的边框颜色
@@ -78,8 +102,6 @@ class MainActivity : BaseActivity() {
                 setOnMyLocationChangeListener {
                     centerLatLng = LatLng(it.latitude, it.longitude)
                     aMap.animateCamera(CameraUpdateFactory.changeLatLng(centerLatLng))
-
-                    getNearData(it.latitude, it.longitude)
                 }
             }
 
@@ -96,9 +118,15 @@ class MainActivity : BaseActivity() {
                             position.target.latitude, position.target.longitude),
                             100f,
                             GeocodeSearch.AMAP))
+
+                    getNearData(position.target.latitude, position.target.longitude)
                 }
 
-                override fun onCameraChange(position: CameraPosition) {}
+                override fun onCameraChange(position: CameraPosition) {
+                    listMaker.forEach { it.destroy() }
+                    listMaker.clear()
+                    OkGo.getInstance().cancelTag(this@MainActivity)
+                }
 
             })
 
@@ -130,7 +158,16 @@ class MainActivity : BaseActivity() {
                         val street = result.regeocodeAddress.streetNumber.street
                         val township = result.regeocodeAddress.township
 
+                        nowAddress = if (neighborhood.isEmpty()) {
+                            if (building.isEmpty()) {
+                                if (street.isEmpty()) {
+                                    township
+                                } else street
+                            } else building
+                        } else neighborhood
+
                         main_title.text = result.regeocodeAddress.district
+                        handler.sendEmptyMessage(0)
                     }
                 }
             }
@@ -157,17 +194,6 @@ class MainActivity : BaseActivity() {
         nav_live.setOnClickListener(this@MainActivity)
     }
 
-    private fun startLocation() {
-        AMapLocationHelper.getInstance(baseContext).clearCodes()
-        AMapLocationHelper.getInstance(baseContext).startLocation(1) { location, isSuccessed, codes ->
-            if (isSuccessed && 1 in codes) {
-                centerLatLng = LatLng(location.latitude, location.longitude)
-                aMap.animateCamera(CameraUpdateFactory.changeLatLng(centerLatLng))
-                main_title.text = location.district
-            }
-        }
-    }
-
     @Suppress("DEPRECATION")
     override fun doClick(v: View) {
         super.doClick(v)
@@ -175,6 +201,7 @@ class MainActivity : BaseActivity() {
             R.id.main_msg -> startActivity<MessageActivity>()
             R.id.main_grab -> startActivity<TaskGrabActivity>()
             R.id.main_live -> startActivity<LiveActivity>()
+            R.id.main_often_ll -> if (listAddress.isEmpty()) startActivity<AddressActivity>()
             R.id.main_issue -> {
                 val inflate = View.inflate(baseContext, R.layout.pop_main_issue, null)
                 val popBuy = inflate.findViewById<LinearLayout>(R.id.pop_buy)
@@ -198,6 +225,7 @@ class MainActivity : BaseActivity() {
                         runOnUiThread {
                             val intent = Intent(baseContext, TaskActivity::class.java)
                             intent.putExtra("type", "buy")
+                            intent.putExtra("title", main_title.text.toString())
                             startActivity(intent)
                         }
                     }, 500)
@@ -208,6 +236,7 @@ class MainActivity : BaseActivity() {
                         runOnUiThread {
                             val intent = Intent(baseContext, TaskActivity::class.java)
                             intent.putExtra("type", "get")
+                            intent.putExtra("title", main_title.text.toString())
                             startActivity(intent)
                         }
                     }, 300)
@@ -288,33 +317,61 @@ class MainActivity : BaseActivity() {
                             addItems(response.body().`object`.orders)
                         }
 
-                        //绘制marker
-                        aMap.addMarker(MarkerOptions().position(LatLng(34.786758, 113.680852))
-                                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.index_xx01))
-                                .anchor(0.45f, 0.5f)
-                                .draggable(true))
-
-                        //绘制marker
-                        aMap.addMarker(MarkerOptions().position(LatLng(34.785867, 113.680980))
-                                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.index_xx02))
-                                .anchor(0.45f, 0.5f)
-                                .draggable(true))
-
                         if (list.isNotEmpty()) {
-                            list.forEach {
+                            list.filter { it.status == "1" }.forEach {
                                 //绘制marker
-                                aMap.addMarker(MarkerOptions().position(LatLng(34.785867, 113.680852))
-                                        .icon(BitmapDescriptorFactory.fromResource(R.mipmap.gps_point))
+                                val markerOption = MarkerOptions().position(LatLng(it.receiptLat.toDouble(), it.receiptLng.toDouble()))
+                                        .icon(BitmapDescriptorFactory.fromResource(when (it.type) {
+                                            "0" -> R.mipmap.index_xx02
+                                            else -> R.mipmap.index_xx01
+                                        }))
                                         .anchor(0.45f, 0.5f)
-                                        .draggable(true))
+                                        .draggable(true)
+                                markerOption.isFlat = true
+                                val marker = aMap.addMarker(markerOption)
+                                startGrowAnimation(marker)
+                                listMaker.add(marker)
                             }
                         }
 
+                        nowCtn = response.body().`object`.nowCtn
+                        cyCtn = response.body().`object`.cyCtn
                         main_grab_num.text = "有${response.body().`object`.nowCtn}个任务"
                         main_live_num.text = "有${response.body().`object`.msgCtn}条消息"
+                        handler.sendEmptyMessage(0)
                     }
 
                 })
+    }
+
+    private fun getAddressData() {
+        OkGo.post<BaseResponse<ArrayList<CommonData>>>(BaseHttp.my_commonaddress_list)
+                .tag(this@MainActivity)
+                .headers("token", getString("token"))
+                .params("type", 0)
+                .execute(object : JacksonDialogCallback<BaseResponse<ArrayList<CommonData>>>(baseContext) {
+
+                    override fun onSuccess(response: Response<BaseResponse<ArrayList<CommonData>>>) {
+
+                        listAddress.apply {
+                            clear()
+                            addItems(response.body().`object`)
+                        }
+                        handler.sendEmptyMessage(0)
+                    }
+
+                })
+    }
+
+    private fun startGrowAnimation(marker: Marker) {
+        val animation = ScaleAnimation(0f, 1f, 0f, 1f)
+        animation.setInterpolator(LinearInterpolator())
+        //整个移动所需要的时间
+        animation.setDuration(500)
+        //设置动画
+        marker.setAnimation(animation)
+        //开始动画
+        marker.startAnimation()
     }
 
     private var exitTime: Long = 0

@@ -122,4 +122,5 @@ dependencies {
     implementation 'com.github.santalu:mask-edittext:1.0.1'
     implementation 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1'
     implementation 'com.github.lguipeng:BubbleView:1.0.1'
+    implementation 'com.weigan:loopView:0.1.2'
 }

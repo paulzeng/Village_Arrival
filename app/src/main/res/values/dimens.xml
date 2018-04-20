@@ -23,6 +23,10 @@
     <dimen name="sp_size_8">8sp</dimen>
 
     <dimen name="dimen_size_200">200dp</dimen>
+    <dimen name="dimen_size_190">190dp</dimen>
+    <dimen name="dimen_size_180">180dp</dimen>
+    <dimen name="dimen_size_170">170dp</dimen>
+    <dimen name="dimen_size_160">160dp</dimen>
     <dimen name="dimen_size_150">150dp</dimen>
     <dimen name="dimen_size_140">140dp</dimen>
     <dimen name="dimen_size_130">130dp</dimen>
