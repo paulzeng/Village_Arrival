@@ -3,6 +3,7 @@ package com.ruanmeng.village_arrival
 import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.TabLayout
+import android.text.InputFilter
 import android.view.View
 import com.amap.api.maps.AMap
 import com.amap.api.maps.CameraUpdateFactory
@@ -13,26 +14,29 @@ import com.amap.api.maps.model.MyLocationStyle
 import com.amap.api.services.core.AMapException
 import com.amap.api.services.core.LatLonPoint
 import com.amap.api.services.core.PoiItem
+import com.amap.api.services.geocoder.GeocodeResult
+import com.amap.api.services.geocoder.GeocodeSearch
+import com.amap.api.services.geocoder.RegeocodeQuery
+import com.amap.api.services.geocoder.RegeocodeResult
 import com.amap.api.services.poisearch.PoiResult
 import com.amap.api.services.poisearch.PoiSearch
 import com.lzg.extend.BaseResponse
+import com.lzg.extend.StringDialogCallback
 import com.lzg.extend.jackson.JacksonDialogCallback
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
-import com.ruanmeng.base.BaseActivity
-import com.ruanmeng.base.addItems
-import com.ruanmeng.base.getString
-import com.ruanmeng.base.load_Linear
+import com.ruanmeng.base.*
 import com.ruanmeng.model.CommonData
+import com.ruanmeng.model.LocationMessageEvent
+import com.ruanmeng.model.RefreshMessageEvent
 import com.ruanmeng.share.BaseHttp
-import com.ruanmeng.utils.Tools
-import com.ruanmeng.utils.gone
-import com.ruanmeng.utils.visible
+import com.ruanmeng.utils.*
 import kotlinx.android.synthetic.main.activity_address_add.*
 import kotlinx.android.synthetic.main.layout_title.*
 import net.idik.lib.slimadapter.SlimAdapter
 import net.idik.lib.slimadapter.ex.loadmore.SimpleLoadMoreViewCreator
 import net.idik.lib.slimadapter.ex.loadmore.SlimMoreLoader
+import org.greenrobot.eventbus.EventBus
 
 class AddressAddActivity : BaseActivity() {
 
@@ -40,22 +44,50 @@ class AddressAddActivity : BaseActivity() {
     private var centerLatLng: LatLng? = null
     private lateinit var query: PoiSearch.Query
     private lateinit var poiSearch: PoiSearch
+    private lateinit var geocoderSearch: GeocodeSearch
 
-    private var isFirstEnter = true
     private var list = ArrayList<Any>()
     private var listAddress = ArrayList<Any>()
+    private lateinit var mTitle: String
+    private var province = ""
+    private var city = ""
+    private var district = ""
+    private var township = ""
+    private var address = ""
+    private var lat = ""
+    private var lng = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_address_add)
         address_map.onCreate(savedInstanceState)
-        init_title("我的地址")
+        mTitle = intent.getStringExtra("title")
+        init_title(mTitle)
+
+        window.decorView.postDelayed({
+            runOnUiThread {
+                aMap.setOnCameraChangeListener(object : AMap.OnCameraChangeListener {
+
+                    override fun onCameraChangeFinish(position: CameraPosition) {
+                        pageNum = 1
+                        getData(pageNum)
+                    }
+
+                    override fun onCameraChange(position: CameraPosition) {}
+
+                })
+
+                address_expand.expand()
+                getData(pageNum)
+            }
+        }, 2000)
     }
 
     @Suppress("DEPRECATION")
     override fun init_title() {
         super.init_title()
         nav_right.visibility = View.VISIBLE
+        et_name.filters = arrayOf<InputFilter>(NameLengthFilter(12))
         aMap = address_map.map
 
         aMap.uiSettings.apply {
@@ -83,55 +115,35 @@ class AddressAddActivity : BaseActivity() {
                 showMyLocation(true)               //设置是否显示定位小蓝点
                 //设置定位蓝点的icon图标方法
                 myLocationIcon(BitmapDescriptorFactory.fromResource(R.mipmap.gps_point))
+                setOnMyLocationChangeListener { centerLatLng = LatLng(it.latitude, it.longitude) }
+            }
 
-                setOnMyLocationChangeListener {
-                    centerLatLng = LatLng(it.latitude, it.longitude)
-                    aMap.animateCamera(CameraUpdateFactory.changeLatLng(centerLatLng))
+            setOnMapTouchListener { address_card.goneAnimation() }
+        }
+
+        //周边搜索
+        initPoiSearch()
+
+        //逆向地理编码
+        geocoderSearch = GeocodeSearch(baseContext)
+        geocoderSearch.setOnGeocodeSearchListener(object : GeocodeSearch.OnGeocodeSearchListener {
+
+            override fun onRegeocodeSearched(result: RegeocodeResult?, code: Int) {
+                if (code == AMapException.CODE_AMAP_SUCCESS) {
+                    if (result?.regeocodeAddress != null
+                            && result.regeocodeAddress.formatAddress != null) {
+
+                        province = result.regeocodeAddress.province
+                        city = result.regeocodeAddress.city
+                        district = result.regeocodeAddress.district
+                        township = result.regeocodeAddress.township
+                    }
                 }
             }
 
-            setOnCameraChangeListener(object : AMap.OnCameraChangeListener {
+            override fun onGeocodeSearched(result: GeocodeResult, code: Int) {}
 
-                override fun onCameraChangeFinish(position: CameraPosition) {
-                    if (isFirstEnter) {
-                        window.decorView.postDelayed({
-                            isFirstEnter = false
-                            pageNum = 1
-                            getData(pageNum)
-                        }, 500)
-                    } else {
-                        pageNum = 1
-                        getData(pageNum)
-                    }
-                }
-
-                override fun onCameraChange(position: CameraPosition) {}
-
-            })
-
-            setOnMapTouchListener { address_card.gone() }
-        }
-
-        initPoiSearch()
-
-        address_tab.apply {
-            addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-
-                override fun onTabReselected(tab: TabLayout.Tab) {}
-                override fun onTabUnselected(tab: TabLayout.Tab) {}
-
-                override fun onTabSelected(tab: TabLayout.Tab) {
-                    address_card.gone()
-                    tab.position
-                }
-
-            })
-
-            addTab(this.newTab().setText("附近地址"), true)
-            addTab(this.newTab().setText("常用地址"), false)
-
-            post { Tools.setIndicator(this, 40, 40) }
-        }
+        })
 
         address_list.load_Linear(baseContext)
         mAdapter = SlimAdapter.create()
@@ -141,20 +153,156 @@ class AddressAddActivity : BaseActivity() {
 
                             .clicked(R.id.item_map) {
                                 address_card.visible()
+
+                                address = data.title
+                                lat = data.latLonPoint.latitude.toString()
+                                lng = data.latLonPoint.longitude.toString()
+                                township = ""
+                                address_title.text = data.title
+                                et_detail.setText("")
+
+                                window.decorView.post {
+                                    geocoderSearch.getFromLocationAsyn(RegeocodeQuery(LatLonPoint(
+                                            data.latLonPoint.latitude, data.latLonPoint.longitude),
+                                            100f,
+                                            GeocodeSearch.AMAP))
+                                }
+                            }
+                }
+                .register<CommonData>(R.layout.item_map_list) { data, injector ->
+                    injector.text(R.id.item_map_name, data.address + data.detailAdress)
+                    injector.text(R.id.item_map_hint, "${data.name}    ${data.mobile}")
+
+                            .clicked(R.id.item_map) {
+                                EventBus.getDefault().post(LocationMessageEvent(
+                                        mTitle,
+                                        data.commonAddressId,
+                                        data.address,
+                                        data.detailAdress))
+                                ActivityStack.screenManager.popActivities(this@AddressAddActivity::class.java)
                             }
                 }
                 .enableLoadMore(object : SlimMoreLoader(
                         baseContext,
                         SimpleLoadMoreViewCreator(baseContext).setNoMoreHint("没有更多数据了...")) {
-                    override fun hasMore(): Boolean = true
+                    override fun hasMore(): Boolean = mPosition == 0
                     override fun onLoadMore(handler: Handler) = getData(pageNum)
                 })
                 .attachTo(address_list)
+
+        when (mTitle) {
+            "我的地址" -> {
+                address_tab.apply {
+                    setSelectedTabIndicatorColor(resources.getColor(R.color.white))
+                    addTab(this.newTab().setText("附近地址"), true)
+                }
+            }
+            else -> {
+                address_tab.apply {
+                    addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+
+                        override fun onTabReselected(tab: TabLayout.Tab) {}
+                        override fun onTabUnselected(tab: TabLayout.Tab) {}
+
+                        override fun onTabSelected(tab: TabLayout.Tab) {
+                            address_card.goneAnimation()
+                            mPosition = tab.position
+                            when (tab.position) {
+                                0 -> mAdapter.updateData(list)
+                                1 -> {
+                                    if (listAddress.isEmpty()) getAddressData()
+                                    else mAdapter.updateData(listAddress)
+                                }
+                            }
+                        }
+
+                    })
+
+                    addTab(this.newTab().setText("附近地址"), true)
+                    addTab(this.newTab().setText("常用地址"), false)
+
+                    post { Tools.setIndicator(this, 40, 40) }
+                }
+            }
+        }
+
+        nav_right.setOnClickListener {
+
+            if (address_card.visibility != View.VISIBLE) return@setOnClickListener
+
+            if (township.isEmpty()) {
+                showToast("地址信息获取失败")
+                return@setOnClickListener
+            }
+
+            if (et_detail.text.isEmpty()) {
+                et_detail.requestFocus()
+                showToast("请输入详细地址")
+                return@setOnClickListener
+            }
+
+            if (et_name.text.isEmpty()) {
+                et_name.requestFocus()
+                showToast("请输入姓名")
+                return@setOnClickListener
+            }
+
+            if (et_tel.text.isEmpty()) {
+                et_tel.requestFocus()
+                showToast("请输入手机号")
+                return@setOnClickListener
+            }
+
+            if (!CommonUtil.isMobile(et_tel.text.toString())) {
+                et_tel.requestFocus()
+                et_tel.setText("")
+                showToast("手机号码格式错误，请重新输入")
+                return@setOnClickListener
+            }
+
+            if (mTitle == "我的地址") {
+                OkGo.post<String>(BaseHttp.add_commonaddress)
+                        .tag(this@AddressAddActivity)
+                        .isMultipart(true)
+                        .headers("token", getString("token"))
+                        .params("type", "0")
+                        .params("lat", lat)
+                        .params("lng", lng)
+                        .params("province", province)
+                        .params("city", city)
+                        .params("district", district)
+                        .params("township", township)
+                        .params("address", address)
+                        .params("detailAdress", et_detail.text.toString())
+                        .params("name", et_name.text.toString())
+                        .params("mobile", et_tel.text.toString())
+                        .execute(object : StringDialogCallback(baseContext) {
+
+                            override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
+
+                                showToast(msg)
+                                EventBus.getDefault().post(RefreshMessageEvent("常用地址"))
+                                ActivityStack.screenManager.popActivities(this@AddressAddActivity::class.java)
+                            }
+
+                        })
+            } else {
+                EventBus.getDefault().post(LocationMessageEvent(
+                        mTitle, "",
+                        address,
+                        et_detail.text.toString(),
+                        et_name.text.toString(),
+                        et_tel.text.toString(),
+                        lat, lng,
+                        province, city, district, township))
+                ActivityStack.screenManager.popActivities(this@AddressAddActivity::class.java)
+            }
+        }
     }
 
     private fun initPoiSearch() {
         query = PoiSearch.Query("", "", "")
-        query.pageSize = 100
+        query.pageSize = 20
         poiSearch = PoiSearch(this, query)
         poiSearch.setOnPoiSearchListener(object : PoiSearch.OnPoiSearchListener {
 
@@ -167,43 +315,46 @@ class AddressAddActivity : BaseActivity() {
                 }
 
                 if (result != null && result.query != null) {
-                    if (pageNum == 1) list.clear()
+                    if (pageNum == 1) {
+                        if (list.isNotEmpty()) address_list.scrollToPosition(0)
+                        list.clear()
+                    }
+                    if (result.pois.isNotEmpty()) pageNum++
                     list.addItems(result.pois)
-                    if (list.size > 0) pageNum++
+
+                    if (mPosition == 1) return
                     mAdapter.updateData(list)
 
-                    empty_view.visibility = if (list.size == 0) View.VISIBLE else View.GONE
-                } else {
-                    empty_view.visibility = View.VISIBLE
-                }
+                    empty_view.apply { if (list.isEmpty()) visible() else gone() }
+                } else empty_view.visible()
             }
 
         })
     }
 
     override fun getData(pindex: Int) {
-        query.pageNum = pindex
-
         val latLng = aMap.cameraPosition.target
+
+        query.pageNum = pindex
         poiSearch.bound = PoiSearch.SearchBound(LatLonPoint(latLng.latitude, latLng.longitude), 20000)
         poiSearch.searchPOIAsyn()
     }
 
     private fun getAddressData() {
-        OkGo.post<BaseResponse<java.util.ArrayList<CommonData>>>(BaseHttp.my_commonaddress_list)
+        OkGo.post<BaseResponse<ArrayList<CommonData>>>(BaseHttp.my_commonaddress_list)
                 .tag(this@AddressAddActivity)
                 .headers("token", getString("token"))
-                .params("type", 0)
-                .execute(object : JacksonDialogCallback<BaseResponse<java.util.ArrayList<CommonData>>>(baseContext) {
+                .params("type", 1)
+                .execute(object : JacksonDialogCallback<BaseResponse<ArrayList<CommonData>>>(baseContext) {
 
-                    override fun onSuccess(response: Response<BaseResponse<java.util.ArrayList<CommonData>>>) {
+                    override fun onSuccess(response: Response<BaseResponse<ArrayList<CommonData>>>) {
 
                         listAddress.apply {
                             clear()
                             addItems(response.body().`object`)
                         }
 
-                        mAdapter.updateData(listAddress)
+                        if (mPosition == 1) mAdapter.updateData(listAddress)
                     }
 
                 })

@@ -1,5 +1,6 @@
 package com.ruanmeng.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -20,11 +21,11 @@ public class AddressAdapter extends RecyclerView.Adapter {
 
     private List<CommonData> mDataSet;
     private LayoutInflater mInflater;
-    private Context mContext;
+    private OnItemClickListener onItemClickListener;
+    private OnItemDeleteClickListener onItemDeleteClickListener;
     private final ViewBinderHelper binderHelper = new ViewBinderHelper();
 
     public AddressAdapter(Context context, List<CommonData> dataSet) {
-        mContext = context;
         mDataSet = dataSet;
         mInflater = LayoutInflater.from(context);
 
@@ -60,6 +61,14 @@ public class AddressAdapter extends RecyclerView.Adapter {
         return mDataSet == null ? 0 : mDataSet.size();
     }
 
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
+    public void setOnItemDeleteClickListener(OnItemDeleteClickListener onItemDeleteClickListener) {
+        this.onItemDeleteClickListener = onItemDeleteClickListener;
+    }
+
     /**
      * Only if you need to restore open/close state when the orientation is changed.
      * Call this method in {@link android.app.Activity#onSaveInstanceState(Bundle)}
@@ -81,7 +90,7 @@ public class AddressAdapter extends RecyclerView.Adapter {
         private View frontLayout;
         private TextView tv_addr, tv_name, tv_del;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             swipeLayout = itemView.findViewById(R.id.swipe_layout);
             frontLayout = itemView.findViewById(R.id.front_layout);
@@ -90,21 +99,34 @@ public class AddressAdapter extends RecyclerView.Adapter {
             tv_del = itemView.findViewById(R.id.item_address_delete);
         }
 
-        public void bind(final CommonData data) {
+        @SuppressLint("SetTextI18n")
+        void bind(final CommonData data) {
+            tv_addr.setText(data.getAddress() + data.getDetailAdress());
+            tv_name.setText(data.getName() + "    " + data.getMobile());
+
             tv_del.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mDataSet.remove(getAdapterPosition());
-                    notifyItemRemoved(getAdapterPosition());
+                    if (onItemDeleteClickListener != null) {
+                        onItemDeleteClickListener.onDelete(getAdapterPosition());
+                    }
                 }
             });
 
             frontLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    if (onItemClickListener != null) onItemClickListener.onClick(getAdapterPosition());
                 }
             });
         }
+    }
+
+    public interface OnItemClickListener {
+        void onClick(int position);
+    }
+
+    public interface OnItemDeleteClickListener {
+        void onDelete(int position);
     }
 }

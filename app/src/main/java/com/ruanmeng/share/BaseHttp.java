@@ -27,6 +27,8 @@ public class BaseHttp {
     public static String certification_sub = baseIp + "/certification_sub.rm"; //实名认证√
     public static String my_account_info = baseIp + "/my_account_info.rm"; //我的账户√
     public static String my_commonaddress_list = baseIp + "/my_commonaddress_list.rm"; //地址列表√
+    public static String add_commonaddress = baseIp + "/add_commonaddress.rm"; //新增地址√
+    public static String delete_commonaddress = baseIp + "/delete_commonaddress.rm"; //删除地址√
 
     public static String frist_index_data = baseIp + "/frist_index_data.rm"; //首页√
 }

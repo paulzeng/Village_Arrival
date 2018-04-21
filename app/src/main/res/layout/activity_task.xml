@@ -141,10 +141,12 @@
                         android:id="@+id/task_get_hint"
                         style="@style/Font14_black"
                         android:layout_width="wrap_content"
-                        android:layout_height="@dimen/line_height"
+                        android:layout_height="wrap_content"
                         android:drawablePadding="@dimen/dimen_size_5"
                         android:drawableStart="@mipmap/index_adress01"
                         android:gravity="center_vertical"
+                        android:paddingBottom="@dimen/dimen_size_14"
+                        android:paddingTop="@dimen/dimen_size_14"
                         android:text="购买店铺" />
 
                     <LinearLayout
@@ -205,10 +207,12 @@
                     <TextView
                         style="@style/Font14_black"
                         android:layout_width="wrap_content"
-                        android:layout_height="@dimen/line_height"
+                        android:layout_height="wrap_content"
                         android:drawablePadding="@dimen/dimen_size_5"
                         android:drawableStart="@mipmap/index_adress02"
                         android:gravity="center_vertical"
+                        android:paddingBottom="@dimen/dimen_size_14"
+                        android:paddingTop="@dimen/dimen_size_14"
                         android:text="收货地址" />
 
                     <LinearLayout

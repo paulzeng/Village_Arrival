@@ -1,17 +1,22 @@
 package com.ruanmeng.village_arrival
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import com.lzg.extend.BaseResponse
+import com.lzg.extend.StringDialogCallback
 import com.lzg.extend.jackson.JacksonDialogCallback
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 import com.ruanmeng.adapter.AddressAdapter
 import com.ruanmeng.base.*
 import com.ruanmeng.model.CommonData
+import com.ruanmeng.model.RefreshMessageEvent
 import com.ruanmeng.share.BaseHttp
 import kotlinx.android.synthetic.main.activity_address.*
 import kotlinx.android.synthetic.main.layout_empty_addr.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 import java.util.ArrayList
 
 class AddressActivity : BaseActivity() {
@@ -23,6 +28,8 @@ class AddressActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_address)
         init_title("常用地址")
+
+        EventBus.getDefault().register(this@AddressActivity)
 
         getData()
     }
@@ -47,13 +54,36 @@ class AddressActivity : BaseActivity() {
         super.init_title()
         address_list.load_Linear(baseContext)
         adapter = AddressAdapter(baseContext, list)
+        adapter.setOnItemClickListener {  }
+        adapter.setOnItemDeleteClickListener {
+
+            OkGo.post<String>(BaseHttp.delete_commonaddress)
+                    .tag(this@AddressActivity)
+                    .headers("token", getString("token"))
+                    .params("commonAddressId", list[it].commonAddressId)
+                    .execute(object : StringDialogCallback(baseContext) {
+
+                        override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
+
+                            showToast(msg)
+                            list.removeAt(it)
+                            adapter.notifyItemRemoved(it)
+                            empty_view.apply { if (list.isNotEmpty()) gone() else visible() }
+                        }
+
+                    })
+        }
         address_list.adapter = adapter
     }
 
     override fun doClick(v: View) {
         super.doClick(v)
         when (v.id) {
-            R.id.empty_add -> startActivity<AddressAddActivity>()
+            R.id.empty_add -> {
+                val intent = Intent(baseContext, AddressAddActivity::class.java)
+                intent.putExtra("title", "我的地址")
+                startActivity(intent)
+            }
         }
     }
 
@@ -70,15 +100,29 @@ class AddressActivity : BaseActivity() {
                             clear()
                             addItems(response.body().`object`)
                         }
-                        if (list.isNotEmpty()) mAdapter.updateData(list)
+                        if (list.isNotEmpty()) adapter.notifyDataSetChanged()
                     }
 
                     override fun onFinish() {
                         super.onFinish()
-
-                        empty_view.visibility = if (list.size > 0) View.GONE else View.VISIBLE
+                        empty_view.apply { if (list.isNotEmpty()) gone() else visible() }
                     }
 
                 })
+    }
+
+    override fun finish() {
+        EventBus.getDefault().unregister(this@AddressActivity)
+        super.finish()
+    }
+
+    @Subscribe
+    fun onMessageEvent(event: RefreshMessageEvent) {
+        when (event.type) {
+            "常用地址" -> {
+                empty_view.gone()
+                getData()
+            }
+        }
     }
 }

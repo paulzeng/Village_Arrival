@@ -125,7 +125,7 @@ class MainActivity : BaseActivity() {
                 override fun onCameraChange(position: CameraPosition) {
                     listMaker.forEach { it.destroy() }
                     listMaker.clear()
-                    OkGo.getInstance().cancelTag(this@MainActivity)
+                    OkGo.getInstance().cancelTag("周边信息")
                 }
 
             })
@@ -303,7 +303,7 @@ class MainActivity : BaseActivity() {
 
     private fun getNearData(lat: Double, lng: Double) {
         OkGo.post<BaseResponse<CommonModel>>(BaseHttp.frist_index_data)
-                .tag(this@MainActivity)
+                .tag("周边信息")
                 .headers("token", getString("token"))
                 .params("nowlat", lat)
                 .params("nowlng", lng)
@@ -403,6 +403,7 @@ class MainActivity : BaseActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        OkGo.getInstance().cancelTag("周边信息")
         main_map.onDestroy()
     }
 }

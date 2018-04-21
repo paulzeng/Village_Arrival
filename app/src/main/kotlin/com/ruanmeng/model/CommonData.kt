@@ -38,8 +38,9 @@ data class CommonData(
         //地址列表
         var commonAddressId: String = "",
         var address: String = "",
-        var nickName: String = "",
-        var telephone: String = "",
+        var detailAdress: String = "",
+        var name: String = "",
+        var mobile: String = "",
         var lat: String = "",
         var lng: String = "",
         //附近订单

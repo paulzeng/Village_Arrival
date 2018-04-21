@@ -126,7 +126,7 @@ inline fun <reified T : TextView> T.startIncreaseAnimator(to: Float, millisecond
 /**
  * 显示动画，默认300ms
  */
-inline fun <reified T : View> T.visible() {
+inline fun <reified T : View> T.visibleAnimation() {
     if (visibility == View.GONE || visibility == View.INVISIBLE) {
         val appearAnimation = AlphaAnimation(0f, 1f)
         appearAnimation.duration = 300
@@ -147,7 +147,7 @@ inline fun <reified T : View> T.visible() {
 /**
  * 隐藏动画，默认300ms
  */
-inline fun <reified T : View> T.gone() {
+inline fun <reified T : View> T.goneAnimation() {
     if (visibility == View.VISIBLE) {
         val disappearAnimation = AlphaAnimation(1f, 0f)
         disappearAnimation.duration = 300

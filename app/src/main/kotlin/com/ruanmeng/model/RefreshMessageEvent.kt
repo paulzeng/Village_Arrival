@@ -1,5 +1,5 @@
 /**
- * created by 小卷毛, 2018/4/21 0021
+ * created by 小卷毛, 2018/3/16 0016
  * Copyright (c) 2018, 416143467@qq.com All Rights Reserved.
  * #                   *********                            #
  * #                  ************                          #
@@ -25,23 +25,14 @@
  * #          *****       ***        ***      *             #
  * #            **       ****        ****                   #
  */
-package com.ruanmeng.base
-
-import android.view.View
+package com.ruanmeng.model
 
 /**
  * 项目名称：Village_Arrival
- * 创建人：41614
- * 创建时间：2018-04-21 08:58
+ * 创建人：小卷毛
+ * 创建时间：2018-04-21 14:22
  */
-inline fun <reified T : View> T.visible() {
-    visibility = View.VISIBLE
-}
-
-inline fun <reified T : View> T.invisible() {
-    visibility = View.INVISIBLE
-}
-
-inline fun <reified T : View> T.gone() {
-    visibility = View.GONE
-}
+data class RefreshMessageEvent(
+        var type: String = "",
+        var id: String = "",
+        var name: String = "")

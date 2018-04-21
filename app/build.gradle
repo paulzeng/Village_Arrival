@@ -116,11 +116,12 @@ dependencies {
         exclude group: 'com.github.bumptech.glide', module: 'glide'
     }
 
-    implementation 'net.idik:slimadapter:2.1.2'
-    implementation 'com.yanzhenjie:permission:1.1.2'
-    implementation 'net.cachapa.expandablelayout:expandablelayout:2.9.2'
-    implementation 'com.github.santalu:mask-edittext:1.0.1'
     implementation 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1'
     implementation 'com.github.lguipeng:BubbleView:1.0.1'
+    implementation 'com.github.santalu:mask-edittext:1.0.1'
     implementation 'com.weigan:loopView:0.1.2'
+    implementation 'com.yanzhenjie:permission:1.1.2'
+    implementation 'net.cachapa.expandablelayout:expandablelayout:2.9.2'
+    implementation 'net.idik:slimadapter:2.1.2'
+    implementation 'org.greenrobot:eventbus:3.0.0'
 }

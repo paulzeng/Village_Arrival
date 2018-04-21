@@ -1,5 +1,5 @@
 /**
- * created by 小卷毛, 2018/4/21 0021
+ * created by 小卷毛, 2018/3/16 0016
  * Copyright (c) 2018, 416143467@qq.com All Rights Reserved.
  * #                   *********                            #
  * #                  ************                          #
@@ -25,23 +25,23 @@
  * #          *****       ***        ***      *             #
  * #            **       ****        ****                   #
  */
-package com.ruanmeng.base
-
-import android.view.View
+package com.ruanmeng.model
 
 /**
  * 项目名称：Village_Arrival
- * 创建人：41614
- * 创建时间：2018-04-21 08:58
+ * 创建人：小卷毛
+ * 创建时间：2018-04-21 14:30
  */
-inline fun <reified T : View> T.visible() {
-    visibility = View.VISIBLE
-}
-
-inline fun <reified T : View> T.invisible() {
-    visibility = View.INVISIBLE
-}
-
-inline fun <reified T : View> T.gone() {
-    visibility = View.GONE
-}
+data class LocationMessageEvent(
+        var type: String = "",
+        var addressId: String = "",
+        var address: String = "",
+        var detail: String = "",
+        var name: String = "",
+        var mobile: String = "",
+        var lat: String = "",
+        var lng: String = "",
+        var province: String = "",
+        var city: String = "",
+        var district: String = "",
+        var township: String = "")
