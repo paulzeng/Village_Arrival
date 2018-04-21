@@ -184,7 +184,11 @@ class AddressAddActivity : BaseActivity() {
                 }
                 .enableLoadMore(object : SlimMoreLoader(
                         baseContext,
-                        SimpleLoadMoreViewCreator(baseContext).setNoMoreHint("没有更多数据了...")) {
+                        SimpleLoadMoreViewCreator(baseContext)
+                                .setLoadingHint("正在加载...")
+                                .setNoMoreHint("没有更多数据了...")
+                                .setPullToLoadMoreHint("加载更多")
+                                .setErrorHint("加载失败")) {
                     override fun hasMore(): Boolean = mPosition == 0
                     override fun onLoadMore(handler: Handler) = getData(pageNum)
                 })
