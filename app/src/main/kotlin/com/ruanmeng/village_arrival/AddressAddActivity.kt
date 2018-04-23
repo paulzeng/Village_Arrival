@@ -177,8 +177,9 @@ class AddressAddActivity : BaseActivity() {
                                 EventBus.getDefault().post(LocationMessageEvent(
                                         mTitle,
                                         data.commonAddressId,
-                                        data.address,
-                                        data.detailAdress))
+                                        data.address, data.detailAdress,
+                                        data.name, data.mobile,
+                                        data.lat, data.lng))
                                 ActivityStack.screenManager.popActivities(this@AddressAddActivity::class.java)
                             }
                 }
@@ -186,7 +187,7 @@ class AddressAddActivity : BaseActivity() {
                         baseContext,
                         SimpleLoadMoreViewCreator(baseContext)
                                 .setLoadingHint("正在加载...")
-                                .setNoMoreHint("没有更多数据了...")
+                                .setNoMoreHint("没有更多数据了")
                                 .setPullToLoadMoreHint("加载更多")
                                 .setErrorHint("加载失败")) {
                     override fun hasMore(): Boolean = mPosition == 0
@@ -293,10 +294,8 @@ class AddressAddActivity : BaseActivity() {
             } else {
                 EventBus.getDefault().post(LocationMessageEvent(
                         mTitle, "",
-                        address,
-                        et_detail.text.toString(),
-                        et_name.text.toString(),
-                        et_tel.text.toString(),
+                        address, et_detail.text.toString(),
+                        et_name.text.toString(), et_tel.text.toString(),
                         lat, lng,
                         province, city, district, township))
                 ActivityStack.screenManager.popActivities(this@AddressAddActivity::class.java)

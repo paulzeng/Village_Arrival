@@ -52,8 +52,8 @@ class MainActivity : BaseActivity() {
 
     private val listAddress = ArrayList<CommonData>() //常用地址
     private var nowAddress = ""  //当前地址
-    private var nowCtn = ""      //当前位置抢单数
-    private var cyCtn = ""       //常用位置抢单数
+    private var nowCtn = "0"      //当前位置抢单数
+    private var cyCtn = "0"       //常用位置抢单数
 
     @SuppressLint("HandlerLeak", "SetTextI18n")
     private var handler = object : Handler() {
@@ -140,7 +140,7 @@ class MainActivity : BaseActivity() {
             isZoomControlsEnabled = false     //缩放按钮
             isCompassEnabled = false          //指南针
             isMyLocationButtonEnabled = false //定位按钮
-            isTiltGesturesEnabled = false     //倾斜手势
+            isTiltGesturesEnabled = true      //倾斜手势
             isRotateGesturesEnabled = false   //旋转手势
             setLogoBottomMargin(-50)          //隐藏logo
         }
@@ -276,8 +276,7 @@ class MainActivity : BaseActivity() {
                     @SuppressLint("SetTextI18n")
                     override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
 
-                        val obj = JSONObject(response.body()).getJSONObject("userMsg")
-                                ?: JSONObject()
+                        val obj = JSONObject(response.body()).getJSONObject("userMsg") ?: JSONObject()
                         putString("nickName", obj.getString("nickName"))
                         putString("userhead", obj.getString("userhead"))
                         putString("sex", obj.getString("sex"))
@@ -367,7 +366,7 @@ class MainActivity : BaseActivity() {
         val animation = ScaleAnimation(0f, 1f, 0f, 1f)
         animation.setInterpolator(LinearInterpolator())
         //整个移动所需要的时间
-        animation.setDuration(500)
+        animation.setDuration(300)
         //设置动画
         marker.setAnimation(animation)
         //开始动画

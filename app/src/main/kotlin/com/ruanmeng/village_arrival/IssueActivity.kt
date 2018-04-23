@@ -5,35 +5,37 @@ import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.view.View
 import android.widget.LinearLayout
+import com.lzg.extend.BaseResponse
+import com.lzg.extend.jackson.JacksonDialogCallback
 import com.lzy.okgo.OkGo
-import com.ruanmeng.base.BaseActivity
-import com.ruanmeng.base.load_Linear
-import com.ruanmeng.base.refresh
+import com.lzy.okgo.model.Response
+import com.ruanmeng.base.*
 import com.ruanmeng.model.CommonData
+import com.ruanmeng.model.RefreshMessageEvent
+import com.ruanmeng.share.BaseHttp
 import com.ruanmeng.utils.DensityUtil
+import com.ruanmeng.utils.TimeHelper
 import kotlinx.android.synthetic.main.activity_issue.*
 import kotlinx.android.synthetic.main.layout_empty.*
 import kotlinx.android.synthetic.main.layout_list.*
 import net.idik.lib.slimadapter.SlimAdapter
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 
 class IssueActivity : BaseActivity() {
 
     private val list = ArrayList<Any>()
+    private var mStatus = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_issue)
         init_title("我的发布")
 
-        list.add(CommonData("1"))
-        list.add(CommonData("2"))
-        list.add(CommonData("3"))
-        list.add(CommonData("4"))
-        list.add(CommonData("5"))
-        list.add(CommonData("6"))
-        list.add(CommonData("7"))
-        list.add(CommonData("8"))
-        mAdapter.updateData(list)
+        EventBus.getDefault().register(this@IssueActivity)
+
+        swipe_refresh.isRefreshing = true
+        getData(pageNum)
     }
 
     override fun init_title() {
@@ -45,8 +47,15 @@ class IssueActivity : BaseActivity() {
                 override fun onTabUnselected(tab: TabLayout.Tab) {}
 
                 override fun onTabSelected(tab: TabLayout.Tab) {
+                    mStatus = when (tab.position) {
+                        1 -> "0"
+                        2 -> "1"
+                        3 -> "2"
+                        4 -> "3"
+                        else -> ""
+                    }
                     OkGo.getInstance().cancelTag(this@IssueActivity)
-                    window.decorView.postDelayed({ runOnUiThread { /*updateList()*/ } }, 300)
+                    window.decorView.postDelayed({ runOnUiThread { updateList() } }, 300)
                 }
 
             })
@@ -77,17 +86,87 @@ class IssueActivity : BaseActivity() {
 
         mAdapter = SlimAdapter.create()
                 .register<CommonData>(R.layout.item_issue_list) { data, injector ->
-                    injector.visibility(R.id.item_issue_divider, if (list.indexOf(data) != 0) View.GONE else View.VISIBLE)
+                    injector.text(R.id.item_issue_time, when (data.status) {
+                        "-1", "2" -> "抢单时间：${TimeHelper.getDiffTime(TimeHelper.getInstance().millisecondToLong(data.grabsingleTime))}"
+                        "3" -> "完成时间：${TimeHelper.getDiffTime(TimeHelper.getInstance().millisecondToLong(data.arriveTime))}"
+                        else -> "下单时间：${TimeHelper.getDiffTime(TimeHelper.getInstance().millisecondToLong(data.createDate))}"
+                    })
+                            .text(R.id.item_issue_status, when (data.status) {
+                                "-3" -> "已删除"
+                                "-2" -> "已取消"
+                                "-1" -> "取消中"
+                                "0" -> "待支付"
+                                "1" -> "待抢单"
+                                "2" -> "进行中"
+                                "3" -> "已完成"
+                                else -> ""
+                            })
+                            .text(R.id.item_issue_name, when (data.type) {
+                                "1" -> "顺风商品：${data.goods}"
+                                else -> "代买商品：${data.goods}"
+                            })
+                            .image(R.id.item_issue_img1, if (data.type == "1") R.mipmap.index_lab05 else R.mipmap.index_lab01)
+                            .text(R.id.item_issue_addr1, data.buyAddress + data.buyDetailAdress)
+                            .text(R.id.item_issue_addr2, data.receiptAddress + data.receiptDetailAdress)
+                            .text(R.id.item_issue_name1, "${data.buyname}  ${data.buyMobile}")
+                            .text(R.id.item_issue_name2, "${data.receiptName}  ${data.receiptMobile}")
+                            .text(R.id.item_issue_yong, data.commission)
+                            .text(R.id.item_issue_yu, data.goodsPrice)
+
+                            .visibility(R.id.item_issue_name1, if (data.buyAddress == "就近购买") View.GONE else View.VISIBLE)
+                            .visibility(R.id.item_issue_yu_ll, if (data.goodsPrice.isEmpty()) View.GONE else View.VISIBLE)
+                            .visibility(R.id.item_issue_pay, if (data.status == "0") View.VISIBLE else View.GONE)
+                            .visibility(R.id.item_issue_divider, if (list.indexOf(data) != 0) View.GONE else View.VISIBLE)
+
+                            .clicked(R.id.item_issue_pay) {
+                                val intent = Intent(baseContext, IssuePayActivity::class.java)
+                                intent.putExtra("goodsOrderId", data.goodsOrderId)
+                                startActivity(intent)
+                            }
 
                             .clicked(R.id.item_issue) {
                                 val intent = Intent(baseContext, IssueDetailActivity::class.java)
+                                intent.putExtra("goodsOrderId", data.goodsOrderId)
                                 startActivity(intent)
                             }
                 }
                 .attachTo(recycle_list)
     }
 
-    fun updateList() {
+    override fun getData(pindex: Int) {
+        OkGo.post<BaseResponse<ArrayList<CommonData>>>(BaseHttp.my_order_list)
+                .tag(this@IssueActivity)
+                .headers("token", getString("token"))
+                .params("status", mStatus)
+                .params("page", pindex)
+                .execute(object : JacksonDialogCallback<BaseResponse<ArrayList<CommonData>>>(baseContext) {
+
+                    override fun onSuccess(response: Response<BaseResponse<ArrayList<CommonData>>>) {
+
+                        list.apply {
+                            if (pindex == 1) {
+                                clear()
+                                pageNum = pindex
+                            }
+                            addItems(response.body().`object`)
+                            if (count(response.body().`object`) > 0) pageNum++
+                        }
+
+                        if (count(response.body().`object`) > 0) mAdapter.updateData(list)
+                    }
+
+                    override fun onFinish() {
+                        super.onFinish()
+                        swipe_refresh.isRefreshing = false
+                        isLoadingMore = false
+
+                        empty_view.apply { if (list.isEmpty()) visible() else gone() }
+                    }
+
+                })
+    }
+
+    private fun updateList() {
         swipe_refresh.isRefreshing = true
 
         empty_view.visibility = View.GONE
@@ -98,5 +177,17 @@ class IssueActivity : BaseActivity() {
 
         pageNum = 1
         getData(pageNum)
+    }
+
+    override fun finish() {
+        EventBus.getDefault().unregister(this@IssueActivity)
+        super.finish()
+    }
+
+    @Subscribe
+    fun onMessageEvent(event: RefreshMessageEvent) {
+        when (event.type) {
+            "支付成功" -> updateList()
+        }
     }
 }

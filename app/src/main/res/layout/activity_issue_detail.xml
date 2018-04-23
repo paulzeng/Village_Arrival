@@ -184,7 +184,7 @@
                         android:layout_marginStart="@dimen/dimen_size_35"
                         android:layout_marginTop="@dimen/dimen_size_5"
                         android:lineSpacingExtra="@dimen/dimen_size_3"
-                        android:text="姓名    电话" />
+                        android:text="姓名  电话" />
 
                 </LinearLayout>
 
@@ -225,7 +225,7 @@
                         android:layout_marginStart="@dimen/dimen_size_35"
                         android:layout_marginTop="@dimen/dimen_size_5"
                         android:lineSpacingExtra="@dimen/dimen_size_3"
-                        android:text="姓名    电话" />
+                        android:text="姓名  电话" />
 
                 </LinearLayout>
 
@@ -256,7 +256,7 @@
                             android:id="@+id/issue_check"
                             style="@style/Font14_black_dark"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
+                            android:layout_height="wrap_content" />
 
                     </LinearLayout>
 
@@ -308,25 +308,10 @@
                         android:gravity="center_vertical|end">
 
                         <TextView
-                            android:id="@+id/issue_product1"
                             style="@style/Font14_light"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="商品：" />
-
-                        <TextView
-                            android:id="@+id/item_issue_money"
-                            style="@style/Font14_black"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0元"
-                            android:textColor="@color/red" />
-
-                        <TextView
-                            style="@style/Font14_light"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text=" + 佣金：" />
+                            android:text="佣金：" />
 
                         <TextView
                             android:id="@+id/issue_yong"
@@ -367,6 +352,7 @@
                         android:gravity="end">
 
                         <TextView
+                            android:id="@+id/issue_total_hint"
                             style="@style/Font14_light"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -431,6 +417,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_size_46"
                 android:layout_marginTop="@dimen/dimen_size_10"
+                android:visibility="gone"
                 app:sBothLineMargin="@dimen/dimen_size_0"
                 app:sLeftTextColor="@color/black"
                 app:sLeftTextMarginLeft="@dimen/dimen_size_10"

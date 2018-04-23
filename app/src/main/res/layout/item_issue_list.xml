@@ -170,11 +170,42 @@
 
             <TextView
                 style="@style/Font14_black"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="元"
                 android:textColor="@color/red" />
+
+            <LinearLayout
+                android:id="@+id/item_issue_yu_ll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical">
+
+                <TextView
+                    style="@style/Font13_light"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="（商品预估：" />
+
+                <TextView
+                    android:id="@+id/item_issue_yu"
+                    style="@style/Font13_light"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0" />
+
+                <TextView
+                    style="@style/Font13_light"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="元）" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dimen_size_1"
+                android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/item_issue_del"
@@ -186,7 +217,8 @@
                 android:background="@drawable/rec_bg_trans_stroke_blue"
                 android:gravity="center"
                 android:text="取消订单"
-                android:textColor="@color/colorAccent" />
+                android:textColor="@color/colorAccent"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/item_issue_pay"

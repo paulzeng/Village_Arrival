@@ -404,44 +404,77 @@ public class TimeHelper {
     }
 
     /**
-     * 根据用户传入的时间，返回指定时间的毫秒值
+     * 根据用户传入的时间，返回指定时间
      *
-     * @param nowtime 指定时间
+     * @param nowtime 指定时间（秒）
      * @return long   返回类型
      */
-    public long stringToLong(String nowtime) {
+    public long strToLong(String nowtime) {
         @SuppressLint("SimpleDateFormat")
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        long time;
         try {
             Date date = sdf.parse(nowtime);
-            time = date.getTime() / 1000;
+            return date.getTime() / 1000;
         } catch (ParseException e) {
             e.printStackTrace();
             return -1;
         }
-        return time;
     }
 
     /**
-     * 根据用户传入的时间和格式，返回指定时间的毫秒值
+     * 根据用户传入的时间和格式，返回指定时间
      *
      * @param format  格式
-     * @param nowtime 指定时间
+     * @param nowtime 指定时间（秒）
      * @return long   返回类型
      */
-    public long stringToLong(String format, String nowtime) {
+    public long strToLong(String format, String nowtime) {
         @SuppressLint("SimpleDateFormat")
         SimpleDateFormat sdf = new SimpleDateFormat(format);
-        long time;
         try {
             Date date = sdf.parse(nowtime);
-            time = date.getTime() / 1000;
+            return date.getTime() / 1000;
         } catch (ParseException e) {
             e.printStackTrace();
             return -1;
         }
-        return time;
+    }
+
+    /**
+     * 根据用户传入的时间，返回指定时间
+     *
+     * @param nowtime 指定时间（毫秒）
+     * @return long   返回类型
+     */
+    public long millisecondToLong(String nowtime) {
+        try {
+            @SuppressLint("SimpleDateFormat")
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+            return sdf.parse(nowtime).getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    /**
+     * 根据用户传入的时间和格式，返回指定时间
+     *
+     * @param format  格式
+     * @param nowtime 指定时间（毫秒）
+     * @return long   返回类型
+     */
+    public long millisecondToLong(String format, String nowtime) {
+        try {
+            @SuppressLint("SimpleDateFormat")
+            SimpleDateFormat sdf = new SimpleDateFormat(format);
+
+            return sdf.parse(nowtime).getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return -1;
+        }
     }
 
     /**
