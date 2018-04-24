@@ -4,13 +4,17 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import com.lzg.extend.BaseResponse
+import com.lzg.extend.StringDialogCallback
 import com.lzg.extend.jackson.JacksonDialogCallback
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 import com.ruanmeng.base.*
 import com.ruanmeng.model.CommonData
+import com.ruanmeng.model.RefreshMessageEvent
 import com.ruanmeng.share.BaseHttp
+import com.ruanmeng.utils.ActivityStack
 import kotlinx.android.synthetic.main.activity_grab_detail.*
+import org.greenrobot.eventbus.EventBus
 
 class GrabDetailActivity : BaseActivity() {
 
@@ -38,7 +42,24 @@ class GrabDetailActivity : BaseActivity() {
     override fun doClick(v: View) {
         super.doClick(v)
         when (v.id) {
-            R.id.bt_done -> startActivity<TaskContactActivity>()
+            R.id.bt_done -> {
+                startActivity<TaskContactActivity>()
+
+                OkGo.post<String>(BaseHttp.complete_order)
+                        .tag(this@GrabDetailActivity)
+                        .headers("token", getString("token"))
+                        .params("goodsOrderId", intent.getStringExtra("goodsOrderId"))
+                        .execute(object : StringDialogCallback(baseContext) {
+
+                            override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
+
+                                showToast(msg)
+                                EventBus.getDefault().post(RefreshMessageEvent("完成订单"))
+                                getData()
+                            }
+
+                        })
+            }
         }
     }
 

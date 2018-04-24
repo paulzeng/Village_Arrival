@@ -44,6 +44,7 @@ public class BaseHttp {
     public static String add_order_tip_balance = baseIp + "/add_order_tip_balance.rm"; //余额支付小费√
     public static String order_list_data = baseIp + "/order_list_data.rm"; //订单列表√
     public static String grab_order = baseIp + "/grab_order.rm"; //抢单√
+    public static String complete_order = baseIp + "/complete_order.rm"; //完成订单√
 
     public static String area_street2 = baseIp + "/area_street2.rm"; //获取乡镇√
 }

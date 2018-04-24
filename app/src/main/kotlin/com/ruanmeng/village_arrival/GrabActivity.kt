@@ -12,6 +12,7 @@ import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 import com.ruanmeng.base.*
 import com.ruanmeng.model.CommonData
+import com.ruanmeng.model.RefreshMessageEvent
 import com.ruanmeng.share.BaseHttp
 import com.ruanmeng.utils.DensityUtil
 import com.ruanmeng.utils.DialogHelper
@@ -21,6 +22,8 @@ import kotlinx.android.synthetic.main.activity_grab.*
 import kotlinx.android.synthetic.main.layout_empty.*
 import kotlinx.android.synthetic.main.layout_list.*
 import net.idik.lib.slimadapter.SlimAdapter
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 
 class GrabActivity : BaseActivity() {
 
@@ -31,6 +34,8 @@ class GrabActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_grab)
         init_title("我的抢单")
+
+        EventBus.getDefault().register(this@GrabActivity)
     }
 
     override fun init_title() {
@@ -190,5 +195,17 @@ class GrabActivity : BaseActivity() {
 
         pageNum = 1
         getData(pageNum)
+    }
+
+    override fun finish() {
+        EventBus.getDefault().unregister(this@GrabActivity)
+        super.finish()
+    }
+
+    @Subscribe
+    fun onMessageEvent(event: RefreshMessageEvent) {
+        when (event.type) {
+            "完成订单" -> updateList()
+        }
     }
 }
