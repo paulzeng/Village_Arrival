@@ -1,6 +1,5 @@
 package com.ruanmeng.village_arrival
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.Html
 import android.view.View
@@ -9,8 +8,6 @@ import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 import com.ruanmeng.base.BaseActivity
 import com.ruanmeng.base.getString
-import com.ruanmeng.base.showToast
-import com.ruanmeng.base.startActivity
 import com.ruanmeng.model.RefreshMessageEvent
 import com.ruanmeng.share.BaseHttp
 import com.ruanmeng.utils.ActivityStack
@@ -59,14 +56,14 @@ class IssuePayActivity : BaseActivity() {
                                     override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
 
                                         EventBus.getDefault().post(RefreshMessageEvent("支付成功"))
-                                        val intent = Intent(baseContext, TaskResultActivity::class.java)
+                                        intent.setClass(baseContext, TaskResultActivity::class.java)
                                         intent.putExtra("title", "支付成功")
                                         startActivity(intent)
                                         ActivityStack.screenManager.popActivities(this@IssuePayActivity::class.java)
                                     }
 
                                     override fun onSuccessResponseErrorCode(response: Response<String>, msg: String, msgCode: String) {
-                                        val intent = Intent(baseContext, TaskResultActivity::class.java)
+                                        intent.setClass(baseContext, TaskResultActivity::class.java)
                                         intent.putExtra("title", "支付失败")
                                         intent.putExtra("message", msg)
                                         startActivity(intent)

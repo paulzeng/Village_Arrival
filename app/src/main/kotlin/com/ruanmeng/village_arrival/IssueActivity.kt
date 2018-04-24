@@ -33,9 +33,6 @@ class IssueActivity : BaseActivity() {
         init_title("我的发布")
 
         EventBus.getDefault().register(this@IssueActivity)
-
-        swipe_refresh.isRefreshing = true
-        getData(pageNum)
     }
 
     override fun init_title() {
@@ -87,6 +84,8 @@ class IssueActivity : BaseActivity() {
         mAdapter = SlimAdapter.create()
                 .register<CommonData>(R.layout.item_issue_list) { data, injector ->
                     injector.text(R.id.item_issue_time, when (data.status) {
+                        "-2" -> "取消时间：${TimeHelper.getDiffTime(TimeHelper.getInstance().millisecondToLong(data.cancelTime))}"
+                        "1" -> "等待时间：${TimeHelper.getDiffTime(TimeHelper.getInstance().millisecondToLong(data.payTime))}"
                         "-1", "2" -> "抢单时间：${TimeHelper.getDiffTime(TimeHelper.getInstance().millisecondToLong(data.grabsingleTime))}"
                         "3" -> "完成时间：${TimeHelper.getDiffTime(TimeHelper.getInstance().millisecondToLong(data.arriveTime))}"
                         else -> "下单时间：${TimeHelper.getDiffTime(TimeHelper.getInstance().millisecondToLong(data.createDate))}"
@@ -120,7 +119,9 @@ class IssueActivity : BaseActivity() {
 
                             .clicked(R.id.item_issue_pay) {
                                 val intent = Intent(baseContext, IssuePayActivity::class.java)
+                                intent.putExtra("hint", "发布列表")
                                 intent.putExtra("goodsOrderId", data.goodsOrderId)
+                                intent.putExtra("commission", data.commission)
                                 startActivity(intent)
                             }
 

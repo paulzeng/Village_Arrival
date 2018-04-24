@@ -234,8 +234,12 @@ class TaskActivity : BaseActivity() {
 
                             override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
 
-                                showToast(msg)
-                                startActivity<IssuePayActivity>()
+                                val obj = JSONObject(response.body()).getJSONObject("object") ?: JSONObject()
+                                val intent = Intent(baseContext, IssuePayActivity::class.java)
+                                intent.putExtra("hint", "提交订单")
+                                intent.putExtra("goodsOrderId", obj.optString("goodsOrderId"))
+                                intent.putExtra("commission", obj.optString("commission", "0.00"))
+                                startActivity(intent)
                                 ActivityStack.screenManager.popActivities(this@TaskActivity::class.java)
                             }
 

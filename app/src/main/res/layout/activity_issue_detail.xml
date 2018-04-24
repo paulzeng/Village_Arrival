@@ -70,6 +70,7 @@
                         android:layout_width="@dimen/dimen_size_45"
                         android:layout_height="@dimen/dimen_size_45"
                         android:layout_marginStart="@dimen/dimen_size_15"
+                        android:onClick="doClick"
                         android:src="@mipmap/buy_tel_icon02"
                         tools:ignore="ContentDescription" />
 
@@ -447,14 +448,14 @@
                 android:paddingTop="@dimen/dimen_size_15">
 
                 <TextView
-                    android:id="@+id/grab_order"
+                    android:id="@+id/issue_order"
                     style="@style/Font14_gray"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="订单编号：" />
 
                 <TextView
-                    android:id="@+id/grab_submit"
+                    android:id="@+id/issue_submit"
                     style="@style/Font14_gray"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -462,7 +463,7 @@
                     android:text="下单时间：" />
 
                 <TextView
-                    android:id="@+id/grab_pay"
+                    android:id="@+id/issue_pay"
                     style="@style/Font14_gray"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -1,9 +1,20 @@
 package com.ruanmeng.village_arrival
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.support.design.widget.BottomSheetDialog
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
+import android.view.WindowManager
+import android.widget.Button
+import android.widget.EditText
+import android.widget.RadioGroup
 import com.lzg.extend.BaseResponse
+import com.lzg.extend.StringDialogCallback
 import com.lzg.extend.jackson.JacksonDialogCallback
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
@@ -11,6 +22,7 @@ import com.ruanmeng.base.*
 import com.ruanmeng.model.CommonData
 import com.ruanmeng.model.RefreshMessageEvent
 import com.ruanmeng.share.BaseHttp
+import com.ruanmeng.utils.DialogHelper
 import kotlinx.android.synthetic.main.activity_issue_detail.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -41,6 +53,8 @@ class IssueDetailActivity : BaseActivity() {
         issue_add.gone()
         bt_press.gone()
         issue_status.gone()
+
+        issue_add.setOnClickListener { showSheetDialog() }
     }
 
     override fun doClick(v: View) {
@@ -51,6 +65,7 @@ class IssueDetailActivity : BaseActivity() {
                     if (mCommission.isEmpty()) return
 
                     intent.setClass(baseContext, IssuePayActivity::class.java)
+                    intent.putExtra("hint", "发布详情")
                     intent.putExtra("commission", mCommission)
                     startActivity(intent)
                 }
@@ -59,12 +74,81 @@ class IssueDetailActivity : BaseActivity() {
                     startActivity(intent)
                 }
             }
+            R.id.issue_call -> {
+                if (sendTelephone.isEmpty()) {
+                    showToast("电话号码为空")
+                    return
+                }
+
+                DialogHelper.showHintDialog(baseContext,
+                        "拨打电话",
+                        "抢单员电话：$sendTelephone，确定要拨打吗？ ",
+                        "取消",
+                        "确定") {
+                    val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$sendTelephone"))
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
+                }
+            }
             R.id.tv_nav_right -> {
                 if (mStauts == "0" || mStauts == "1" || mStauts == "2") {
+                    DialogHelper.showHintDialog(baseContext,
+                            "取消订单",
+                            getString(R.string.cancel_grab),
+                            "取消",
+                            "确定") {
 
+                    }
                 }
             }
         }
+    }
+
+    @SuppressLint("InflateParams")
+    private fun showSheetDialog() {
+        val view = LayoutInflater.from(baseContext).inflate(R.layout.dialog_issue_pay, null) as View
+        val payCount = view.findViewById<EditText>(R.id.pay_count)
+        val payGroup = view.findViewById<RadioGroup>(R.id.pay_group)
+        val btPay = view.findViewById<Button>(R.id.bt_pay)
+        val dialog = BottomSheetDialog(baseContext)
+
+        payGroup.check(R.id.pay_check1)
+        payCount.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                if (s.isNotEmpty()) {
+                    if ("." == s.toString()) {
+                        payCount.setText("0.")
+                        payCount.setSelection(payCount.text.length) //设置光标的位置
+                    }
+                }
+            }
+
+            override fun afterTextChanged(s: Editable) {
+                val temp = s.toString()
+                val posDot = temp.indexOf(".")
+                if (posDot < 0) {
+                    if (temp.length > 7) s.delete(7, 8)
+                } else {
+                    if (temp.length - posDot - 1 > 2) s.delete(posDot + 3, posDot + 4)
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+        })
+        btPay.setOnClickListener {
+            if (payCount.text.isEmpty()) {
+                showToast("请输入小费金额")
+                return@setOnClickListener
+            }
+
+            dialog.dismiss()
+
+            window.decorView.postDelayed({ getPayData(payCount.text.toString()) }, 300)
+        }
+
+        dialog.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
+        dialog.setContentView(view)
+        dialog.show()
     }
 
     override fun getData() {
@@ -170,10 +254,10 @@ class IssueDetailActivity : BaseActivity() {
                             else -> ""
                         }
                         issue_memo.text = data.mome
-                        grab_order.text = "订单编号：${data.goodsOrderId}"
-                        grab_submit.text = "下单时间：${data.createDate}"
-                        grab_pay.text = "付款时间：${data.payTime}"
-                        if (data.payTime.isEmpty()) grab_pay.gone() else grab_pay.visible()
+                        issue_order.text = "订单编号：${data.goodsOrderId}"
+                        issue_submit.text = "下单时间：${data.createDate}"
+                        issue_pay.text = "付款时间：${data.payTime}"
+                        if (data.payTime.isEmpty()) issue_pay.gone() else issue_pay.visible()
 
                         mCommission = data.commission
                         val tip = data.tip.toDouble()
@@ -183,6 +267,23 @@ class IssueDetailActivity : BaseActivity() {
                         issue_fee.text = "${data.tip}元"
                         if (tip == 0.0) issue_fee_ll.gone() else issue_fee_ll.visible()
                         issue_commission.text = data.commission
+                    }
+
+                })
+    }
+
+    private fun getPayData(count: String) {
+        OkGo.post<String>(BaseHttp.add_order_tip_balance)
+                .tag(this@IssueDetailActivity)
+                .headers("token", getString("token"))
+                .params("goodsOrderId", intent.getStringExtra("goodsOrderId"))
+                .params("renewPrice", count)
+                .execute(object : StringDialogCallback(baseContext) {
+
+                    override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
+
+                        showToast(msg)
+                        getData()
                     }
 
                 })

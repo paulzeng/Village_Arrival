@@ -77,6 +77,7 @@ data class CommonData(
         var payTime: String = "",
         var grabsingleTime: String = "",
         var arriveTime: String = "",
+        var cancelTime: String = "",
         var sendUserHead: String = "",
         var sendNickName: String = "",
         var sendTelephone: String = "",
@@ -86,5 +87,10 @@ data class CommonData(
         var agreeCancel: String = "",
         //商品重量
         var weightPriceId: String = "",
-        var weightDescribe: String = ""
+        var weightDescribe: String = "",
+        //乡镇列表
+        var isChecked: Boolean = false,
+        var areaCode: String = "",
+        var areaId: String = "",
+        var areaName: String = ""
 ) : Serializable

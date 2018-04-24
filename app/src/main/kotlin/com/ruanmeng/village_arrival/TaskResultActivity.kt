@@ -4,19 +4,23 @@ import android.os.Bundle
 import android.view.View
 import com.ruanmeng.base.BaseActivity
 import com.ruanmeng.utils.ActivityStack
+import com.ruanmeng.utils.DialogHelper
 import kotlinx.android.synthetic.main.activity_task_result.*
 
 class TaskResultActivity : BaseActivity() {
 
+    private var mTitle = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task_result)
-        init_title(intent.getStringExtra("title"))
+        mTitle = intent.getStringExtra("title")
+        init_title(mTitle)
     }
 
     override fun init_title() {
         super.init_title()
-        when (intent.getStringExtra("title")) {
+        when (mTitle) {
             "支付成功" -> {
                 task_img.setImageResource(R.mipmap.pay_success)
                 task_hint.text = "支付成功"
@@ -38,23 +42,48 @@ class TaskResultActivity : BaseActivity() {
         super.doClick(v)
         when (v.id) {
             R.id.task_cancel -> {
-                when (task_cancel.text.toString()) {
-                    "取消订单" -> {
+                if (mTitle == "支付成功") {
+                    DialogHelper.showHintDialog(baseContext,
+                            "取消订单",
+                            getString(R.string.cancel_grab),
+                            "取消",
+                            "确定") {
 
                     }
-                    "查看订单" -> {
-                        ActivityStack.screenManager.popActivities(this@TaskResultActivity::class.java, IssuePayActivity::class.java)
+                } else {
+                    when (intent.getStringExtra("hint")) {
+                        "提交订单", "发布列表" -> {
+                            intent.setClass(baseContext, IssueDetailActivity::class.java)
+                            startActivity(intent)
+                            ActivityStack.screenManager.popActivities(
+                                    this@TaskResultActivity::class.java,
+                                    IssuePayActivity::class.java)
+                        }
+                        "发布详情" -> ActivityStack.screenManager.popActivities(
+                                this@TaskResultActivity::class.java,
+                                IssuePayActivity::class.java)
                     }
                 }
             }
             R.id.task_look -> {
-                when (task_look.text.toString()) {
-                    "查看订单" -> ActivityStack.screenManager.popActivities(this@TaskResultActivity::class.java)
-                    "重新支付" -> {
-                        ActivityStack.screenManager.popActivities(this@TaskResultActivity::class.java, IssuePayActivity::class.java)
+                if (mTitle == "支付失败") {
+                    ActivityStack.screenManager.popActivities(this@TaskResultActivity::class.java)
+                } else {
+                    when (intent.getStringExtra("hint")) {
+                        "提交订单", "发布列表" -> {
+                            intent.setClass(baseContext, IssueDetailActivity::class.java)
+                            startActivity(intent)
+                            ActivityStack.screenManager.popActivities(this@TaskResultActivity::class.java)
+                        }
+                        "发布详情" -> ActivityStack.screenManager.popActivities(this@TaskResultActivity::class.java)
                     }
                 }
             }
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        if (mTitle == "支付失败") ActivityStack.screenManager.popActivities(IssuePayActivity::class.java)
     }
 }

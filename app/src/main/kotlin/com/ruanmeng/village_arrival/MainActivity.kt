@@ -51,7 +51,9 @@ class MainActivity : BaseActivity() {
     private lateinit var geocoderSearch: GeocodeSearch
 
     private val listAddress = ArrayList<CommonData>() //常用地址
-    private var nowAddress = ""  //当前地址
+    private var nowAddress = ""   //当前地址
+    private var nowCity = ""      //当前市
+    private var nowDistrict = ""  //当前区
     private var nowCtn = "0"      //当前位置抢单数
     private var cyCtn = "0"       //常用位置抢单数
 
@@ -157,6 +159,8 @@ class MainActivity : BaseActivity() {
                         val building = result.regeocodeAddress.building
                         val street = result.regeocodeAddress.streetNumber.street
                         val township = result.regeocodeAddress.township
+                        nowCity = result.regeocodeAddress.city
+                        nowDistrict = result.regeocodeAddress.district
 
                         nowAddress = if (neighborhood.isEmpty()) {
                             if (building.isEmpty()) {
@@ -199,7 +203,14 @@ class MainActivity : BaseActivity() {
         super.doClick(v)
         when (v.id) {
             R.id.main_msg -> startActivity<MessageActivity>()
-            R.id.main_grab -> startActivity<TaskGrabActivity>()
+            R.id.main_grab -> {
+                val intent = Intent(baseContext, TaskGrabActivity::class.java)
+                intent.putExtra("lat", aMap.cameraPosition.target.latitude.toString())
+                intent.putExtra("lng", aMap.cameraPosition.target.longitude.toString())
+                intent.putExtra("city", nowCity)
+                intent.putExtra("district", nowDistrict)
+                startActivity(intent)
+            }
             R.id.main_live -> startActivity<LiveActivity>()
             R.id.main_often_ll -> if (listAddress.isEmpty()) startActivity<AddressActivity>()
             R.id.main_issue -> {
@@ -295,6 +306,13 @@ class MainActivity : BaseActivity() {
                                 nav_img.setTag(R.id.nav_img, getString("userhead"))
                             }
                         }
+
+                        nav_status.setRightString(when (getString("status")) {
+                            "-1" -> "审核中"
+                            "0" -> "未通过"
+                            "1" -> "已审核"
+                            else -> "未审核"
+                        })
                     }
 
                 })

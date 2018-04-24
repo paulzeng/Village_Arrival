@@ -2,13 +2,25 @@ package com.ruanmeng.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
 import com.flyco.dialog.widget.base.BottomBaseDialog;
 import com.maning.mndialoglibrary.MProgressDialog;
+import com.ruanmeng.base.BaseDialog;
+import com.ruanmeng.view.DropPopWindow;
 import com.ruanmeng.village_arrival.R;
 import com.weigan.loopview.LoopView;
+
+import net.idik.lib.slimadapter.SlimAdapter;
+import net.idik.lib.slimadapter.SlimInjector;
+import net.idik.lib.slimadapter.viewinjector.IViewInjector;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,6 +50,90 @@ public class DialogHelper {
     public static void dismissDialog() {
         if (mMProgressDialog != null && mMProgressDialog.isShowing())
             mMProgressDialog.dismiss();
+    }
+
+    public static void showHintDialog(
+            final Context context,
+            final String title,
+            final CharSequence content,
+            final String left,
+            final String right,
+            final ClickCallBack callBack) {
+        BaseDialog dialog = new BaseDialog(context) {
+            @Override
+            public View onCreateView() {
+                widthScale(0.85f);
+                View view = View.inflate(context, R.layout.dialog_cancel_hint, null);
+
+                TextView tv_title = view.findViewById(R.id.dialog_title);
+                TextView tv_content = view.findViewById(R.id.dialog_content);
+                TextView tv_left = view.findViewById(R.id.dialog_left);
+                TextView tv_right = view.findViewById(R.id.dialog_right);
+
+                tv_title.setText(title);
+                tv_content.setText(content);
+                tv_left.setText(left);
+                tv_right.setText(right);
+
+                tv_left.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dismiss();
+                        callBack.onClick("left");
+                    }
+                });
+                tv_right.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dismiss();
+                        callBack.onClick("right");
+                    }
+                });
+
+                return view;
+            }
+        };
+
+        dialog.show();
+    }
+
+    public static void showDropWindow(
+            final Context context,
+            @LayoutRes int resoureId,
+            View arrow,
+            View anchor,
+            final List<String> items,
+            final ItemCallBack callBack) {
+        DropPopWindow dropPopWindow = new DropPopWindow(context, resoureId, arrow) {
+            @Override
+            public void afterInitView(@NotNull View view) {
+                RecyclerView recyclerView = view.findViewById(R.id.pop_container);
+                recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                SlimAdapter adapter = SlimAdapter.create()
+                        .register(R.layout.item_area_list, new SlimInjector<String>() {
+                            @Override
+                            public void onInject(@NonNull final String data, @NonNull IViewInjector injector) {
+                                injector.text(R.id.item_area, data)
+                                        .visibility(
+                                                R.id.item_area_divider1,
+                                                items.indexOf(data) == items.size() - 1 ? View.GONE : View.VISIBLE)
+                                        .visibility(
+                                                R.id.item_area_divider2,
+                                                items.indexOf(data) != items.size() - 1 ? View.GONE : View.VISIBLE)
+                                        .clicked(R.id.item_area, new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                dismiss();
+                                                callBack.doWork(items.indexOf(data), data);
+                                            }
+                                        });
+                            }
+                        })
+                        .attachTo(recyclerView);
+                adapter.updateData(items);
+            }
+        };
+        dropPopWindow.showAsDropDown(anchor);
     }
 
     public static void showItemDialog(
@@ -171,6 +267,10 @@ public class DialogHelper {
         }
 
         return items;
+    }
+
+    public interface ClickCallBack {
+        void onClick(String hint);
     }
 
     public interface ItemCallBack {

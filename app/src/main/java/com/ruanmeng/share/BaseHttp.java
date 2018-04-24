@@ -26,15 +26,24 @@ public class BaseHttp {
     public static String certification_info = baseIp + "/certification_info.rm";           //实名信息√
     public static String certification_sub = baseIp + "/certification_sub.rm";             //实名认证√
     public static String my_order_list = baseIp + "/my_order_list.rm";                     //我的发布√
+    public static String grabsingle_order_list = baseIp + "/grabsingle_order_list.rm";     //我的抢单√
     public static String goodsorde_dealis = baseIp + "/goodsorde_dealis.rm";               //订单详情√
     public static String my_account_info = baseIp + "/my_account_info.rm";                 //我的账户√
     public static String my_commonaddress_list = baseIp + "/my_commonaddress_list.rm";     //地址列表√
     public static String add_commonaddress = baseIp + "/add_commonaddress.rm";             //新增地址√
     public static String delete_commonaddress = baseIp + "/delete_commonaddress.rm";       //删除地址√
+    public static String applyodd_data = baseIp + "/applyodd_data.rm";                     //抢单状态√
+    public static String add_applyodd = baseIp + "/add_applyodd.rm";                       //申请抢单√
+    public static String check_bail = baseIp + "/check_bail.rm";                           //保证金额√
 
     public static String frist_index_data = baseIp + "/frist_index_data.rm"; //首页√
     public static String weightprice_list_data = baseIp + "/weightprice_address_list_data.rm"; //商品重量√
     public static String order_commission = baseIp + "/order_commission.rm"; //获取佣金√
     public static String add_goodsorde = baseIp + "/add_goodsorde.rm"; //新增订单√
     public static String balance_pay_order = baseIp + "/balance_pay_order.rm"; //余额支付√
+    public static String add_order_tip_balance = baseIp + "/add_order_tip_balance.rm"; //余额支付小费√
+    public static String order_list_data = baseIp + "/order_list_data.rm"; //订单列表√
+    public static String grab_order = baseIp + "/grab_order.rm"; //抢单√
+
+    public static String area_street2 = baseIp + "/area_street2.rm"; //获取乡镇√
 }
