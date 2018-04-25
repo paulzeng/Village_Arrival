@@ -35,10 +35,13 @@ import com.lzy.okgo.model.Response
 import com.ruanmeng.base.*
 import com.ruanmeng.model.CommonData
 import com.ruanmeng.model.CommonModel
+import com.ruanmeng.model.RefreshMessageEvent
 import com.ruanmeng.share.BaseHttp
 import com.ruanmeng.utils.CommonUtil
 import com.ruanmeng.utils.DensityUtil
 import kotlinx.android.synthetic.main.activity_main.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 import org.json.JSONObject
 import java.util.*
 
@@ -79,6 +82,8 @@ class MainActivity : BaseActivity() {
         transparentStatusBar(false)
         main_map.onCreate(savedInstanceState)
         init_title()
+
+        EventBus.getDefault().register(this@MainActivity)
     }
 
     override fun onStart() {
@@ -120,8 +125,6 @@ class MainActivity : BaseActivity() {
                             position.target.latitude, position.target.longitude),
                             100f,
                             GeocodeSearch.AMAP))
-
-                    getNearData(position.target.latitude, position.target.longitude)
                 }
 
                 override fun onCameraChange(position: CameraPosition) {
@@ -171,6 +174,7 @@ class MainActivity : BaseActivity() {
                         } else neighborhood
 
                         main_title.text = result.regeocodeAddress.district
+                        getNearData(result.regeocodeQuery.point.latitude, result.regeocodeQuery.point.longitude)
                         handler.sendEmptyMessage(0)
                     }
                 }
@@ -211,7 +215,11 @@ class MainActivity : BaseActivity() {
                 intent.putExtra("district", nowDistrict)
                 startActivity(intent)
             }
-            R.id.main_live -> startActivity<LiveActivity>()
+            R.id.main_live -> {
+                val intent = Intent(baseContext, LiveHomeActivity::class.java)
+                intent.putExtra("title", nowCity)
+                startActivity(intent)
+            }
             R.id.main_often_ll -> if (listAddress.isEmpty()) startActivity<AddressActivity>()
             R.id.main_issue -> {
                 val inflate = View.inflate(baseContext, R.layout.pop_main_issue, null)
@@ -321,9 +329,12 @@ class MainActivity : BaseActivity() {
     private fun getNearData(lat: Double, lng: Double) {
         OkGo.post<BaseResponse<CommonModel>>(BaseHttp.frist_index_data)
                 .tag("周边信息")
+                .isMultipart(true)
                 .headers("token", getString("token"))
                 .params("nowlat", lat)
                 .params("nowlng", lng)
+                .params("city", nowCity)
+                .params("district", nowDistrict)
                 .execute(object : JacksonDialogCallback<BaseResponse<CommonModel>>(baseContext) {
 
                     @SuppressLint("SetTextI18n")
@@ -333,6 +344,9 @@ class MainActivity : BaseActivity() {
                             clear()
                             addItems(response.body().`object`.orders)
                         }
+
+                        listMaker.forEach { it.destroy() }
+                        listMaker.clear()
 
                         if (list.isNotEmpty()) {
                             list.filter { it.status == "1" }.forEach {
@@ -422,5 +436,21 @@ class MainActivity : BaseActivity() {
         super.onDestroy()
         OkGo.getInstance().cancelTag("周边信息")
         main_map.onDestroy()
+    }
+
+    override fun finish() {
+        EventBus.getDefault().unregister(this@MainActivity)
+        super.finish()
+    }
+
+    @Subscribe
+    fun onMessageEvent(event: RefreshMessageEvent) {
+        when (event.type) {
+            "新增地址", "删除地址", "支付成功", "抢单成功", "快速抢单", "客户取消", "客户同意", "骑手同意" -> {
+                getNearData(
+                        aMap.cameraPosition.target.latitude,
+                        aMap.cameraPosition.target.longitude)
+            }
+        }
     }
 }

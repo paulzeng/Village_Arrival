@@ -69,6 +69,7 @@ class AddressActivity : BaseActivity() {
                             list.removeAt(it)
                             adapter.notifyItemRemoved(it)
                             empty_view.apply { if (list.isNotEmpty()) gone() else visible() }
+                            EventBus.getDefault().post(RefreshMessageEvent("删除地址"))
                         }
 
                     })
@@ -119,7 +120,7 @@ class AddressActivity : BaseActivity() {
     @Subscribe
     fun onMessageEvent(event: RefreshMessageEvent) {
         when (event.type) {
-            "常用地址" -> {
+            "新增地址" -> {
                 empty_view.gone()
                 getData()
             }

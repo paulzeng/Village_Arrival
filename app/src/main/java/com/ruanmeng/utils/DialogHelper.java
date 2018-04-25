@@ -58,6 +58,7 @@ public class DialogHelper {
             final CharSequence content,
             final String left,
             final String right,
+            final boolean cancel,
             final ClickCallBack callBack) {
         BaseDialog dialog = new BaseDialog(context) {
             @Override
@@ -94,6 +95,7 @@ public class DialogHelper {
             }
         };
 
+        dialog.setCanceledOnTouchOutside(cancel);
         dialog.show();
     }
 

@@ -112,7 +112,7 @@ class IssueActivity : BaseActivity() {
                             .text(R.id.item_issue_yong, data.commission)
                             .text(R.id.item_issue_yu, data.goodsPrice)
 
-                            .visibility(R.id.item_issue_name1, if (data.buyAddress == "就近购买") View.GONE else View.VISIBLE)
+                            .visibility(R.id.item_issue_name1, if (data.buyMobile.isEmpty()) View.GONE else View.VISIBLE)
                             .visibility(R.id.item_issue_yu_ll, if (data.goodsPrice.isEmpty()) View.GONE else View.VISIBLE)
                             .visibility(R.id.item_issue_pay, if (data.status == "0") View.VISIBLE else View.GONE)
                             .visibility(R.id.item_issue_divider, if (list.indexOf(data) != 0) View.GONE else View.VISIBLE)
@@ -188,7 +188,7 @@ class IssueActivity : BaseActivity() {
     @Subscribe
     fun onMessageEvent(event: RefreshMessageEvent) {
         when (event.type) {
-            "支付成功" -> updateList()
+            "支付成功", "客户取消", "客户同意" -> updateList()
         }
     }
 }

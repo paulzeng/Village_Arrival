@@ -4,8 +4,11 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
 import android.support.design.widget.BottomSheetDialog
 import android.text.Editable
+import android.text.Html
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
@@ -26,13 +29,28 @@ import com.ruanmeng.utils.DialogHelper
 import kotlinx.android.synthetic.main.activity_issue_detail.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
+import java.text.DecimalFormat
 
 class IssueDetailActivity : BaseActivity() {
 
     private var mStauts = ""
     private var mType = ""
-    private var sendTelephone = ""
     private var mCommission = ""
+    private var sendNickName = ""
+    private var sendUserHead = ""
+    private var sendTelephone = ""
+    private var userGrade = ""
+
+    private var agreeCancel = "0.0"
+    private var unAgreeCancel = "0.0"
+
+    @SuppressLint("HandlerLeak")
+    private var handler = object : Handler() {
+        override fun handleMessage(msg: Message) {
+            super.handleMessage(msg)
+            getData()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +59,7 @@ class IssueDetailActivity : BaseActivity() {
 
         EventBus.getDefault().register(this@IssueDetailActivity)
 
-        getData()
+        handler.sendEmptyMessage(0)
     }
 
     override fun init_title() {
@@ -71,6 +89,10 @@ class IssueDetailActivity : BaseActivity() {
                 }
                 "立即评价" -> {
                     intent.setClass(baseContext, IssueCommentActivity::class.java)
+                    intent.putExtra("sendNickName", sendNickName)
+                    intent.putExtra("sendUserHead", sendUserHead)
+                    intent.putExtra("sendTelephone", sendTelephone)
+                    intent.putExtra("userGrade", userGrade)
                     startActivity(intent)
                 }
             }
@@ -84,21 +106,28 @@ class IssueDetailActivity : BaseActivity() {
                         "拨打电话",
                         "抢单员电话：$sendTelephone，确定要拨打吗？ ",
                         "取消",
-                        "确定") {
+                        "确定",
+                        true) {
+                    if (it == "right") {
                     val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$sendTelephone"))
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                     startActivity(intent)
                 }
+                }
             }
             R.id.tv_nav_right -> {
-                if (mStauts == "0" || mStauts == "1" || mStauts == "2") {
-                    DialogHelper.showHintDialog(baseContext,
-                            "取消订单",
-                            getString(R.string.cancel_grab),
-                            "取消",
-                            "确定") {
-
+                when (mStauts) {
+                    "0", "1" -> {
+                        DialogHelper.showHintDialog(baseContext,
+                                "取消订单",
+                                getString(R.string.cancel_grab),
+                                "取消",
+                                "确定",
+                                false) {
+                            if (it == "right") getCancelData()
+                        }
                     }
+                    "2" -> showCancelDialog()
                 }
             }
         }
@@ -151,6 +180,72 @@ class IssueDetailActivity : BaseActivity() {
         dialog.show()
     }
 
+    @Suppress("DEPRECATION")
+    private fun showCancelDialog() {
+        val hintAgree = DecimalFormat("0.##").format(agreeCancel.toDouble() * 100)
+        val hintUnAgree = DecimalFormat("0.##").format(unAgreeCancel.toDouble() * 100)
+        val hint = "订单派送中，您确定要取消订单？<br>" +
+                "骑手同意取消，<font color='#F23030'>支付违约金金额为$hintAgree%佣金</font><br>" +
+                "骑手不同意取消，<font color='#F23030'>支付违约金金额为$hintUnAgree%佣金</font>"
+
+        DialogHelper.showHintDialog(baseContext,
+                "取消订单",
+                Html.fromHtml(hint),
+                "取消",
+                "确定",
+                false) {
+            if (it == "right") getCancelData()
+        }
+    }
+
+    @Suppress("DEPRECATION")
+    private fun showCancelAgreeDialog() {
+        val hintUnAgree = DecimalFormat("0.##").format(unAgreeCancel.toDouble() * 100)
+        val hint = "骑手申请取消订单<br>" +
+                "您同意取消，此单将等待其他人抢单<br>" +
+                "您不同意取消，<font color='#F23030'>获得违约金金额为$hintUnAgree%佣金</font>"
+
+        DialogHelper.showHintDialog(baseContext,
+                "骑手取消订单",
+                Html.fromHtml(hint),
+                "同意取消",
+                "不同意取消",
+                false) {
+            OkGo.post<String>(BaseHttp.customer_cancel_order)
+                    .tag(this@IssueDetailActivity)
+                    .headers("token", getString("token"))
+                    .params("goodsOrderId", intent.getStringExtra("goodsOrderId"))
+                    .params("agree", if (it == "right") "1" else "0")
+                    .execute(object : StringDialogCallback(baseContext) {
+
+                        override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
+
+                            showToast(msg)
+                            EventBus.getDefault().post(RefreshMessageEvent("客户同意"))
+                            handler.sendEmptyMessage(0)
+                        }
+
+                    })
+        }
+    }
+
+    private fun getCancelData() {
+        OkGo.post<String>(BaseHttp.cancel_order)
+                .tag(this@IssueDetailActivity)
+                .headers("token", getString("token"))
+                .params("goodsOrderId", intent.getStringExtra("goodsOrderId"))
+                .execute(object : StringDialogCallback(baseContext) {
+
+                    override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
+
+                        showToast(msg)
+                        EventBus.getDefault().post(RefreshMessageEvent("客户取消"))
+                        handler.sendEmptyMessage(0)
+                    }
+
+                })
+    }
+
     override fun getData() {
         OkGo.post<BaseResponse<CommonData>>(BaseHttp.goodsorde_dealis)
                 .tag(this@IssueDetailActivity)
@@ -164,6 +259,8 @@ class IssueDetailActivity : BaseActivity() {
 
                         mStauts = data.status
                         mType = data.type
+                        agreeCancel = data.agreeCancel
+                        unAgreeCancel = data.unAgreeCancel
 
                         when (mStauts) {
                             "-3" -> {
@@ -232,10 +329,13 @@ class IssueDetailActivity : BaseActivity() {
 
                         if (data.sendUserInfoId.isNotEmpty()) {
                             issue_info_ll.visible()
+                            sendNickName = data.sendNickName
+                            sendUserHead = data.sendUserHead
                             sendTelephone = data.sendTelephone
-                            issue_name.text = "抢单员：${data.sendNickName}"
-                            issue_img.loadImage(BaseHttp.baseImg + data.sendUserHead)
-                            issue_rating.rating = if (data.userGrade.isEmpty()) 0f else data.userGrade.toFloat()
+                            userGrade = data.userGrade
+                            issue_name.text = "抢单员：$sendNickName"
+                            issue_img.loadImage(BaseHttp.baseImg + sendUserHead)
+                            issue_rating.rating = if (userGrade.isEmpty()) 0f else userGrade.toFloat()
                         }
 
                         issue_type1.text = if (mType == "1") "顺风商品：" else "代买商品："
@@ -245,7 +345,7 @@ class IssueDetailActivity : BaseActivity() {
                         issue_img1.setImageResource(if (mType == "1") R.mipmap.index_lab05 else R.mipmap.index_lab01)
                         issue_addr1.text = data.buyAddress + data.buyDetailAdress
                         issue_name1.text = "${data.buyname}  ${data.buyMobile}"
-                        if (data.buyAddress == "就近购买") issue_name1.gone()
+                        if (data.buyMobile.isEmpty()) issue_name1.gone()
                         issue_addr2.text = data.receiptAddress + data.receiptDetailAdress
                         issue_name2.text = "${data.receiptName}  ${data.receiptMobile}"
                         issue_check.text = when (data.inspection) {
@@ -260,13 +360,18 @@ class IssueDetailActivity : BaseActivity() {
                         if (data.payTime.isEmpty()) issue_pay.gone() else issue_pay.visible()
 
                         mCommission = data.commission
-                        val tip = data.tip.toDouble()
+                        val commission = if (data.commission.isEmpty()) "0.0" else data.commission
+                        val tip = if (data.tip.isEmpty()) 0.0 else data.tip.toDouble()
 
-                        issue_total.text = String.format("%.2f", mCommission.toDouble() + tip)
+                        issue_total.text = String.format("%.2f", commission.toDouble() + tip)
                         issue_yong.text = "${data.commission}元"
                         issue_fee.text = "${data.tip}元"
                         if (tip == 0.0) issue_fee_ll.gone() else issue_fee_ll.visible()
                         issue_commission.text = data.commission
+
+                        if (mStauts == "-1" && data.cancelType == "1") window.decorView.postDelayed({
+                            runOnUiThread { showCancelAgreeDialog() }
+                        }, 300)
                     }
 
                 })
@@ -283,7 +388,7 @@ class IssueDetailActivity : BaseActivity() {
                     override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
 
                         showToast(msg)
-                        getData()
+                        handler.sendEmptyMessage(0)
                     }
 
                 })
@@ -297,7 +402,7 @@ class IssueDetailActivity : BaseActivity() {
     @Subscribe
     fun onMessageEvent(event: RefreshMessageEvent) {
         when (event.type) {
-            "支付成功" -> getData()
+            "支付成功", "评价成功" -> handler.sendEmptyMessage(0)
         }
     }
 }

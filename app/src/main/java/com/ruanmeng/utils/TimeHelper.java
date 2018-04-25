@@ -209,6 +209,40 @@ public class TimeHelper {
     }
 
     /**
+     * 获取指定日期距离当前时间时差的大致表达形式
+     *
+     * @param milliseconds 日期毫秒
+     * @return 时差的大致表达形式
+     */
+    public static String getDiffTimeAfter(long milliseconds) {
+        String strTime;
+        long time = Math.abs(new Date().getTime() - milliseconds);
+        // 一分钟以内
+        if (time < TIME_NUMBERS * TIME_MILLISECONDS) {
+            strTime = time / TIME_MILLISECONDS + "秒";
+        } else {
+            int min = (int) (time / TIME_MILLISECONDS / TIME_NUMBERS);
+            if (min < TIME_NUMBERS) {
+                strTime = min + "分钟";
+            } else {
+                int hh = min / TIME_NUMBERS;
+                if (hh < TIME_HOURSES) {
+                    strTime = hh + "小时";
+                } else {
+                    int days = hh / TIME_HOURSES;
+                    if (days / 365 < 1) {
+                        strTime = days / 30 + "个月";
+                    } else {
+                        strTime = days / 365 + "年";
+                    }
+                }
+            }
+        }
+
+        return strTime;
+    }
+
+    /**
      * 判断是否润年
      */
     public boolean isLeapYear(String ddate) {

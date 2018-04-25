@@ -10,6 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import com.ruanmeng.model.CommonData;
@@ -67,20 +70,8 @@ public class SwitcherTextView extends ViewSwitcher implements ViewSwitcher.ViewF
                         setText(mIndex);
                     }
                     mIndex++;
-                    if (mIndex > demoBeans.size() - 1) {
+                    if (mIndex * 2 > demoBeans.size() - 1) {
                         mIndex = 0;
-                    }
-                    if (itemDataListener != null) {
-                        view.setOnClickListener(new OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                if (mIndex == 0) {
-                                    itemDataListener.onItemClick(demoBeans.size() - 1);
-                                } else {
-                                    itemDataListener.onItemClick(mIndex - 1);
-                                }
-                            }
-                        });
                     }
                     break;
             }
@@ -97,10 +88,42 @@ public class SwitcherTextView extends ViewSwitcher implements ViewSwitcher.ViewF
         mHandler.sendEmptyMessage(AUTO_RUN_FLIP_TEXT);
     }
 
-    public void setText(int position) {
+    public void setText(final int position) {
         final View view = getNextView();
-//        TextView tv_title = view.findViewById(R.id.switcher_title);
-//        tv_title.setText(title);
+        LinearLayout first = view.findViewById(R.id.switcher_first);
+        LinearLayout second = view.findViewById(R.id.switcher_second);
+        ImageView img1 = view.findViewById(R.id.switcher_img1);
+        ImageView img2 = view.findViewById(R.id.switcher_img2);
+        TextView title1 = view.findViewById(R.id.switcher_title1);
+        TextView title2 = view.findViewById(R.id.switcher_title2);
+
+        CommonData data1 = demoBeans.get(position * 2);
+        img1.setImageResource(data1.getNewsType().equals("0") ? R.mipmap.ass_icon08 : R.mipmap.ass_icon09);
+        title1.setText(data1.getTitle());
+
+        if ((position + 1) * 2 > demoBeans.size()) second.setVisibility(View.INVISIBLE);
+        else {
+            second.setVisibility(View.VISIBLE);
+            CommonData data2 = demoBeans.get(position * 2 + 1);
+            img2.setImageResource(data2.getNewsType().equals("0") ? R.mipmap.ass_icon08 : R.mipmap.ass_icon09);
+            title2.setText(data2.getTitle());
+        }
+
+        if (itemDataListener != null) {
+            first.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    itemDataListener.onItemClick(position * 2);
+                }
+            });
+            second.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    itemDataListener.onItemClick(position * 2 + 1);
+                }
+            });
+        }
+
         showNext();
     }
 

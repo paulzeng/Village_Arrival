@@ -87,7 +87,7 @@ class GrabActivity : BaseActivity() {
                     injector.text(R.id.item_grab_time, when (data.status) {
                         "-2" -> "取消时间：${TimeHelper.getDiffTime(TimeHelper.getInstance().millisecondToLong(data.cancelTime))}"
                         "1" -> "等待时间：${TimeHelper.getDiffTime(TimeHelper.getInstance().millisecondToLong(data.payTime))}"
-                        "-1", "2" -> "抢单时间：${TimeHelper.getDiffTime(TimeHelper.getInstance().millisecondToLong(data.grabsingleTime))}"
+                        "-1", "2" -> "已接单：${TimeHelper.getDiffTimeAfter(TimeHelper.getInstance().millisecondToLong(data.grabsingleTime))}"
                         "3" -> "完成时间：${TimeHelper.getDiffTime(TimeHelper.getInstance().millisecondToLong(data.arriveTime))}"
                         else -> "下单时间：${TimeHelper.getDiffTime(TimeHelper.getInstance().millisecondToLong(data.createDate))}"
                     })
@@ -113,32 +113,48 @@ class GrabActivity : BaseActivity() {
                             .text(R.id.item_grab_yong, data.commission)
                             .text(R.id.item_grab_yu, data.goodsPrice)
 
-                            .visibility(R.id.item_grab_name1, if (data.buyAddress == "就近购买") View.GONE else View.VISIBLE)
-                            .visibility(R.id.item_grab_call1, if (data.buyAddress == "就近购买") View.GONE else View.VISIBLE)
+                            .visibility(R.id.item_grab_name1, if (data.buyMobile.isEmpty()) View.GONE else View.VISIBLE)
+                            .visibility(R.id.item_grab_call1, if (data.buyMobile.isEmpty()) View.GONE else View.VISIBLE)
                             .visibility(R.id.item_grab_yu_ll, if (data.goodsPrice.isEmpty()) View.GONE else View.VISIBLE)
                             .visibility(R.id.item_grab_divider, if (list.indexOf(data) != 0) View.GONE else View.VISIBLE)
 
                             .clicked(R.id.item_grab_call1) {
+                                if (data.buyMobile.isEmpty()) {
+                                    showToast("电话号码为空")
+                                    return@clicked
+                                }
+
                                 DialogHelper.showHintDialog(baseContext,
                                         "拨打电话",
                                         "电话号码：${data.buyMobile}，确定要拨打吗？ ",
                                         "取消",
-                                        "确定") {
-                                    val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + data.buyMobile))
-                                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                                    startActivity(intent)
+                                        "确定",
+                                        true) {
+                                    if (it == "right") {
+                                        val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + data.buyMobile))
+                                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                                        startActivity(intent)
+                                    }
                                 }
                             }
 
                             .clicked(R.id.item_grab_call2) {
+                                if (data.receiptMobile.isEmpty()) {
+                                    showToast("电话号码为空")
+                                    return@clicked
+                                }
+
                                 DialogHelper.showHintDialog(baseContext,
                                         "拨打电话",
                                         "电话号码：${data.receiptMobile}，确定要拨打吗？ ",
                                         "取消",
-                                        "确定") {
-                                    val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + data.receiptMobile))
-                                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                                    startActivity(intent)
+                                        "确定",
+                                        true) {
+                                    if (it == "right") {
+                                        val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + data.receiptMobile))
+                                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                                        startActivity(intent)
+                                    }
                                 }
                             }
 
@@ -205,7 +221,7 @@ class GrabActivity : BaseActivity() {
     @Subscribe
     fun onMessageEvent(event: RefreshMessageEvent) {
         when (event.type) {
-            "完成订单" -> updateList()
+            "完成订单", "取消抢单", "骑手取消", "骑手同意" -> updateList()
         }
     }
 }

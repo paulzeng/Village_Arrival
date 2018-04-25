@@ -38,5 +38,11 @@ data class CommonModel(
         var cyCtn: String = "",
         var msgCtn: String = "",
         var nowCtn: String = "",
-        var orders: List<CommonData> ?= ArrayList()
+        var msg: String = "",
+        var msgcode: String = "",
+        var orders: List<CommonData> ?= ArrayList(),
+        var sliders: List<CommonData> ?= ArrayList(),
+        var modules: List<CommonData> ?= ArrayList(),
+        var nnews: List<CommonData> ?= ArrayList(),
+        var cooperationList: List<CommonData> ?= ArrayList()
 ): Serializable

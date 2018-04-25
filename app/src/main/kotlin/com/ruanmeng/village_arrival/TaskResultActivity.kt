@@ -2,10 +2,18 @@ package com.ruanmeng.village_arrival
 
 import android.os.Bundle
 import android.view.View
+import com.lzg.extend.StringDialogCallback
+import com.lzy.okgo.OkGo
+import com.lzy.okgo.model.Response
 import com.ruanmeng.base.BaseActivity
+import com.ruanmeng.base.getString
+import com.ruanmeng.base.showToast
+import com.ruanmeng.model.RefreshMessageEvent
+import com.ruanmeng.share.BaseHttp
 import com.ruanmeng.utils.ActivityStack
 import com.ruanmeng.utils.DialogHelper
 import kotlinx.android.synthetic.main.activity_task_result.*
+import org.greenrobot.eventbus.EventBus
 
 class TaskResultActivity : BaseActivity() {
 
@@ -47,8 +55,24 @@ class TaskResultActivity : BaseActivity() {
                             "取消订单",
                             getString(R.string.cancel_grab),
                             "取消",
-                            "确定") {
+                            "确定",
+                            false) {
+                        if (it == "right") {
+                            OkGo.post<String>(BaseHttp.cancel_order)
+                                    .tag(this@TaskResultActivity)
+                                    .headers("token", getString("token"))
+                                    .params("goodsOrderId", intent.getStringExtra("goodsOrderId"))
+                                    .execute(object : StringDialogCallback(baseContext) {
 
+                                        override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
+
+                                            showToast(msg)
+                                            EventBus.getDefault().post(RefreshMessageEvent("客户取消"))
+                                            ActivityStack.screenManager.popActivities(this@TaskResultActivity::class.java)
+                                        }
+
+                                    })
+                        }
                     }
                 } else {
                     when (intent.getStringExtra("hint")) {

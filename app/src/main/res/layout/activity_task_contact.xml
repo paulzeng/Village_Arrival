@@ -38,7 +38,7 @@
             android:layout_marginTop="@dimen/dimen_size_10"
             android:gravity="center"
             android:lineSpacingExtra="@dimen/dimen_size_5"
-            android:text="您已抢单成功，可尽快与他们联系" />
+            android:text="@string/grab_success" />
 
         <Button
             android:id="@+id/task_look"
@@ -60,6 +60,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/task_contact_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -128,6 +129,7 @@
                     android:layout_width="@dimen/dimen_size_45"
                     android:layout_height="@dimen/dimen_size_45"
                     android:layout_marginStart="@dimen/dimen_size_10"
+                    android:onClick="doClick"
                     android:src="@mipmap/buy_tel_icon01"
                     tools:ignore="ContentDescription" />
 
@@ -185,6 +187,7 @@
                     android:layout_width="@dimen/dimen_size_45"
                     android:layout_height="@dimen/dimen_size_45"
                     android:layout_marginStart="@dimen/dimen_size_10"
+                    android:onClick="doClick"
                     android:src="@mipmap/buy_tel_icon02"
                     tools:ignore="ContentDescription" />
 

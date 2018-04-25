@@ -13,6 +13,7 @@ import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 import com.ruanmeng.base.*
 import com.ruanmeng.model.CommonData
+import com.ruanmeng.model.RefreshMessageEvent
 import com.ruanmeng.share.BaseHttp
 import com.ruanmeng.utils.DensityUtil
 import com.ruanmeng.utils.DialogHelper
@@ -24,6 +25,8 @@ import kotlinx.android.synthetic.main.layout_empty.*
 import kotlinx.android.synthetic.main.layout_list.*
 import kotlinx.android.synthetic.main.layout_title_task.*
 import net.idik.lib.slimadapter.SlimAdapter
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 
 class TaskGrabActivity : BaseActivity() {
 
@@ -41,6 +44,8 @@ class TaskGrabActivity : BaseActivity() {
         setContentView(R.layout.activity_task_grab)
         setToolbarVisibility(false)
         init_title()
+
+        EventBus.getDefault().register(this@TaskGrabActivity)
 
         swipe_refresh.isRefreshing = true
         getData(pageNum)
@@ -126,6 +131,26 @@ class TaskGrabActivity : BaseActivity() {
                                                 showToast(msg)
                                                 list.remove(data)
                                                 mAdapter.notifyDataSetChanged()
+                                                EventBus.getDefault().post(RefreshMessageEvent("快速抢单"))
+
+                                                val intent = Intent(baseContext, TaskContactActivity::class.java)
+                                                intent.putExtra("title", "抢单成功")
+                                                intent.putExtra("goodsOrderId", data.goodsOrderId)
+                                                intent.putExtra("type", data.type)
+                                                intent.putExtra("buyAddress", data.buyAddress + data.buyDetailAdress)
+                                                intent.putExtra("buyName", "${data.buyname}  ${data.buyMobile}")
+                                                intent.putExtra("receiptAddress", data.receiptAddress + data.receiptDetailAdress)
+                                                intent.putExtra("receiptName", "${data.receiptName}  ${data.receiptMobile}")
+                                                intent.putExtra("buyMobile", data.buyMobile)
+                                                intent.putExtra("receiptMobile", data.receiptMobile)
+                                                startActivity(intent)
+                                            }
+
+                                            override fun onSuccessResponseErrorCode(response: Response<String>, msg: String, msgCode: String) {
+                                                val intent = Intent(baseContext, TaskContactActivity::class.java)
+                                                intent.putExtra("title", "抢单失败")
+                                                intent.putExtra("message", msg)
+                                                startActivity(intent)
                                             }
 
                                         })
@@ -247,6 +272,7 @@ class TaskGrabActivity : BaseActivity() {
                     load_Linear(baseContext)
                     adapter = SlimAdapter.create()
                             .register<CommonData>(R.layout.item_area_list) { data, injector ->
+                                @Suppress("DEPRECATION")
                                 injector.text(R.id.item_area, data.areaName)
                                         .textColor(R.id.item_area,
                                                 resources.getColor(if (data.isChecked) R.color.colorAccent else R.color.black_dark))
@@ -334,5 +360,17 @@ class TaskGrabActivity : BaseActivity() {
 
         pageNum = 1
         getData(pageNum)
+    }
+
+    override fun finish() {
+        EventBus.getDefault().unregister(this@TaskGrabActivity)
+        super.finish()
+    }
+
+    @Subscribe
+    fun onMessageEvent(event: RefreshMessageEvent) {
+        when (event.type) {
+            "完成订单", "取消抢单", "抢单成功", "骑手取消", "骑手同意" -> updateList()
+        }
     }
 }

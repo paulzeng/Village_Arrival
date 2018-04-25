@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:id="@+id/item_live"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/dimen_size_15">
+
+        <com.sunfusheng.glideimageview.GlideImageView
+            android:id="@+id/item_live_img"
+            android:layout_width="@dimen/dimen_size_55"
+            android:layout_height="@dimen/dimen_size_55"
+            android:src="@mipmap/default_logo"
+            app:riv_is_circle="true"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/item_live_name"
+            style="@style/Font13_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_size_5"
+            android:text="名称" />
+
+    </LinearLayout>
+
+</FrameLayout>

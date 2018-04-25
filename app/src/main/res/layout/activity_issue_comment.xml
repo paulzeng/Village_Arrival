@@ -60,6 +60,7 @@
             android:layout_width="@dimen/dimen_size_45"
             android:layout_height="@dimen/dimen_size_45"
             android:layout_marginStart="@dimen/dimen_size_15"
+            android:onClick="doClick"
             android:src="@mipmap/buy_tel_icon02"
             tools:ignore="ContentDescription" />
 
@@ -149,7 +150,7 @@
             android:background="@color/divider" />
 
         <EditText
-            android:id="@+id/feedback_content"
+            android:id="@+id/comment_content"
             style="@style/Font14_black"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

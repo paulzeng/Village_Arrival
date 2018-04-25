@@ -18,7 +18,6 @@
             android:layout_width="@dimen/dimen_size_40"
             android:layout_height="@dimen/dimen_size_20"
             android:layout_marginEnd="@dimen/dimen_size_10"
-            android:src="@mipmap/ass_icon08"
             tools:ignore="ContentDescription" />
 
         <TextView
@@ -45,7 +44,6 @@
             android:layout_width="@dimen/dimen_size_40"
             android:layout_height="@dimen/dimen_size_20"
             android:layout_marginEnd="@dimen/dimen_size_10"
-            android:src="@mipmap/ass_icon09"
             tools:ignore="ContentDescription" />
 
         <TextView

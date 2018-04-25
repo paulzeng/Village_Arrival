@@ -85,9 +85,33 @@ data class CommonData(
         var userGrade: String = "",
         var unAgreeCancel: String = "",
         var agreeCancel: String = "",
+        var cancelType: String = "",
         //商品重量
         var weightPriceId: String = "",
         var weightDescribe: String = "",
+        //互助列表
+        var province: String = "",
+        var city: String = "",
+        var district: String = "",
+        var township: String = "",
+        var cooperationId: String = "",
+        var title: String = "",
+        var commentCtn: String = "",
+        var readCtn: String = "",
+        //模块列表
+        var appmoduleId: String = "",
+        var moduleType: String = "",
+        var moduleName: String = "",
+        var moduleIcon: String = "",
+        var moduleUrl: String = "",
+        var moduleContent: String = "",
+        //公告促销列表
+        var newsType: String = "",
+        var newsnoticeId: String = "",
+        //轮播图列表
+        var sliderId: String = "",
+        var sliderImg: String = "",
+        var href: String = "",
         //乡镇列表
         var isChecked: Boolean = false,
         var areaCode: String = "",

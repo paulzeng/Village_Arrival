@@ -36,15 +36,24 @@ public class BaseHttp {
     public static String add_applyodd = baseIp + "/add_applyodd.rm";                       //申请抢单√
     public static String check_bail = baseIp + "/check_bail.rm";                           //保证金额√
 
-    public static String frist_index_data = baseIp + "/frist_index_data.rm"; //首页√
+    public static String frist_index_data = baseIp + "/frist_index_data.rm";                   //首页√
     public static String weightprice_list_data = baseIp + "/weightprice_address_list_data.rm"; //商品重量√
-    public static String order_commission = baseIp + "/order_commission.rm"; //获取佣金√
-    public static String add_goodsorde = baseIp + "/add_goodsorde.rm"; //新增订单√
-    public static String balance_pay_order = baseIp + "/balance_pay_order.rm"; //余额支付√
-    public static String add_order_tip_balance = baseIp + "/add_order_tip_balance.rm"; //余额支付小费√
-    public static String order_list_data = baseIp + "/order_list_data.rm"; //订单列表√
-    public static String grab_order = baseIp + "/grab_order.rm"; //抢单√
-    public static String complete_order = baseIp + "/complete_order.rm"; //完成订单√
+    public static String order_commission = baseIp + "/order_commission.rm";                   //获取佣金√
+    public static String add_goodsorde = baseIp + "/add_goodsorde.rm";                         //新增订单√
+    public static String balance_pay_order = baseIp + "/balance_pay_order.rm";                 //余额支付√
+    public static String add_order_tip_balance = baseIp + "/add_order_tip_balance.rm";         //余额支付小费√
+    public static String order_list_data = baseIp + "/order_list_data.rm";                     //订单列表√
+    public static String grab_order = baseIp + "/grab_order.rm";                               //抢单√
+    public static String complete_order = baseIp + "/complete_order.rm";                       //完成订单√
+    public static String evaluate_order = baseIp + "/evaluate_order.rm";                       //评价订单√
+    public static String cancel_order = baseIp + "/cancel_order.rm";                           //客户取消√
+    public static String customer_cancel_order = baseIp + "/customer_cancel_order.rm";         //客户同意√
+    public static String rider_cancel_order = baseIp + "/rider_cancel_order.rm";               //骑手取消√
+    public static String rider_deal_cancel_order = baseIp + "/rider_deal_cancel_order.rm";     //骑手同意√
+
+    public static String index_data = baseIp + "/index_data.rm"; //互助首页√
+    public static String cooperation_list = baseIp + "/cooperation_list.rm"; //互助列表√
 
     public static String area_street2 = baseIp + "/area_street2.rm"; //获取乡镇√
+    public static String area_street3 = baseIp + "/area_street3.rm"; //获取区√
 }

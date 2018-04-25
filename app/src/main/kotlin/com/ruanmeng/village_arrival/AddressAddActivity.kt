@@ -246,19 +246,19 @@ class AddressAddActivity : BaseActivity() {
                 return@setOnClickListener
             }
 
-            if (et_name.text.isEmpty()) {
+            if (mTitle != "购买地址" && et_name.text.isEmpty()) {
                 et_name.requestFocus()
                 showToast("请输入姓名")
                 return@setOnClickListener
             }
 
-            if (et_tel.text.isEmpty()) {
+            if (mTitle != "购买地址" && et_tel.text.isEmpty()) {
                 et_tel.requestFocus()
                 showToast("请输入手机号")
                 return@setOnClickListener
             }
 
-            if (!CommonUtil.isMobile(et_tel.text.toString())) {
+            if (mTitle != "购买地址" && !CommonUtil.isMobile(et_tel.text.toString())) {
                 et_tel.requestFocus()
                 et_tel.setText("")
                 showToast("手机号码格式错误，请重新输入")
@@ -286,7 +286,7 @@ class AddressAddActivity : BaseActivity() {
                             override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
 
                                 showToast(msg)
-                                EventBus.getDefault().post(RefreshMessageEvent("常用地址"))
+                                EventBus.getDefault().post(RefreshMessageEvent("新增地址"))
                                 ActivityStack.screenManager.popActivities(this@AddressAddActivity::class.java)
                             }
 

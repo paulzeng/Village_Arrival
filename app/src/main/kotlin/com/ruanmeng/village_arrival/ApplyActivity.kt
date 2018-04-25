@@ -27,7 +27,7 @@ class ApplyActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_apply)
-        init_title("立即抢单")
+        init_title("申请抢单")
 
         getData()
     }

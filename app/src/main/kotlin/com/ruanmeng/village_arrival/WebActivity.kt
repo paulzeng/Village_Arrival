@@ -21,6 +21,7 @@ class WebActivity : BaseActivity() {
             "提现说明" -> {}
             "常见问题" -> {}
             "消息详情" -> {}
+            "详情" -> {}
         }
      }
 

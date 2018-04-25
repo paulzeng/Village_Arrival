@@ -217,7 +217,7 @@
                             android:id="@+id/grab_check"
                             style="@style/Font14_black_dark"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
+                            android:layout_height="wrap_content" />
 
                     </LinearLayout>
 
