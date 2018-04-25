@@ -85,7 +85,10 @@ class LiveHomeActivity : BaseActivity() {
                         (adapter as SlimAdapter).updateData(listModule)
                     }
 
-                    tvRecommand.setOnClickListener { startActivity<LiveActivity>() }
+                    tvRecommand.setOnClickListener {
+                        intent.setClass(baseContext, LiveActivity::class.java)
+                        startActivity(intent)
+                    }
 
                     addHeader(view)
                 }

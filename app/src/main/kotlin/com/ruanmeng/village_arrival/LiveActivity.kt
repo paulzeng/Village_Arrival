@@ -12,6 +12,7 @@ import com.ruanmeng.base.*
 import com.ruanmeng.model.CommonData
 import com.ruanmeng.model.CommonModel
 import com.ruanmeng.share.BaseHttp
+import com.ruanmeng.utils.DialogHelper
 import com.ruanmeng.utils.TimeHelper
 import com.ruanmeng.view.DropPopWindow
 import kotlinx.android.synthetic.main.activity_live.*
@@ -23,7 +24,8 @@ class LiveActivity : BaseActivity() {
 
     private val list = ArrayList<Any>()
     private var mAddress = ""
-    private var mDate = ""
+    private var mStartDate = ""
+    private var mEndDate = ""
 
     private val listArea = ArrayList<CommonData>()
     private var dropPopWindowArea: DropPopWindow? = null
@@ -72,6 +74,92 @@ class LiveActivity : BaseActivity() {
                 .attachTo(recycle_list)
     }
 
+    override fun getData(pindex: Int) {
+        OkGo.post<CommonModel>(BaseHttp.cooperation_list)
+                .tag(this@LiveActivity)
+                .headers("token", getString("token"))
+                .params("address", mAddress)
+                .params("sartDate", mStartDate)
+                .params("endDate", mEndDate)
+                .params("page", pindex)
+                .execute(object : JacksonDialogCallback<CommonModel>(baseContext, CommonModel::class.java) {
+
+                    override fun onSuccess(response: Response<CommonModel>) {
+
+                        list.apply {
+                            if (pindex == 1) {
+                                clear()
+                                pageNum = pindex
+                            }
+                            addItems(response.body().cooperationList)
+                            if (count(response.body().cooperationList) > 0) pageNum++
+                        }
+
+                        if (count(response.body().cooperationList) > 0) mAdapter.updateData(list)
+                    }
+
+                    override fun onFinish() {
+                        super.onFinish()
+                        swipe_refresh.isRefreshing = false
+                        isLoadingMore = false
+
+                        empty_view.apply { if (list.isEmpty()) visible() else gone() }
+                    }
+
+                })
+    }
+
+    override fun doClick(v: View) {
+        super.doClick(v)
+        when (v.id) {
+            R.id.live_qu_ll -> {
+                if (dropPopWindowArea == null || listArea.isEmpty()) {
+                    OkGo.post<BaseResponse<ArrayList<CommonData>>>(BaseHttp.area_street3)
+                            .tag(this@LiveActivity)
+                            .isMultipart(true)
+                            .params("areaName", intent.getStringExtra("title"))
+                            .execute(object : JacksonDialogCallback<BaseResponse<ArrayList<CommonData>>>(baseContext, true) {
+
+                                @Suppress("DEPRECATION")
+                                override fun onSuccess(response: Response<BaseResponse<ArrayList<CommonData>>>) {
+                                    listArea.apply {
+                                        clear()
+                                        addItems(response.body().`object`)
+                                    }
+
+                                    if (listArea.isNotEmpty()) showDropArea()
+                                }
+
+                            })
+                } else {
+                    if (dropPopWindowArea!!.isShowing) dropPopWindowArea!!.dismiss()
+                    else showDropArea()
+                }
+            }
+            R.id.live_time_ll -> {
+                DialogHelper.showDropWindow(
+                        baseContext,
+                        R.layout.pop_layout_area,
+                        live_time_arrow,
+                        live_divider,
+                        listOf("最近7天", "最近30天", "最近60天", "最近90天")) { position, name ->
+
+                    mEndDate = TimeHelper.getInstance().stringDateShort
+
+                    when (position) {
+                        0 -> mStartDate = TimeHelper.getInstance().getNextDay(mEndDate, -7)
+                        1 -> mStartDate = TimeHelper.getInstance().getNextDay(mEndDate, -30)
+                        2 -> mStartDate = TimeHelper.getInstance().getNextDay(mEndDate, -60)
+                        3 -> mStartDate = TimeHelper.getInstance().getNextDay(mEndDate, -90)
+                    }
+                    live_time.text = name
+                    window.decorView.postDelayed({ runOnUiThread { updateList() } }, 350)
+                }
+            }
+            R.id.bt_issue -> startActivity<LiveIssueActivity>()
+        }
+    }
+
     private fun showDropArea() {
         dropPopWindowArea = object : DropPopWindow(
                 baseContext,
@@ -116,74 +204,6 @@ class LiveActivity : BaseActivity() {
             }
         }
         dropPopWindowArea!!.showAsDropDown(live_divider)
-    }
-
-    override fun getData(pindex: Int) {
-        OkGo.post<CommonModel>(BaseHttp.cooperation_list)
-                .tag(this@LiveActivity)
-                .headers("token", getString("token"))
-                .params("address", mAddress)
-                .params("date", mDate)
-                .params("page", pindex)
-                .execute(object : JacksonDialogCallback<CommonModel>(baseContext, CommonModel::class.java) {
-
-                    override fun onSuccess(response: Response<CommonModel>) {
-
-                        list.apply {
-                            if (pindex == 1) {
-                                clear()
-                                pageNum = pindex
-                            }
-                            addItems(response.body().cooperationList)
-                            if (count(response.body().cooperationList) > 0) pageNum++
-                        }
-
-                        if (count(response.body().cooperationList) > 0) mAdapter.updateData(list)
-                    }
-
-                    override fun onFinish() {
-                        super.onFinish()
-                        swipe_refresh.isRefreshing = false
-                        isLoadingMore = false
-
-                        empty_view.apply { if (list.isEmpty()) visible() else gone() }
-                    }
-
-                })
-    }
-
-    override fun doClick(v: View) {
-        super.doClick(v)
-        when (v.id) {
-            R.id.live_qu_ll -> {
-                if (dropPopWindowArea == null || listArea.isEmpty()) {
-                    OkGo.post<BaseResponse<ArrayList<CommonData>>>(BaseHttp.area_street3)
-                            .tag(this@LiveActivity)
-                            .isMultipart(true)
-                            .params("areaName", intent.getStringExtra("district"))
-                            .execute(object : JacksonDialogCallback<BaseResponse<ArrayList<CommonData>>>(baseContext, true) {
-
-                                @Suppress("DEPRECATION")
-                                override fun onSuccess(response: Response<BaseResponse<ArrayList<CommonData>>>) {
-                                    listArea.apply {
-                                        clear()
-                                        addItems(response.body().`object`)
-                                    }
-
-                                    if (listArea.isNotEmpty()) showDropArea()
-                                }
-
-                            })
-                } else {
-                    if (dropPopWindowArea!!.isShowing) dropPopWindowArea!!.dismiss()
-                    else showDropArea()
-                }
-            }
-            R.id.live_time_ll -> {
-                startActivity<LiveIssueActivity>()
-            }
-            R.id.bt_issue -> startActivity<LiveIssueActivity>()
-        }
     }
 
     fun updateList() {
