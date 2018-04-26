@@ -268,6 +268,9 @@ class GrabDetailActivity : BaseActivity() {
                         grab_yong.text = "${data.commission}元"
                         grab_fee.text = "${data.tip}元"
                         if (tip == 0.0) grab_fee_ll.gone() else grab_fee_ll.visible()
+                        @Suppress("DEPRECATION")
+                        grab_commission_fee.text = Html.fromHtml("（小费：<font color='#F23030'>${data.tip}元）</font>")
+                        if (tip == 0.0) grab_commission_fee.gone() else grab_commission_fee.visible()
                         grab_commission.text = data.commission
 
                         if (mStauts == "-1" && data.cancelType == "0") window.decorView.postDelayed({

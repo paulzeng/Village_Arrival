@@ -385,7 +385,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/dimen_size_15"
                     android:layout_marginTop="@dimen/dimen_size_10"
-                    android:gravity="end">
+                    android:gravity="end|bottom">
 
                     <TextView
                         style="@style/Font14_light"
@@ -408,6 +408,13 @@
                         android:layout_height="wrap_content"
                         android:text="元"
                         android:textColor="@color/red" />
+
+                    <TextView
+                        android:id="@+id/issue_commission_fee"
+                        style="@style/Font12_light"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="（小费：0元）" />
 
                 </LinearLayout>
 

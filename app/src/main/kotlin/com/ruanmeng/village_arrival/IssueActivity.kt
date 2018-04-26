@@ -110,10 +110,10 @@ class IssueActivity : BaseActivity() {
                             .text(R.id.item_issue_name1, "${data.buyname}  ${data.buyMobile}")
                             .text(R.id.item_issue_name2, "${data.receiptName}  ${data.receiptMobile}")
                             .text(R.id.item_issue_yong, data.commission)
-                            .text(R.id.item_issue_yu, data.goodsPrice)
+                            .text(R.id.item_issue_yu, "（商品预估：${data.goodsPrice}元）")
 
                             .visibility(R.id.item_issue_name1, if (data.buyMobile.isEmpty()) View.GONE else View.VISIBLE)
-                            .visibility(R.id.item_issue_yu_ll, if (data.goodsPrice.isEmpty()) View.GONE else View.VISIBLE)
+                            .visibility(R.id.item_issue_yu, if (data.goodsPrice.isEmpty()) View.GONE else View.VISIBLE)
                             .visibility(R.id.item_issue_pay, if (data.status == "0") View.VISIBLE else View.GONE)
                             .visibility(R.id.item_issue_divider, if (list.indexOf(data) != 0) View.GONE else View.VISIBLE)
 

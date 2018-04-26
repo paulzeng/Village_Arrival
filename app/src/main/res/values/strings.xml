@@ -7,5 +7,7 @@
     <string name="margin_hint">您的保证金状态为冻结中</string>
     <string name="applying">认证审核中，请耐心等待</string>
     <string name="cancel_grab">等待抢单中\n您确定要取消订单吗？</string>
+    <string name="del_address">删除常用地址\n您确定要删除该常用地址吗？</string>
     <string name="grab_success">您已抢单成功，可尽快与他们联系</string>
+    <string name="del_live">删除发布信息\n您确定要删除该发布信息吗？</string>
 </resources>

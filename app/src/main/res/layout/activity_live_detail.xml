@@ -28,26 +28,33 @@
             android:layout_marginEnd="@dimen/dimen_size_10"
             android:layout_marginStart="@dimen/dimen_size_10"
             android:layout_marginTop="@dimen/dimen_size_8"
-            android:background="@drawable/rec_bg_background"
             android:gravity="center_vertical">
 
             <EditText
-                android:id="@+id/comment_hint"
+                android:id="@+id/live_input"
                 style="@style/Font14_black"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/transparent"
+                android:background="@drawable/rec_bg_background"
                 android:hint="我要回复"
                 android:lineSpacingExtra="@dimen/dimen_size_3"
-                android:minHeight="@dimen/btn_height"
+                android:paddingBottom="@dimen/dimen_size_8"
                 android:paddingEnd="@dimen/dimen_size_10"
-                android:paddingStart="@dimen/dimen_size_10" />
+                android:paddingStart="@dimen/dimen_size_10"
+                android:paddingTop="@dimen/dimen_size_8" />
 
-            <ImageView
-                android:layout_width="@dimen/line_height"
-                android:layout_height="@dimen/dimen_size_25"
-                android:src="@mipmap/ass_lab_icon08"
+            <TextView
+                android:id="@+id/live_send"
+                style="@style/Font15_black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="doClick"
+                android:paddingBottom="@dimen/dimen_size_5"
+                android:paddingEnd="@dimen/dimen_size_5"
+                android:paddingStart="@dimen/dimen_size_15"
+                android:paddingTop="@dimen/dimen_size_5"
+                android:text="发送"
                 tools:ignore="ContentDescription" />
 
         </LinearLayout>

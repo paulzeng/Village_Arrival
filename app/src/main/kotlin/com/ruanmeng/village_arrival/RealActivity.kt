@@ -76,7 +76,7 @@ class RealActivity : BaseActivity() {
         bt_submit.setBackgroundResource(R.drawable.rec_bg_d0d0d0)
         bt_submit.isClickable = false
 
-        et_name.filters = arrayOf<InputFilter>(NameLengthFilter(16))
+        et_name.filters = arrayOf<InputFilter>(NameLengthFilter(10))
         et_name.addTextChangedListener(this@RealActivity)
         et_card.addTextChangedListener(this@RealActivity)
     }

@@ -34,7 +34,9 @@ public class BaseHttp {
     public static String delete_commonaddress = baseIp + "/delete_commonaddress.rm";       //删除地址√
     public static String applyodd_data = baseIp + "/applyodd_data.rm";                     //抢单状态√
     public static String add_applyodd = baseIp + "/add_applyodd.rm";                       //申请抢单√
-    public static String check_bail = baseIp + "/check_bail.rm";                           //保证金额√
+    public static String check_user_bail = baseIp + "/check_user_bail.rm";                 //保证金判断√
+    public static String un_blocked = baseIp + "/un_blocked.rm";                           //保证金解冻√
+    public static String trade_list_data = baseIp + "/trade_list_data.rm";                 //交易列表√
 
     public static String frist_index_data = baseIp + "/frist_index_data.rm";                   //首页√
     public static String weightprice_list_data = baseIp + "/weightprice_address_list_data.rm"; //商品重量√
@@ -51,8 +53,17 @@ public class BaseHttp {
     public static String rider_cancel_order = baseIp + "/rider_cancel_order.rm";               //骑手取消√
     public static String rider_deal_cancel_order = baseIp + "/rider_deal_cancel_order.rm";     //骑手同意√
 
-    public static String index_data = baseIp + "/index_data.rm"; //互助首页√
-    public static String cooperation_list = baseIp + "/cooperation_list.rm"; //互助列表√
+    public static String index_data = baseIp + "/index_data.rm";                               //互助首页√
+    public static String cooperation_list = baseIp + "/cooperation_list.rm";                   //互助列表√
+    public static String add_cooperation = baseIp + "/add_cooperation.rm";                     //添加互助√
+    public static String cooperation_detail = baseIp + "/cooperation_detail.rm";               //互助详情√
+    public static String cooperation_collect = baseIp + "/cooperation_collect.rm";             //收藏互助√
+    public static String delete_collect_cooperatio = baseIp + "/delete_collect_cooperatio.rm"; //取消互助√
+    public static String add_cooperation_collect = baseIp + "/add_cooperation_collect.rm";     //添加评论√
+    public static String comment_list = baseIp + "/comment_list.rm";                           //评论列表√
+    public static String mycooperation_list = baseIp + "/mycooperation_list.rm";               //我的发布√
+    public static String cooperation_collect_list = baseIp + "/cooperation_collect_list.rm";   //我的收藏√
+    public static String delete_cooperation = baseIp + "/delete_cooperation.rm";               //删除互助√
 
     public static String area_street2 = baseIp + "/area_street2.rm"; //获取乡镇√
     public static String area_street3 = baseIp + "/area_street3.rm"; //获取区√

@@ -13,6 +13,7 @@ import com.ruanmeng.base.*
 import com.ruanmeng.model.CommonData
 import com.ruanmeng.model.RefreshMessageEvent
 import com.ruanmeng.share.BaseHttp
+import com.ruanmeng.utils.DialogHelper
 import kotlinx.android.synthetic.main.activity_address.*
 import kotlinx.android.synthetic.main.layout_empty_addr.*
 import org.greenrobot.eventbus.EventBus
@@ -54,25 +55,34 @@ class AddressActivity : BaseActivity() {
         super.init_title()
         address_list.load_Linear(baseContext)
         adapter = AddressAdapter(baseContext, list)
-        adapter.setOnItemClickListener {  }
-        adapter.setOnItemDeleteClickListener {
+        adapter.setOnItemClickListener { }
+        adapter.setOnItemDeleteClickListener { position ->
 
-            OkGo.post<String>(BaseHttp.delete_commonaddress)
-                    .tag(this@AddressActivity)
-                    .headers("token", getString("token"))
-                    .params("commonAddressId", list[it].commonAddressId)
-                    .execute(object : StringDialogCallback(baseContext) {
+            DialogHelper.showHintDialog(baseContext,
+                    "删除地址",
+                    getString(R.string.del_address),
+                    "取消",
+                    "确定",
+                    false) {
+                if (it == "right") {
+                    OkGo.post<String>(BaseHttp.delete_commonaddress)
+                            .tag(this@AddressActivity)
+                            .headers("token", getString("token"))
+                            .params("commonAddressId", list[position].commonAddressId)
+                            .execute(object : StringDialogCallback(baseContext) {
 
-                        override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
+                                override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
 
-                            showToast(msg)
-                            list.removeAt(it)
-                            adapter.notifyItemRemoved(it)
-                            empty_view.apply { if (list.isNotEmpty()) gone() else visible() }
-                            EventBus.getDefault().post(RefreshMessageEvent("删除地址"))
-                        }
+                                    showToast(msg)
+                                    list.removeAt(position)
+                                    adapter.notifyItemRemoved(position)
+                                    empty_view.apply { if (list.isNotEmpty()) gone() else visible() }
+                                    EventBus.getDefault().post(RefreshMessageEvent("删除地址"))
+                                }
 
-                    })
+                            })
+                }
+            }
         }
         address_list.adapter = adapter
     }

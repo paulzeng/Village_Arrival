@@ -230,10 +230,13 @@ public class TimeHelper {
                     strTime = hh + "小时";
                 } else {
                     int days = hh / TIME_HOURSES;
-                    if (days / 365 < 1) {
-                        strTime = days / 30 + "个月";
-                    } else {
-                        strTime = days / 365 + "年";
+                    if (days <= 30) strTime = days + "天";
+                    else {
+                        if (days / 365 < 1) {
+                            strTime = days / 30 + "个月";
+                        } else {
+                            strTime = days / 365 + "年";
+                        }
                     }
                 }
             }

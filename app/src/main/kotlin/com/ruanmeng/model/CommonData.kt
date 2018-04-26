@@ -98,6 +98,7 @@ data class CommonData(
         var title: String = "",
         var commentCtn: String = "",
         var readCtn: String = "",
+        var imgs: String = "",
         //模块列表
         var appmoduleId: String = "",
         var moduleType: String = "",
@@ -112,6 +113,19 @@ data class CommonData(
         var sliderId: String = "",
         var sliderImg: String = "",
         var href: String = "",
+        //评论列表
+        var commentId: String = "",
+        var content: String = "",
+        var nickName: String = "",
+        var userInfoId: String = "",
+        var userhead: String = "",
+        //交易列表
+        var balance: String = "",
+        var businessId: String = "",
+        var tradeExplain: String = "",
+        var tradeId: String = "",
+        var tradeSum: String = "",
+        var tradeType: String = "",
         //乡镇列表
         var isChecked: Boolean = false,
         var areaCode: String = "",

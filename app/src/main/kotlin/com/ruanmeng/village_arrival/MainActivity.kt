@@ -446,7 +446,9 @@ class MainActivity : BaseActivity() {
     @Subscribe
     fun onMessageEvent(event: RefreshMessageEvent) {
         when (event.type) {
-            "新增地址", "删除地址", "支付成功", "抢单成功", "快速抢单", "客户取消", "客户同意", "骑手同意" -> {
+            "新增地址", "删除地址", "支付成功", "抢单成功",
+            "快速抢单", "客户取消", "客户同意", "骑手同意",
+            "添加评论" -> {
                 getNearData(
                         aMap.cameraPosition.target.latitude,
                         aMap.cameraPosition.target.longitude)

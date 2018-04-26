@@ -75,6 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimen_size_10"
             android:adjustViewBounds="true"
+            android:onClick="doClick"
             android:scaleType="centerCrop"
             android:src="@mipmap/default_logo"
             tools:ignore="ContentDescription" />

@@ -16,6 +16,7 @@ import com.ruanmeng.adapter.LoopAdapter
 import com.ruanmeng.base.*
 import com.ruanmeng.model.CommonData
 import com.ruanmeng.model.CommonModel
+import com.ruanmeng.model.RefreshMessageEvent
 import com.ruanmeng.share.BaseHttp
 import com.ruanmeng.utils.TimeHelper
 import com.ruanmeng.utils.TopDecoration
@@ -25,6 +26,8 @@ import com.sunfusheng.glideimageview.GlideImageView
 import kotlinx.android.synthetic.main.layout_list.*
 import net.idik.lib.slimadapter.SlimAdapter
 import net.idik.lib.slimadapter.SlimAdapterEx
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 
 class LiveHomeActivity : BaseActivity() {
 
@@ -43,6 +46,8 @@ class LiveHomeActivity : BaseActivity() {
         setContentView(R.layout.activity_live_home)
         transparentStatusBar(false)
         init_title()
+
+        EventBus.getDefault().register(this@LiveHomeActivity)
 
         swipe_refresh.isRefreshing = true
         getData()
@@ -70,7 +75,7 @@ class LiveHomeActivity : BaseActivity() {
                     }
 
                     recycler.apply {
-                        layoutManager = FullyGridLayoutManager(baseContext, 3)
+                        layoutManager = FullyGridLayoutManager(baseContext, 3).apply { setScrollEnabled(false) }
                         addItemDecoration(TopDecoration(15))
 
                         adapter = SlimAdapter.create()
@@ -167,5 +172,17 @@ class LiveHomeActivity : BaseActivity() {
                     }
 
                 })
+    }
+
+    override fun finish() {
+        EventBus.getDefault().unregister(this@LiveHomeActivity)
+        super.finish()
+    }
+
+    @Subscribe
+    fun onMessageEvent(event: RefreshMessageEvent) {
+        when (event.type) {
+            "发布需求", "添加评论" -> getData()
+        }
     }
 }

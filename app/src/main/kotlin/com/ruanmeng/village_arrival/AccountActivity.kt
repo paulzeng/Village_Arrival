@@ -1,5 +1,6 @@
 package com.ruanmeng.village_arrival
 
+import android.content.Intent
 import android.os.Bundle
 import com.lzg.extend.StringDialogCallback
 import com.lzy.okgo.OkGo
@@ -15,6 +16,9 @@ import java.text.DecimalFormat
 
 class AccountActivity : BaseActivity() {
 
+    private var mBalance = 0f
+    private var mEnsureSum = 0.0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_account)
@@ -28,7 +32,11 @@ class AccountActivity : BaseActivity() {
 
         account_promise.setOnClickListener { startActivity<MarginActivity>() }
         account_detail.setOnClickListener { startActivity<AccountDetailActivity>() }
-        bt_withdraw.setOnClickListener { startActivity<WithdrawActivity>() }
+        bt_withdraw.setOnClickListener {
+            val intent = Intent(baseContext, WithdrawActivity::class.java)
+            intent.putExtra("balance", mBalance.toString())
+            startActivity(intent)
+        }
     }
 
     override fun getData() {
@@ -40,15 +48,19 @@ class AccountActivity : BaseActivity() {
                     override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
 
                         val obj = JSONObject(response.body())
-                        val balance = obj.optString("balance", "0")
-                        val ensureSum = obj.optString("ensureSum", "0")
-                        val profitSum = obj.optString("profitSum", "0")
+                        mBalance = obj.optString("balance", "0").toFloat()
+                        mEnsureSum = obj.optString("ensureSum", "0").toDouble()
+                        val profitSum = obj.optString("profitSum", "0").toDouble()
 
-                        account_total.startIncreaseAnimator(balance.toFloat())
-                        account_commission.text = DecimalFormat(",##0.##").format(profitSum.toDouble())
-                        account_save.text = DecimalFormat(",##0.##").format(ensureSum.toDouble())
+                        account_total.startIncreaseAnimator(mBalance)
+                        account_commission.text = DecimalFormat(",##0.##").format(profitSum)
+                        account_save.text = DecimalFormat(",##0.##").format(mEnsureSum)
 
-                        if (ensureSum.toDouble() > 0) account_promise.setRightString("已缴纳保证金")
+                        account_promise.setRightString(when {
+                            mEnsureSum > 0 && mEnsureSum < 100 -> "保证金不足"
+                            mEnsureSum >= 100 -> "已缴纳保证金"
+                            else -> "未缴纳保证金，立即充值缴纳"
+                        })
                     }
 
                 })

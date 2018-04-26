@@ -11,6 +11,7 @@ import com.lzy.okgo.model.Response
 import com.ruanmeng.base.*
 import com.ruanmeng.model.CommonData
 import com.ruanmeng.model.CommonModel
+import com.ruanmeng.model.RefreshMessageEvent
 import com.ruanmeng.share.BaseHttp
 import com.ruanmeng.utils.DialogHelper
 import com.ruanmeng.utils.TimeHelper
@@ -19,6 +20,8 @@ import kotlinx.android.synthetic.main.activity_live.*
 import kotlinx.android.synthetic.main.layout_empty.*
 import kotlinx.android.synthetic.main.layout_list.*
 import net.idik.lib.slimadapter.SlimAdapter
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 
 class LiveActivity : BaseActivity() {
 
@@ -34,6 +37,8 @@ class LiveActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_live)
         init_title("生活互助")
+
+        EventBus.getDefault().register(this@LiveActivity)
 
         swipe_refresh.isRefreshing = true
         getData(pageNum)
@@ -77,6 +82,7 @@ class LiveActivity : BaseActivity() {
     override fun getData(pindex: Int) {
         OkGo.post<CommonModel>(BaseHttp.cooperation_list)
                 .tag(this@LiveActivity)
+                .isMultipart(true)
                 .headers("token", getString("token"))
                 .params("address", mAddress)
                 .params("sartDate", mStartDate)
@@ -144,13 +150,13 @@ class LiveActivity : BaseActivity() {
                         live_divider,
                         listOf("最近7天", "最近30天", "最近60天", "最近90天")) { position, name ->
 
-                    mEndDate = TimeHelper.getInstance().stringDateShort
+                    mEndDate = TimeHelper.getInstance().stringDate
 
                     when (position) {
-                        0 -> mStartDate = TimeHelper.getInstance().getNextDay(mEndDate, -7)
-                        1 -> mStartDate = TimeHelper.getInstance().getNextDay(mEndDate, -30)
-                        2 -> mStartDate = TimeHelper.getInstance().getNextDay(mEndDate, -60)
-                        3 -> mStartDate = TimeHelper.getInstance().getNextDay(mEndDate, -90)
+                        0 -> mStartDate = TimeHelper.getInstance().getNextDay(mEndDate, -8, "yyyy-MM-dd HH:mm:ss")
+                        1 -> mStartDate = TimeHelper.getInstance().getNextDay(mEndDate, -31, "yyyy-MM-dd HH:mm:ss")
+                        2 -> mStartDate = TimeHelper.getInstance().getNextDay(mEndDate, -61, "yyyy-MM-dd HH:mm:ss")
+                        3 -> mStartDate = TimeHelper.getInstance().getNextDay(mEndDate, -91, "yyyy-MM-dd HH:mm:ss")
                     }
                     live_time.text = name
                     window.decorView.postDelayed({ runOnUiThread { updateList() } }, 350)
@@ -217,5 +223,17 @@ class LiveActivity : BaseActivity() {
 
         pageNum = 1
         getData(pageNum)
+    }
+
+    override fun finish() {
+        EventBus.getDefault().unregister(this@LiveActivity)
+        super.finish()
+    }
+
+    @Subscribe
+    fun onMessageEvent(event: RefreshMessageEvent) {
+        when (event.type) {
+            "发布需求", "添加评论" -> updateList()
+        }
     }
 }
