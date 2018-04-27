@@ -36,14 +36,19 @@ public class BaseHttp {
     public static String add_applyodd = baseIp + "/add_applyodd.rm";                       //申请抢单√
     public static String check_user_bail = baseIp + "/check_user_bail.rm";                 //保证金判断√
     public static String un_blocked = baseIp + "/un_blocked.rm";                           //保证金解冻√
+    public static String recharge_request = baseIp + "/recharge_request.rm";               //保证金充值√
+    public static String recharge_balance = baseIp + "/recharge_balance.rm";               //保证金余额充值√
     public static String trade_list_data = baseIp + "/trade_list_data.rm";                 //交易列表√
+    public static String user_withdraw = baseIp + "/user_withdraw.rm";                     //提现√
 
     public static String frist_index_data = baseIp + "/frist_index_data.rm";                   //首页√
     public static String weightprice_list_data = baseIp + "/weightprice_address_list_data.rm"; //商品重量√
     public static String order_commission = baseIp + "/order_commission.rm";                   //获取佣金√
     public static String add_goodsorde = baseIp + "/add_goodsorde.rm";                         //新增订单√
     public static String balance_pay_order = baseIp + "/balance_pay_order.rm";                 //余额支付√
+    public static String order_pay = baseIp + "/order_pay.rm";                                 //支付√
     public static String add_order_tip_balance = baseIp + "/add_order_tip_balance.rm";         //余额支付小费√
+    public static String pay_renew = baseIp + "/pay_renew.rm";                                 //支付小费√
     public static String order_list_data = baseIp + "/order_list_data.rm";                     //订单列表√
     public static String grab_order = baseIp + "/grab_order.rm";                               //抢单√
     public static String complete_order = baseIp + "/complete_order.rm";                       //完成订单√
@@ -67,4 +72,10 @@ public class BaseHttp {
 
     public static String area_street2 = baseIp + "/area_street2.rm"; //获取乡镇√
     public static String area_street3 = baseIp + "/area_street3.rm"; //获取区√
+    public static String leave_message_sub = baseIp + "/leave_message_sub.rm"; //意见反馈√
+    public static String msg_list_data = baseIp + "/msg_list_data.rm"; //消息列表√
+    public static String common_problem = baseIp + "/common_problem.rm"; //常见问题√
+    public static String help_center = baseIp + "/help_center.rm"; //帮助中心√
+    public static String newsnotice_Info = baseIp + "/newsnotice_Info.rm"; //公告详情√
+    public static String get_versioninfo = baseIp + "/get_versioninfo.rm"; //版本信息√
 }

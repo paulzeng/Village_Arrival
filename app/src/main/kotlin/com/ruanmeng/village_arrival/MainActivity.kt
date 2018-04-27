@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
 import android.widget.LinearLayout
 import com.amap.api.maps.AMap
+import com.amap.api.maps.AMapUtils
 import com.amap.api.maps.CameraUpdateFactory
 import com.amap.api.maps.model.*
 import com.amap.api.maps.model.animation.ScaleAnimation
@@ -32,6 +33,7 @@ import com.lzg.extend.StringDialogCallback
 import com.lzg.extend.jackson.JacksonDialogCallback
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
+import com.lzy.okgo.utils.OkLogger
 import com.ruanmeng.base.*
 import com.ruanmeng.model.CommonData
 import com.ruanmeng.model.CommonModel
@@ -51,6 +53,7 @@ class MainActivity : BaseActivity() {
     private val listMaker = ArrayList<Marker>()
     private lateinit var aMap: AMap
     private var centerLatLng: LatLng? = null
+    private var locationLatLng: LatLng? = null
     private lateinit var geocoderSearch: GeocodeSearch
 
     private val listAddress = ArrayList<CommonData>() //常用地址
@@ -90,6 +93,20 @@ class MainActivity : BaseActivity() {
         super.onStart()
         getPersonData()
         getAddressData()
+
+        if (centerLatLng == null) {
+            if (locationLatLng != null) {
+                aMap.animateCamera(CameraUpdateFactory.changeLatLng(locationLatLng))
+            }
+        } else getNearData(centerLatLng!!.latitude, centerLatLng!!.longitude)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (centerLatLng != null && locationLatLng != null) {
+            val distance = AMapUtils.calculateLineDistance(centerLatLng, locationLatLng)
+            if (distance > 0.5) centerLatLng = null
+        }
     }
 
     override fun init_title() {
@@ -97,8 +114,8 @@ class MainActivity : BaseActivity() {
 
         aMap.apply {
             myLocationStyle = MyLocationStyle().apply {
-                //定位一次，且将视角移动到地图中心点
-                myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE)
+                //连续定位、蓝点不会移动到地图中心点，并且蓝点会跟随设备移动
+                myLocationType(MyLocationStyle.LOCATION_TYPE_FOLLOW_NO_CENTER)
                 interval(5000)                     //设置连续定位模式下的定位间隔
                 strokeColor(Color.TRANSPARENT)     //设置定位蓝点精度圆圈的边框颜色
                 radiusFillColor(Color.TRANSPARENT) //设置定位蓝点精度圆圈的填充颜色
@@ -107,8 +124,10 @@ class MainActivity : BaseActivity() {
                 myLocationIcon(BitmapDescriptorFactory.fromResource(R.mipmap.gps_point))
 
                 setOnMyLocationChangeListener {
-                    centerLatLng = LatLng(it.latitude, it.longitude)
-                    aMap.animateCamera(CameraUpdateFactory.changeLatLng(centerLatLng))
+                    if (locationLatLng == null) {
+                        locationLatLng = LatLng(it.latitude, it.longitude)
+                        aMap.animateCamera(CameraUpdateFactory.changeLatLng(locationLatLng))
+                    } else locationLatLng = LatLng(it.latitude, it.longitude)
                 }
             }
 
@@ -121,6 +140,8 @@ class MainActivity : BaseActivity() {
             setOnCameraChangeListener(object : AMap.OnCameraChangeListener {
 
                 override fun onCameraChangeFinish(position: CameraPosition) {
+                    centerLatLng = position.target
+
                     geocoderSearch.getFromLocationAsyn(RegeocodeQuery(LatLonPoint(
                             position.target.latitude, position.target.longitude),
                             100f,
@@ -175,7 +196,6 @@ class MainActivity : BaseActivity() {
 
                         main_title.text = result.regeocodeAddress.district
                         getNearData(result.regeocodeQuery.point.latitude, result.regeocodeQuery.point.longitude)
-                        handler.sendEmptyMessage(0)
                     }
                 }
             }

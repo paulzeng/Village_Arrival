@@ -52,7 +52,6 @@ class GrabDetailActivity : BaseActivity() {
         super.init_title()
         @Suppress("DEPRECATION")
         tvRight.setTextColor(resources.getColor(R.color.light))
-        grab_commission_ll.gone()
         bt_done.gone()
     }
 
@@ -100,20 +99,24 @@ class GrabDetailActivity : BaseActivity() {
                                 })
                     }
                     "我已完成" -> {
-                        OkGo.post<String>(BaseHttp.complete_order)
-                                .tag(this@GrabDetailActivity)
-                                .headers("token", getString("token"))
-                                .params("goodsOrderId", intent.getStringExtra("goodsOrderId"))
-                                .execute(object : StringDialogCallback(baseContext) {
+                        DialogHelper.showDoneDialog(baseContext, false) {
 
-                                    override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
+                            OkGo.post<String>(BaseHttp.complete_order)
+                                    .tag(this@GrabDetailActivity)
+                                    .headers("token", getString("token"))
+                                    .params("goodsOrderId", intent.getStringExtra("goodsOrderId"))
+                                    .params("code", it)
+                                    .execute(object : StringDialogCallback(baseContext) {
 
-                                        showToast(msg)
-                                        EventBus.getDefault().post(RefreshMessageEvent("完成订单"))
-                                        handler.sendEmptyMessage(0)
-                                    }
+                                        override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
 
-                                })
+                                            showToast(msg)
+                                            EventBus.getDefault().post(RefreshMessageEvent("完成订单"))
+                                            handler.sendEmptyMessage(0)
+                                        }
+
+                                    })
+                        }
                     }
                 }
             }
@@ -228,16 +231,8 @@ class GrabDetailActivity : BaseActivity() {
                         }
 
                         when (mType) {
-                            "0" -> {
-                                grab_total_ll.visible()
-                                grab_commission_ll.gone()
-                                grab_check_ll.gone()
-                            }
-                            "1" -> {
-                                grab_total_ll.gone()
-                                grab_commission_ll.visible()
-                                grab_check_ll.visible()
-                            }
+                            "0" -> grab_check_ll.gone()
+                            "1" -> grab_check_ll.visible()
                         }
 
                         grab_type1.text = if (mType == "1") "顺风商品：" else "代买商品："
@@ -261,17 +256,11 @@ class GrabDetailActivity : BaseActivity() {
                         grab_pay.text = "付款时间：${data.payTime}"
                         if (data.payTime.isEmpty()) grab_pay.gone() else grab_pay.visible()
 
-                        val commission = if (data.commission.isEmpty()) "0.0" else data.commission
                         val tip = if (data.tip.isEmpty()) 0.0 else data.tip.toDouble()
-
-                        grab_total.text = String.format("%.2f", commission.toDouble() + tip)
-                        grab_yong.text = "${data.commission}元"
-                        grab_fee.text = "${data.tip}元"
-                        if (tip == 0.0) grab_fee_ll.gone() else grab_fee_ll.visible()
+                        grab_commission.text = data.commission
                         @Suppress("DEPRECATION")
                         grab_commission_fee.text = Html.fromHtml("（小费：<font color='#F23030'>${data.tip}元）</font>")
                         if (tip == 0.0) grab_commission_fee.gone() else grab_commission_fee.visible()
-                        grab_commission.text = data.commission
 
                         if (mStauts == "-1" && data.cancelType == "0") window.decorView.postDelayed({
                             runOnUiThread { showCancelAgreeDialog() }

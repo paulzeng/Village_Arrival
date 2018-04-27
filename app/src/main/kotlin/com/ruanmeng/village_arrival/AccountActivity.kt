@@ -23,7 +23,10 @@ class AccountActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_account)
         init_title("我的账户", "说明")
+    }
 
+    override fun onStart() {
+        super.onStart()
         getData()
     }
 
@@ -35,6 +38,11 @@ class AccountActivity : BaseActivity() {
         bt_withdraw.setOnClickListener {
             val intent = Intent(baseContext, WithdrawActivity::class.java)
             intent.putExtra("balance", mBalance.toString())
+            startActivity(intent)
+        }
+        tvRight.setOnClickListener {
+            val intent = Intent(baseContext, WebActivity::class.java)
+            intent.putExtra("title", "账户说明")
             startActivity(intent)
         }
     }

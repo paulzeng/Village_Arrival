@@ -126,6 +126,10 @@ data class CommonData(
         var tradeId: String = "",
         var tradeSum: String = "",
         var tradeType: String = "",
+        //消息列表
+        var msgId: String = "",
+        var msgType: String = "",
+        var sendDate: String = "",
         //乡镇列表
         var isChecked: Boolean = false,
         var areaCode: String = "",

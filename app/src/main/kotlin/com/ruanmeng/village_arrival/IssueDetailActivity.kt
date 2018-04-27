@@ -16,21 +16,27 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.RadioGroup
+import com.cuieney.rxpay_annotation.WX
+import com.cuieney.sdk.rxpay.RxPay
 import com.lzg.extend.BaseResponse
 import com.lzg.extend.StringDialogCallback
 import com.lzg.extend.jackson.JacksonDialogCallback
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
+import com.lzy.okgo.utils.OkLogger
 import com.ruanmeng.base.*
 import com.ruanmeng.model.CommonData
 import com.ruanmeng.model.RefreshMessageEvent
 import com.ruanmeng.share.BaseHttp
 import com.ruanmeng.utils.DialogHelper
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_issue_detail.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
+import org.json.JSONObject
 import java.text.DecimalFormat
 
+@WX(packageName = "com.ruanmeng.village_arrival")
 class IssueDetailActivity : BaseActivity() {
 
     private var mStauts = ""
@@ -67,7 +73,6 @@ class IssueDetailActivity : BaseActivity() {
         @Suppress("DEPRECATION")
         tvRight.setTextColor(resources.getColor(R.color.light))
         issue_info_ll.gone()
-        issue_commission_ll.gone()
         issue_add.gone()
         bt_press.gone()
         issue_status.gone()
@@ -172,7 +177,15 @@ class IssueDetailActivity : BaseActivity() {
 
             dialog.dismiss()
 
-            window.decorView.postDelayed({ getPayData(payCount.text.toString()) }, 300)
+            when (payGroup.checkedRadioButtonId) {
+                R.id.pay_check1 -> window.decorView.postDelayed({ getPayData(payCount.text.toString()) }, 300)
+                R.id.pay_check2 -> window.decorView.postDelayed({
+                    getThirdPayData(payCount.text.toString(), "AliPay")
+                }, 300)
+                R.id.pay_check3 -> window.decorView.postDelayed({
+                    getThirdPayData(payCount.text.toString(), "WxPay")
+                }, 300)
+            }
         }
 
         dialog.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
@@ -315,16 +328,8 @@ class IssueDetailActivity : BaseActivity() {
                         }
 
                         when (mType) {
-                            "0" -> {
-                                issue_total_ll.visible()
-                                issue_commission_ll.gone()
-                                issue_check_ll.gone()
-                            }
-                            "1" -> {
-                                issue_total_ll.gone()
-                                issue_commission_ll.visible()
-                                issue_check_ll.visible()
-                            }
+                            "0" -> issue_check_ll.gone()
+                            "1" -> issue_check_ll.visible()
                         }
 
                         if (data.sendUserInfoId.isNotEmpty()) {
@@ -360,17 +365,12 @@ class IssueDetailActivity : BaseActivity() {
                         if (data.payTime.isEmpty()) issue_pay.gone() else issue_pay.visible()
 
                         mCommission = data.commission
-                        val commission = if (data.commission.isEmpty()) "0.0" else data.commission
                         val tip = if (data.tip.isEmpty()) 0.0 else data.tip.toDouble()
 
-                        issue_total.text = String.format("%.2f", commission.toDouble() + tip)
-                        issue_yong.text = "${data.commission}元"
-                        issue_fee.text = "${data.tip}元"
-                        if (tip == 0.0) issue_fee_ll.gone() else issue_fee_ll.visible()
+                        issue_commission.text = data.commission
                         @Suppress("DEPRECATION")
                         issue_commission_fee.text = Html.fromHtml("（小费：<font color='#F23030'>${data.tip}元）</font>")
                         if (tip == 0.0) issue_commission_fee.gone() else issue_commission_fee.visible()
-                        issue_commission.text = data.commission
 
                         if (mStauts == "-1" && data.cancelType == "1") window.decorView.postDelayed({
                             runOnUiThread { showCancelAgreeDialog() }
@@ -392,6 +392,42 @@ class IssueDetailActivity : BaseActivity() {
 
                         showToast(msg)
                         handler.sendEmptyMessage(0)
+                    }
+
+                })
+    }
+
+    private fun getThirdPayData(count: String, type: String) {
+        OkGo.post<String>(BaseHttp.pay_renew)
+                .tag(this@IssueDetailActivity)
+                .headers("token", getString("token"))
+                .params("goodsOrderId", intent.getStringExtra("goodsOrderId"))
+                .params("renewPrice", count)
+                .params("payType", type)
+                .execute(object : StringDialogCallback(baseContext) {
+
+                    override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
+
+                        val obj = JSONObject(response.body()).optString("object")
+                        val data = JSONObject(response.body()).optJSONObject("object") ?: JSONObject()
+                        when (type) {
+                            "AliPay" -> RxPay(baseContext).requestAlipay(obj)
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe({
+                                        if (it) {
+                                            showToast("支付成功")
+                                            handler.sendEmptyMessage(0)
+                                        } else showToast("支付失败")
+                                    }) { OkLogger.printStackTrace(it) }
+                            "WxPay" -> RxPay(baseContext).requestWXpay(data)
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe({
+                                        if (it) {
+                                            showToast("支付成功")
+                                            handler.sendEmptyMessage(0)
+                                        } else showToast("支付失败")
+                                    }) { OkLogger.printStackTrace(it) }
+                        }
                     }
 
                 })

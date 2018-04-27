@@ -5,6 +5,7 @@
     <string name="check_failed">认证失败：照片不清晰，请重新认证</string>
     <string name="real_hint">我们将保护您的隐私，请务必确保真实、有效信息</string>
     <string name="margin_hint">您的保证金状态为冻结中</string>
+    <string name="margin_not">您当前有未完成的订单，冻结中的保证金无法解冻</string>
     <string name="applying">认证审核中，请耐心等待</string>
     <string name="cancel_grab">等待抢单中\n您确定要取消订单吗？</string>
     <string name="del_address">删除常用地址\n您确定要删除该常用地址吗？</string>

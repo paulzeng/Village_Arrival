@@ -1,6 +1,7 @@
 package com.ruanmeng.village_arrival
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialog
 import android.text.Editable
@@ -11,20 +12,25 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.RadioGroup
+import com.cuieney.rxpay_annotation.WX
+import com.cuieney.sdk.rxpay.RxPay
 import com.lzg.extend.StringDialogCallback
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
+import com.lzy.okgo.utils.OkLogger
 import com.ruanmeng.base.BaseActivity
 import com.ruanmeng.base.getString
 import com.ruanmeng.base.showToast
 import com.ruanmeng.share.BaseHttp
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_margin.*
 import org.json.JSONObject
 import java.text.DecimalFormat
 
+@WX(packageName = "com.ruanmeng.village_arrival")
 class MarginActivity : BaseActivity() {
 
-    private var mBailSum = 36.0
+    private var mBailSum = 0.0
     private var mBailStatus = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +46,47 @@ class MarginActivity : BaseActivity() {
         bt_freeze.text = "冻结中"
         bt_freeze.setBackgroundResource(R.drawable.rec_bg_d0d0d0)
         bt_freeze.isClickable = false
+    }
+
+    private fun updateUI() {
+        margin_total.text = DecimalFormat(",##0.00").format(mBailSum)
+        when {
+            mBailSum == 0.0 -> {
+                margin_hint.text = "您当前未缴纳保证金"
+                margin_status .text = "未缴纳"
+                bt_freeze.text = "充值"
+                bt_freeze.setBackgroundResource(R.drawable.rec_bg_blue_shade)
+                bt_freeze.isClickable = true
+            }
+            mBailSum >= 100 -> {
+                margin_hint.text = getString(R.string.margin_hint)
+                margin_status .text = "冻结中"
+                if (mBailStatus == "1") {
+                    bt_freeze.text = "解冻"
+                    bt_freeze.setBackgroundResource(R.drawable.rec_bg_blue_shade)
+                    bt_freeze.isClickable = true
+                }
+                else {
+                    margin_hint.text = getString(R.string.margin_not)
+                    bt_freeze.text = "冻结中"
+                    bt_freeze.setBackgroundResource(R.drawable.rec_bg_d0d0d0)
+                    bt_freeze.isClickable = false
+                }
+            }
+            mBailSum > 0 && mBailSum < 100 -> {
+                if (mBailStatus == "1") {
+                    margin_hint.text = getString(R.string.margin_hint)
+                    margin_status .text = "冻结中"
+                    bt_freeze.text = "解冻"
+                } else {
+                    margin_hint.text = "您当前保证金余额不足"
+                    margin_status .text = "余额不足"
+                    bt_freeze.text = "充值"
+                }
+                bt_freeze.setBackgroundResource(R.drawable.rec_bg_d0d0d0)
+                bt_freeze.isClickable = false
+            }
+        }
     }
 
     override fun doClick(v: View) {
@@ -65,7 +112,65 @@ class MarginActivity : BaseActivity() {
                     }
                 }
             }
+            R.id.tv_nav_right -> {
+                tvRight.setOnClickListener {
+                    val intent = Intent(baseContext, WebActivity::class.java)
+                    intent.putExtra("title", "保证金说明")
+                    startActivity(intent)
+                }
+            }
         }
+    }
+
+    private fun getPayData(count: String) {
+        OkGo.post<String>(BaseHttp.recharge_balance)
+                .tag(this@MarginActivity)
+                .headers("token", getString("token"))
+                .params("rechargeSum", count)
+                .execute(object : StringDialogCallback(baseContext) {
+
+                    override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
+
+                        showToast(msg)
+                        window.decorView.postDelayed({ getData() }, 300)
+                    }
+
+                })
+    }
+
+    private fun getThirdPayData(count: String, type: String) {
+        OkGo.post<String>(BaseHttp.recharge_request)
+                .tag(this@MarginActivity)
+                .headers("token", getString("token"))
+                .params("rechargeSum", count)
+                .params("payType", type)
+                .execute(object : StringDialogCallback(baseContext) {
+
+                    override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
+
+                        val obj = JSONObject(response.body()).optString("object")
+                        val data = JSONObject(response.body()).optJSONObject("object") ?: JSONObject()
+                        when (type) {
+                            "AliPay" -> RxPay(baseContext).requestAlipay(obj)
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe({
+                                        if (it) {
+                                            showToast("支付成功")
+                                            window.decorView.postDelayed({ getData() }, 300)
+                                        } else showToast("支付失败")
+                                    }) { OkLogger.printStackTrace(it) }
+                            "WxPay" -> RxPay(baseContext).requestWXpay(data)
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe({
+                                        if (it) {
+                                            showToast("支付成功")
+                                            window.decorView.postDelayed({ getData() }, 300)
+                                        } else showToast("支付失败")
+                                    }) { OkLogger.printStackTrace(it) }
+                        }
+                    }
+
+                })
     }
 
     override fun getData() {
@@ -86,42 +191,6 @@ class MarginActivity : BaseActivity() {
                     }
                 })
     }
-
-    private fun updateUI() {
-        margin_total.text = DecimalFormat(",##0.00").format(mBailSum)
-        when {
-            mBailSum == 0.0 -> {
-                margin_hint.text = "您当前未缴纳保证金"
-                margin_status .text = "未缴纳"
-                bt_freeze.text = "充值"
-                bt_freeze.setBackgroundResource(R.drawable.rec_bg_blue_shade)
-                bt_freeze.isClickable = true
-            }
-            mBailSum >= 100 -> {
-                margin_hint.text = getString(R.string.margin_hint)
-                margin_status .text = "冻结中"
-                if (mBailStatus == "1") bt_freeze.text = "解冻"
-                else {
-                    bt_freeze.text = "冻结中"
-                    bt_freeze.setBackgroundResource(R.drawable.rec_bg_d0d0d0)
-                    bt_freeze.isClickable = false
-                }
-            }
-            mBailSum > 0 && mBailSum < 100 -> {
-                if (mBailStatus == "1") {
-                    margin_hint.text = getString(R.string.margin_hint)
-                    margin_status .text = "冻结中"
-                    bt_freeze.text = "解冻"
-                } else {
-                    margin_hint.text = "您当前保证金余额不足"
-                    margin_status .text = "余额不足"
-                    bt_freeze.text = "充值"
-                }
-            }
-        }
-    }
-
-    private fun getPayData(count: String) {}
 
     @SuppressLint("InflateParams")
     private fun showSheetDialog() {
@@ -171,7 +240,15 @@ class MarginActivity : BaseActivity() {
 
             dialog.dismiss()
 
-            window.decorView.postDelayed({ getPayData(payCount.text.toString()) }, 300)
+            when (payGroup.checkedRadioButtonId) {
+                R.id.pay_check1 -> window.decorView.postDelayed({ getPayData(payCount.text.toString()) }, 300)
+                R.id.pay_check2 -> window.decorView.postDelayed({
+                    getThirdPayData(payCount.text.toString(), "AliPay")
+                }, 300)
+                R.id.pay_check3 -> window.decorView.postDelayed({
+                    getThirdPayData(payCount.text.toString(), "WxPay")
+                }, 300)
+            }
         }
 
         dialog.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)

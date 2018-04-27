@@ -23,7 +23,6 @@
             android:id="@+id/item_msg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
             android:padding="@dimen/dimen_size_10">
 
             <ImageView
@@ -37,6 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dimen_size_10"
+                android:layout_marginTop="@dimen/dimen_size_3"
                 android:orientation="vertical">
 
                 <TextView
@@ -52,8 +52,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dimen_size_5"
-                    android:ellipsize="end"
-                    android:maxLines="1"
+                    android:lineSpacingExtra="@dimen/dimen_size_3"
                     android:text="内容" />
 
             </LinearLayout>

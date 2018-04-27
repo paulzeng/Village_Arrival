@@ -6,8 +6,11 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.flyco.dialog.widget.base.BottomBaseDialog;
 import com.maning.mndialoglibrary.MProgressDialog;
@@ -50,6 +53,48 @@ public class DialogHelper {
     public static void dismissDialog() {
         if (mMProgressDialog != null && mMProgressDialog.isShowing())
             mMProgressDialog.dismiss();
+    }
+
+    public static void showDoneDialog(
+            final Context context,
+            final boolean cancel,
+            final ClickCallBack callBack) {
+        BaseDialog dialog = new BaseDialog(context, true) {
+            @Override
+            public View onCreateView() {
+                widthScale(0.85f);
+                View view = View.inflate(context, R.layout.dialog_code_done, null);
+
+                final EditText yzm = view.findViewById(R.id.dialog_yzm);
+                TextView tv_left = view.findViewById(R.id.dialog_left);
+                TextView tv_right = view.findViewById(R.id.dialog_right);
+
+                tv_left.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dismiss();
+                    }
+                });
+                tv_right.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String hint = yzm.getText().toString();
+                        if (TextUtils.isEmpty(hint)) {
+                            Toast.makeText(context, "请输入短信验证码", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        dismiss();
+                        callBack.onClick(yzm.getText().toString());
+                    }
+                });
+
+                return view;
+            }
+        };
+
+        dialog.setCanceledOnTouchOutside(cancel);
+        dialog.show();
     }
 
     public static void showHintDialog(

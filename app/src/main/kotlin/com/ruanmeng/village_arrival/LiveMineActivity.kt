@@ -102,6 +102,7 @@ class LiveMineActivity : BaseActivity() {
                                                         val position = list.indexOf(data)
                                                         list.remove(data)
                                                         mAdapter.notifyItemRemoved(position)
+                                                        empty_view.apply { if (list.isEmpty()) visible() else gone() }
                                                     }
 
                                                 })
@@ -123,6 +124,7 @@ class LiveMineActivity : BaseActivity() {
                                                 val position = list.indexOf(data)
                                                 list.remove(data)
                                                 mAdapter.notifyItemRemoved(position)
+                                                empty_view.apply { if (list.isEmpty()) visible() else gone() }
                                             }
 
                                         })

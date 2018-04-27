@@ -3,17 +3,23 @@ package com.ruanmeng.village_arrival
 import android.os.Bundle
 import android.text.Html
 import android.view.View
+import com.cuieney.rxpay_annotation.WX
+import com.cuieney.sdk.rxpay.RxPay
 import com.lzg.extend.StringDialogCallback
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
+import com.lzy.okgo.utils.OkLogger
 import com.ruanmeng.base.BaseActivity
 import com.ruanmeng.base.getString
 import com.ruanmeng.model.RefreshMessageEvent
 import com.ruanmeng.share.BaseHttp
 import com.ruanmeng.utils.ActivityStack
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_issue_pay.*
 import org.greenrobot.eventbus.EventBus
+import org.json.JSONObject
 
+@WX(packageName = "com.ruanmeng.village_arrival")
 class IssuePayActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,6 +73,72 @@ class IssuePayActivity : BaseActivity() {
                                         intent.putExtra("title", "支付失败")
                                         intent.putExtra("message", msg)
                                         startActivity(intent)
+                                    }
+
+                                })
+                    }
+                    1 -> {
+                        OkGo.post<String>(BaseHttp.order_pay)
+                                .tag(this@IssuePayActivity)
+                                .headers("token", getString("token"))
+                                .params("goodsOrderId", intent.getStringExtra("goodsOrderId"))
+                                .params("payType", "AliPay")
+                                .execute(object : StringDialogCallback(baseContext) {
+
+                                    override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
+
+                                        val obj = JSONObject(response.body()).optString("object")
+                                        RxPay(baseContext).requestAlipay(obj)
+                                                .observeOn(AndroidSchedulers.mainThread())
+                                                .subscribe({
+                                                    if (it) {
+
+                                                        EventBus.getDefault().post(RefreshMessageEvent("支付成功"))
+                                                        intent.setClass(baseContext, TaskResultActivity::class.java)
+                                                        intent.putExtra("title", "支付成功")
+                                                        startActivity(intent)
+                                                        ActivityStack.screenManager.popActivities(this@IssuePayActivity::class.java)
+                                                    } else {
+
+                                                        intent.setClass(baseContext, TaskResultActivity::class.java)
+                                                        intent.putExtra("title", "支付失败")
+                                                        intent.putExtra("message", msg)
+                                                        startActivity(intent)
+                                                    }
+                                                }) { OkLogger.printStackTrace(it) }
+                                    }
+
+                                })
+                    }
+                    2 -> {
+                        OkGo.post<String>(BaseHttp.order_pay)
+                                .tag(this@IssuePayActivity)
+                                .headers("token", getString("token"))
+                                .params("goodsOrderId", intent.getStringExtra("goodsOrderId"))
+                                .params("payType", "WxPay")
+                                .execute(object : StringDialogCallback(baseContext) {
+
+                                    override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
+
+                                        val data = JSONObject(response.body()).optJSONObject("object") ?: JSONObject()
+                                        RxPay(baseContext).requestWXpay(data)
+                                                .observeOn(AndroidSchedulers.mainThread())
+                                                .subscribe({
+                                                    if (it) {
+
+                                                        EventBus.getDefault().post(RefreshMessageEvent("支付成功"))
+                                                        intent.setClass(baseContext, TaskResultActivity::class.java)
+                                                        intent.putExtra("title", "支付成功")
+                                                        startActivity(intent)
+                                                        ActivityStack.screenManager.popActivities(this@IssuePayActivity::class.java)
+                                                    } else {
+
+                                                        intent.setClass(baseContext, TaskResultActivity::class.java)
+                                                        intent.putExtra("title", "支付失败")
+                                                        intent.putExtra("message", msg)
+                                                        startActivity(intent)
+                                                    }
+                                                }) { OkLogger.printStackTrace(it) }
                                     }
 
                                 })

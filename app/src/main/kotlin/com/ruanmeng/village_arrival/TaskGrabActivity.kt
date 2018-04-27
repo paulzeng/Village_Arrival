@@ -131,6 +131,7 @@ class TaskGrabActivity : BaseActivity() {
                                                 showToast(msg)
                                                 list.remove(data)
                                                 mAdapter.notifyDataSetChanged()
+                                                empty_view.apply { if (list.isEmpty()) visible() else gone() }
                                                 EventBus.getDefault().post(RefreshMessageEvent("快速抢单"))
 
                                                 val intent = Intent(baseContext, TaskContactActivity::class.java)
