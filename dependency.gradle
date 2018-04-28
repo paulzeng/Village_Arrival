@@ -10,4 +10,9 @@ ext.versions = [
         constraintLayoutVersion: '1.1.0',
         multidexVersion: '1.0.3',
         glideVersion: '4.6.1',
+
+        umengSocialVersion: '6.9.1',
+        amapLocationVersion: '3.8.0',
+        amap3DVersion: '6.1.0',
+        amapNavi3DVersion: '6.0.1_3dmap6.1.0',
 ]

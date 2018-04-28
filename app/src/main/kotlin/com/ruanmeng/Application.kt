@@ -37,6 +37,9 @@ import com.lzy.okgo.https.HttpsUtils
 import com.lzy.okgo.interceptor.HttpLoggingInterceptor
 import com.lzy.okgo.utils.OkLogger
 import com.ruanmeng.village_arrival.BuildConfig
+import com.umeng.commonsdk.UMConfigure
+import com.umeng.socialize.Config
+import com.umeng.socialize.PlatformConfig
 import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
 import java.util.logging.Level
@@ -52,6 +55,13 @@ class Application : MultiDexApplication() {
         super.onCreate()
 
         initOkGo()
+
+        //友盟分享
+        UMConfigure.init(this@Application, "5ae40549f29d984bc9000283", "umeng", UMConfigure.DEVICE_TYPE_PHONE, "")
+        PlatformConfig.setWeixin("wx3e462b5f4f9a5c01", "c28fb66080a11b67399eb50e3e910c86")
+        PlatformConfig.setQQZone("1106461503", "J8ky4clnxm2maLZd")
+        Config.isJumptoAppStore = true
+        UMConfigure.setLogEnabled(BuildConfig.LOG_DEBUG)
     }
 
     private fun initOkGo() {

@@ -3,11 +3,13 @@ package com.ruanmeng.village_arrival
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.BottomSheetDialog
+import android.support.v7.widget.DefaultItemAnimator
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
-import com.allen.library.SuperTextView
 import com.jude.rollviewpager.RollPagerView
 import com.lzg.extend.jackson.JacksonDialogCallback
 import com.lzy.okgo.OkGo
@@ -33,7 +35,7 @@ class LiveHomeActivity : BaseActivity() {
 
     private val list = ArrayList<Any>()
     private val listSlider = ArrayList<CommonData>()
-    private val listModule = ArrayList<Any>()
+    private val listModule = ArrayList<CommonData>()
     private val listNew = ArrayList<CommonData>()
 
     private lateinit var banner: RollPagerView
@@ -65,7 +67,6 @@ class LiveHomeActivity : BaseActivity() {
                     banner = view.findViewById(R.id.live_banner)
                     recycler = view.findViewById(R.id.live_list)
                     tvSwitcher = view.findViewById(R.id.live_switcher)
-                    val tvRecommand = view.findViewById<SuperTextView>(R.id.live_rec)
 
                     tvTitle.text = intent.getStringExtra("title")
                     mLoopAdapter = LoopAdapter(baseContext, banner)
@@ -84,15 +85,22 @@ class LiveHomeActivity : BaseActivity() {
                                             .with<GlideImageView>(R.id.item_live_img) {
                                                 it.loadImage(BaseHttp.baseImg + data.moduleIcon)
                                             }
-                                            .clicked(R.id.item_live) {}
+                                            .clicked(R.id.item_live) {
+                                                if (data.moduleType == "0") {
+                                                    val intent = Intent(baseContext, WebActivity::class.java)
+                                                    intent.putExtra("title", "常用电话")
+                                                    intent.putExtra("moduleName", data.moduleName)
+                                                    intent.putExtra("moduleContent", data.value)
+                                                    startActivity(intent)
+                                                } else {
+                                                    intent.setClass(baseContext, LiveActivity::class.java)
+                                                    intent.putExtra("type", data.appmoduleId)
+                                                    startActivity(intent)
+                                                }
+                                            }
                                 }
                                 .attachTo(this)
                         (adapter as SlimAdapter).updateData(listModule)
-                    }
-
-                    tvRecommand.setOnClickListener {
-                        intent.setClass(baseContext, LiveActivity::class.java)
-                        startActivity(intent)
                     }
 
                     addHeader(view)
@@ -122,7 +130,7 @@ class LiveHomeActivity : BaseActivity() {
     override fun doClick(v: View) {
         super.doClick(v)
         when (v.id) {
-            R.id.bt_issue -> startActivity<LiveIssueActivity>()
+            R.id.bt_issue -> showSheetDialog()
         }
     }
 
@@ -177,6 +185,54 @@ class LiveHomeActivity : BaseActivity() {
     override fun finish() {
         EventBus.getDefault().unregister(this@LiveHomeActivity)
         super.finish()
+    }
+
+    @Suppress("DEPRECATION")
+    @SuppressLint("InflateParams")
+    private fun showSheetDialog() {
+        val listItem = ArrayList<CommonData>()
+        listModule.filter { it.moduleType == "1" }.mapTo(listItem) { it }.forEach { it.isChecked = false }
+
+        val view = LayoutInflater.from(baseContext).inflate(R.layout.dialog_live_type, null) as View
+        val tvCancel = view.findViewById(R.id.tv_dialog_live_cancle) as TextView
+        val tvOk = view.findViewById(R.id.tv_dialog_live_ok) as TextView
+        val recyclerView = view.findViewById(R.id.dialog_live_list) as RecyclerView
+        val dialog = BottomSheetDialog(baseContext)
+
+        tvCancel.setOnClickListener { dialog.dismiss() }
+        tvOk.setOnClickListener {
+            dialog.dismiss()
+
+            window.decorView.postDelayed({
+                val intent = Intent(baseContext, LiveIssueActivity::class.java)
+                intent.putExtra("type", listItem.filter { it.isChecked }[0].appmoduleId)
+                startActivity(intent)
+            }, 350)
+        }
+
+        recyclerView.apply {
+            itemAnimator = DefaultItemAnimator()
+            layoutManager = LinearLayoutManager(baseContext)
+            adapter = SlimAdapter.create()
+                    .register<CommonData>(R.layout.item_area_list, { data, injector ->
+                        injector.text(R.id.item_area, data.moduleName)
+                                .textColor(R.id.item_area, resources.getColor(if (data.isChecked) R.color.colorAccent else R.color.black))
+                                .gone(R.id.item_area_divider1)
+                                .visible(R.id.item_area_divider2)
+
+                                .clicked(R.id.item_area) {
+                                    listItem.filter { it.isChecked }.forEach { it.isChecked = false }
+                                    data.isChecked = true
+                                    (adapter as SlimAdapter).notifyDataSetChanged()
+                                }
+                    })
+                    .attachTo(recyclerView)
+
+            (adapter as SlimAdapter).updateData(listItem)
+        }
+
+        dialog.setContentView(view)
+        dialog.show()
     }
 
     @Subscribe

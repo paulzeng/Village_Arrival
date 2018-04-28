@@ -87,6 +87,7 @@ class LiveActivity : BaseActivity() {
                 .params("address", mAddress)
                 .params("sartDate", mStartDate)
                 .params("endDate", mEndDate)
+                .params("type", intent.getStringExtra("type"))
                 .params("page", pindex)
                 .execute(object : JacksonDialogCallback<CommonModel>(baseContext, CommonModel::class.java) {
 
@@ -162,7 +163,10 @@ class LiveActivity : BaseActivity() {
                     window.decorView.postDelayed({ runOnUiThread { updateList() } }, 350)
                 }
             }
-            R.id.bt_issue -> startActivity<LiveIssueActivity>()
+            R.id.bt_issue -> {
+                intent.setClass(baseContext, LiveIssueActivity::class.java)
+                startActivity(intent)
+            }
         }
     }
 

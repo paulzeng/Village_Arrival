@@ -10,6 +10,7 @@ import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 import com.ruanmeng.base.BaseActivity
 import com.ruanmeng.share.BaseHttp
+import com.ruanmeng.utils.CommonUtil
 import kotlinx.android.synthetic.main.activity_web.*
 import org.json.JSONObject
 
@@ -130,6 +131,27 @@ class WebActivity : BaseActivity() {
 
                         })
             }
+            "常用电话" -> {
+                tvTitle.text = intent.getStringExtra("moduleName")
+
+                val str = "<!doctype html><html>\n" +
+                        "<meta charset=\"utf-8\">" +
+                        "<style type=\"text/css\">" +
+                        "body{ padding:0; margin:0; }\n" +
+                        ".con{ width:95%; margin:0 auto; color:#fff; color:#666; padding:0.5em 0; overflow:hidden; display:block; font-size:0.92em; line-height:1.8em; }\n" +
+                        ".con h1,h2,h3,h4,h5,h6{ font-size:1em; }\n " +
+                        "img{ width:auto; max-width: 100% !important; height:auto !important; margin:0 auto; display:block; }\n" +
+                        "*{ max-width:100% !important; }\n" +
+                        "</style>\n" +
+                        "<body style=\"padding:0; margin:0; \">" +
+                        "<div class=\"con\">" +
+                        intent.getStringExtra("moduleContent") +
+                        "</div>" +
+                        "</body>" +
+                        "</html>"
+
+                wv_web.loadDataWithBaseURL(BaseHttp.baseImg, str, "text/html", "utf-8", "")
+            }
         }
      }
 
@@ -150,6 +172,10 @@ class WebActivity : BaseActivity() {
             settings.builtInZoomControls = true
             settings.displayZoomControls = false
 
+            //设置是否使用缓存
+            settings.setAppCacheEnabled(true)
+            settings.domStorageEnabled = true
+
             webViewClient = object : WebViewClient() {
 
                 /* 这个事件，将在用户点击链接时触发。
@@ -158,8 +184,9 @@ class WebActivity : BaseActivity() {
                  * 如果返回false，表示没有处理，那么浏览器将会根据url获取网页
                  */
                 override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-                    view.loadUrl(url)
-                    return true
+                    val isWeb = CommonUtil.isWeb(url)
+                    if (isWeb) view.loadUrl(url)
+                    return isWeb
                 }
             }
         }

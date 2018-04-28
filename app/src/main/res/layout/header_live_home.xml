@@ -98,7 +98,6 @@
         android:background="@color/divider" />
 
     <com.allen.library.SuperTextView
-        android:id="@+id/live_rec"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_size_46"
         android:layout_marginTop="@dimen/dimen_size_10"
@@ -109,13 +108,6 @@
         app:sLeftTextColor="@color/black"
         app:sLeftTextMarginLeft="@dimen/dimen_size_5"
         app:sLeftTextString="推荐信息"
-        app:sLineShow="both"
-        app:sRightIconMarginRight="@dimen/dimen_size_10"
-        app:sRightIconRes="@mipmap/per_ent"
-        app:sRightIconSize="@dimen/dimen_size_15"
-        app:sRightTextColor="@color/gray"
-        app:sRightTextMarginRight="@dimen/dimen_size_25"
-        app:sRightTextSize="@dimen/sp_size_13"
-        app:sRightTextString="更多" />
+        app:sLineShow="both" />
 
 </LinearLayout>

@@ -70,12 +70,13 @@ public class BaseHttp {
     public static String cooperation_collect_list = baseIp + "/cooperation_collect_list.rm";   //我的收藏√
     public static String delete_cooperation = baseIp + "/delete_cooperation.rm";               //删除互助√
 
-    public static String area_street2 = baseIp + "/area_street2.rm"; //获取乡镇√
-    public static String area_street3 = baseIp + "/area_street3.rm"; //获取区√
+    public static String area_street2 = baseIp + "/area_street2.rm";           //获取乡镇√
+    public static String area_street3 = baseIp + "/area_street3.rm";           //获取区√
     public static String leave_message_sub = baseIp + "/leave_message_sub.rm"; //意见反馈√
-    public static String msg_list_data = baseIp + "/msg_list_data.rm"; //消息列表√
-    public static String common_problem = baseIp + "/common_problem.rm"; //常见问题√
-    public static String help_center = baseIp + "/help_center.rm"; //帮助中心√
-    public static String newsnotice_Info = baseIp + "/newsnotice_Info.rm"; //公告详情√
-    public static String get_versioninfo = baseIp + "/get_versioninfo.rm"; //版本信息√
+    public static String msg_list_data = baseIp + "/msg_list_data.rm";         //消息列表√
+    public static String common_problem = baseIp + "/common_problem.rm";       //常见问题√
+    public static String help_center = baseIp + "/help_center.rm";             //帮助中心√
+    public static String newsnotice_Info = baseIp + "/newsnotice_Info.rm";     //公告详情√
+    public static String get_versioninfo = baseIp + "/get_versioninfo.rm";     //版本信息√
+    public static String invite_index = baseUrl + "/forend/invite_index.hm";   //分享√
 }

@@ -104,8 +104,7 @@ data class CommonData(
         var moduleType: String = "",
         var moduleName: String = "",
         var moduleIcon: String = "",
-        var moduleUrl: String = "",
-        var moduleContent: String = "",
+        var value: String = "",
         //公告促销列表
         var newsType: String = "",
         var newsnoticeId: String = "",

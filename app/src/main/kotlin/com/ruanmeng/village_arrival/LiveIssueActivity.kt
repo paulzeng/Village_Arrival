@@ -150,6 +150,7 @@ class LiveIssueActivity : BaseActivity() {
                         .params("township", locationTownship)
                         .params("title", et_title.text.trim().toString())
                         .params("content", et_content.text.trim().toString())
+                        .params("type", intent.getStringExtra("type"))
                         .apply {
                             if (liveImg.isNotEmpty()) params("img1", File(liveImg))
                             params("mobile", et_tel.text.toString())

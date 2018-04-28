@@ -121,6 +121,7 @@ class IssuePayActivity : BaseActivity() {
                                     override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
 
                                         val data = JSONObject(response.body()).optJSONObject("object") ?: JSONObject()
+
                                         RxPay(baseContext).requestWXpay(data)
                                                 .observeOn(AndroidSchedulers.mainThread())
                                                 .subscribe({

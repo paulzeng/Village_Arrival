@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <TextView
+        style="@style/Font15_black"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_size_15"
+        android:gravity="center"
+        android:text="分享至" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/dialog_share_wechat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:onClick="doClick"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/dimen_size_15"
+            android:paddingTop="@dimen/dimen_size_15">
+
+            <ImageView
+                android:layout_width="@dimen/dimen_size_60"
+                android:layout_height="@dimen/dimen_size_60"
+                android:src="@mipmap/ord_inv_icon03"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                style="@style/Font14_gray"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_size_10"
+                android:text="微信" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/dialog_share_circle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:onClick="doClick"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/dimen_size_15"
+            android:paddingTop="@dimen/dimen_size_15">
+
+            <ImageView
+                android:layout_width="@dimen/dimen_size_60"
+                android:layout_height="@dimen/dimen_size_60"
+                android:src="@mipmap/ord_inv_icon04"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                style="@style/Font14_gray"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_size_10"
+                android:text="朋友圈" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/dialog_share_qq"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:onClick="doClick"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/dimen_size_15"
+            android:paddingTop="@dimen/dimen_size_15">
+
+            <ImageView
+                android:layout_width="@dimen/dimen_size_60"
+                android:layout_height="@dimen/dimen_size_60"
+                android:src="@mipmap/ord_inv_icon05"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                style="@style/Font14_gray"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_size_10"
+                android:text="QQ" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/dialog_share_space"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:onClick="doClick"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/dimen_size_15"
+            android:paddingTop="@dimen/dimen_size_15">
+
+            <ImageView
+                android:layout_width="@dimen/dimen_size_60"
+                android:layout_height="@dimen/dimen_size_60"
+                android:src="@mipmap/ord_inv_icon06"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                style="@style/Font14_gray"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_size_10"
+                android:text="空间" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/dialog_share_sms"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:onClick="doClick"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/dimen_size_15"
+            android:paddingTop="@dimen/dimen_size_15">
+
+            <ImageView
+                android:layout_width="@dimen/dimen_size_60"
+                android:layout_height="@dimen/dimen_size_60"
+                android:src="@mipmap/ord_inv_icon07"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                style="@style/Font14_gray"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_size_10"
+                android:text="短信" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_height"
+        android:background="@color/divider" />
+
+    <TextView
+        android:id="@+id/dialog_share_cancel"
+        style="@style/Font15_light"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/btn_height"
+        android:layout_margin="@dimen/dimen_size_10"
+        android:gravity="center"
+        android:onClick="doClick"
+        android:text="取消分享" />
+
+</LinearLayout>

@@ -28,8 +28,8 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 
     //高德地图
-    api 'com.amap.api:location:3.8.0'              //定位
-    api 'com.amap.api:search:6.1.0'                //搜索
-    api 'com.amap.api:3dmap:6.1.0'                 //3D地图
+    api 'com.amap.api:location:' + versions.amapLocationVersion    //定位
+    api 'com.amap.api:search:' + versions.amap3DVersion            //搜索
+    api 'com.amap.api:3dmap:' + versions.amap3DVersion             //3D地图
     // api 'com.amap.api:navi-3dmap:6.0.1_3dmap6.1.0' //导航(含3D地图)
 }
