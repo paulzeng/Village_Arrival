@@ -2,6 +2,7 @@ package com.ruanmeng.village_arrival
 
 import android.os.Bundle
 import android.view.View
+import cn.jpush.android.api.JPushInterface
 import com.lzg.extend.StringDialogCallback
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
@@ -90,6 +91,9 @@ class LoginActivity : BaseActivity() {
         putString("sex", "")
         putString("pass", "")
         putString("status", "")
+
+        JPushInterface.stopPush(applicationContext)
+        JPushInterface.clearAllNotifications(applicationContext)
     }
 
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {

@@ -9,10 +9,14 @@ import android.os.Message
 import android.support.v4.view.GravityCompat
 import android.text.Html
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
+import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
+import cn.jpush.android.api.JPushInterface
 import com.amap.api.maps.AMap
 import com.amap.api.maps.AMapUtils
 import com.amap.api.maps.CameraUpdateFactory
@@ -33,12 +37,12 @@ import com.lzg.extend.StringDialogCallback
 import com.lzg.extend.jackson.JacksonDialogCallback
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
-import com.lzy.okgo.utils.OkLogger
 import com.ruanmeng.base.*
 import com.ruanmeng.model.CommonData
 import com.ruanmeng.model.CommonModel
 import com.ruanmeng.model.RefreshMessageEvent
 import com.ruanmeng.share.BaseHttp
+import com.ruanmeng.share.Const
 import com.ruanmeng.utils.CommonUtil
 import com.ruanmeng.utils.DensityUtil
 import kotlinx.android.synthetic.main.activity_main.*
@@ -68,13 +72,25 @@ class MainActivity : BaseActivity() {
         @Suppress("DEPRECATION")
         override fun handleMessage(msg: Message) {
             super.handleMessage(msg)
-            main_order1.text = "${nowCtn}单"
-            main_address.text = nowAddress
+            when (msg.what) {
+                0 -> {
+                    main_order1.text = "${if (nowCtn.isEmpty()) "0" else nowCtn}单"
+                    main_address.text = nowAddress
 
-            if (listAddress.isEmpty()) main_order2.text = "您还没有添加常用地址"
-            else {
-                val hint = "您常用地址附近有<font color='${resources.getColor(R.color.red)}'>${nowCtn}单</font>可抢"
-                main_order2.text = Html.fromHtml(hint)
+                    if (listAddress.isEmpty()) main_order2.text = "您还没有添加常用地址"
+                    else {
+                        val hint = "您常用地址附近有<font color='${resources.getColor(R.color.red)}'>${if (cyCtn.isEmpty()) "0" else cyCtn}单</font>可抢"
+                        main_order2.text = Html.fromHtml(hint)
+                    }
+                }
+                1 -> {
+                    OkGo.getInstance().cancelTag("周边信息")
+                    val target = msg.obj as LatLng
+                    geocoderSearch.getFromLocationAsyn(RegeocodeQuery(
+                            LatLonPoint(target.latitude, target.longitude),
+                            100f,
+                            GeocodeSearch.AMAP))
+                }
             }
         }
     }
@@ -85,6 +101,13 @@ class MainActivity : BaseActivity() {
         transparentStatusBar(false)
         main_map.onCreate(savedInstanceState)
         init_title()
+
+        JPushInterface.resumePush(applicationContext)
+        //设置别名（先注册）
+        JPushInterface.setAlias(
+                applicationContext,
+                Const.JPUSH_SEQUENCE,
+                getString("token"))
 
         EventBus.getDefault().register(this@MainActivity)
     }
@@ -137,26 +160,87 @@ class MainActivity : BaseActivity() {
             showIndoorMap(true)            //设置是否显示室内地图
             moveCamera(CameraUpdateFactory.zoomTo(16f)) //缩放级别
 
+            /**
+             * 地图状态发生变化的监听
+             *
+             * 调用AMap.animateCamera(CameraUpdate)、AMap.moveCamera(CameraUpdate)及手势操作地图时会触发该回调
+             */
             setOnCameraChangeListener(object : AMap.OnCameraChangeListener {
 
                 override fun onCameraChangeFinish(position: CameraPosition) {
                     centerLatLng = position.target
 
-                    geocoderSearch.getFromLocationAsyn(RegeocodeQuery(LatLonPoint(
-                            position.target.latitude, position.target.longitude),
-                            100f,
-                            GeocodeSearch.AMAP))
+                    handler.removeMessages(1)
+                    val msg = Message()
+                    msg.what = 1
+                    msg.obj = position.target
+                    handler.sendMessageDelayed(msg, 500)
                 }
 
                 override fun onCameraChange(position: CameraPosition) {
                     listMaker.forEach { it.destroy() }
                     listMaker.clear()
-                    OkGo.getInstance().cancelTag("周边信息")
                 }
 
             })
 
+            /**
+             * 定制marker的信息窗口
+             */
+            setInfoWindowAdapter(object : AMap.InfoWindowAdapter {
+
+                override fun getInfoContents(marker: Marker): View? = null
+
+                @SuppressLint("InflateParams", "SetTextI18n")
+                override fun getInfoWindow(marker: Marker): View {
+
+                    val view = LayoutInflater.from(baseContext).inflate(R.layout.pop_main_marker, null) as View
+                    val img1 = view.findViewById<ImageView>(R.id.pop_main_img1)
+                    val addr1 = view.findViewById<TextView>(R.id.pop_main_addr1)
+                    val addr2 = view.findViewById<TextView>(R.id.pop_main_addr2)
+                    val money = view.findViewById<TextView>(R.id.pop_main_money)
+                    val grab = view.findViewById<TextView>(R.id.pop_main_grab)
+
+                    val data = list[marker.snippet.toInt()]
+                    img1.setImageResource(if (data.type == "1") R.mipmap.index_lab05 else R.mipmap.index_lab01)
+                    addr1.text = data.buyAddress + data.buyDetailAdress
+                    addr2.text = data.receiptAddress + data.receiptDetailAdress
+                    money.text = data.commission + "元"
+                    grab.setBackgroundResource(if (data.type == "1") R.drawable.rec_bg_blue_shade else R.drawable.rec_bg_red_shade)
+
+                    grab.setOnClickListener {
+                        val intent = Intent(baseContext, GrabDetailActivity::class.java)
+                        intent.putExtra("isAll", true)
+                        intent.putExtra("goodsOrderId", data.goodsOrderId)
+                        startActivity(intent)
+                    }
+
+                    return view
+                }
+
+            })
+
+            /**
+             * marker的信息窗口点击事件监听
+             */
+            setOnInfoWindowClickListener {
+                val data = list[it.snippet.toInt()]
+                val intent = Intent(baseContext, GrabDetailActivity::class.java)
+                intent.putExtra("isAll", true)
+                intent.putExtra("goodsOrderId", data.goodsOrderId)
+                startActivity(intent)
+            }
+
+            /**
+             * marker点击事件监听
+             *
+             * true 返回true表示该点击事件已被处理，不再往下传递，返回false则继续往下传递
+             */
             setOnMarkerClickListener {
+                if (it.title == "抢单") {
+                    if (it.isInfoWindowShown) it.hideInfoWindow()
+                    else it.showInfoWindow()
+                }
                 return@setOnMarkerClickListener true
             }
         }
@@ -315,7 +399,8 @@ class MainActivity : BaseActivity() {
                     @SuppressLint("SetTextI18n")
                     override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
 
-                        val obj = JSONObject(response.body()).getJSONObject("userMsg") ?: JSONObject()
+                        val obj = JSONObject(response.body()).getJSONObject("userMsg")
+                                ?: JSONObject()
                         putString("nickName", obj.getString("nickName"))
                         putString("userhead", obj.getString("userhead"))
                         putString("sex", obj.getString("sex"))
@@ -355,7 +440,7 @@ class MainActivity : BaseActivity() {
                 .params("nowlng", lng)
                 .params("city", nowCity)
                 .params("district", nowDistrict)
-                .execute(object : JacksonDialogCallback<BaseResponse<CommonModel>>(baseContext) {
+                .execute(object : JacksonDialogCallback<BaseResponse<CommonModel>>(baseContext, true) {
 
                     @SuppressLint("SetTextI18n")
                     override fun onSuccess(response: Response<BaseResponse<CommonModel>>) {
@@ -376,8 +461,10 @@ class MainActivity : BaseActivity() {
                                             "0" -> R.mipmap.index_xx02
                                             else -> R.mipmap.index_xx01
                                         }))
-                                        .anchor(0.45f, 0.5f)
-                                        .draggable(true)
+                                        .title("抢单")
+                                        .snippet(list.indexOf(it).toString())
+                                        .anchor(0.45f, 0.5f) //设置Marker的锚点
+                                        .draggable(false)    //设置Marker是否可拖动
                                 markerOption.isFlat = true
                                 val marker = aMap.addMarker(markerOption)
                                 startGrowAnimation(marker)

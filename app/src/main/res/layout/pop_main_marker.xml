@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/address_card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/dimen_size_15"
+    android:animateLayoutChanges="true"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="@dimen/dimen_size_5"
+    app:cardElevation="@dimen/dimen_size_3"
+    app:contentPadding="@dimen/dimen_size_5">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/pop_main_img1"
+                android:layout_width="@dimen/dimen_size_25"
+                android:layout_height="@dimen/dimen_size_25"
+                android:layout_marginEnd="@dimen/dimen_size_10"
+                android:src="@mipmap/index_lab01"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/pop_main_addr1"
+                style="@style/Font14_black"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dimen_size_10"
+                android:layout_weight="1"
+                android:lineSpacingExtra="@dimen/dimen_size_3"
+                android:text="地址" />
+
+            <TextView
+                style="@style/Font13_black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="@dimen/dimen_size_3"
+                android:text="佣：" />
+
+            <TextView
+                android:id="@+id/pop_main_money"
+                style="@style/Font13_black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="@dimen/dimen_size_3"
+                android:text="0元"
+                android:textColor="@color/red" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_size_5"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/pop_main_img2"
+                android:layout_width="@dimen/dimen_size_25"
+                android:layout_height="@dimen/dimen_size_25"
+                android:layout_marginEnd="@dimen/dimen_size_10"
+                android:src="@mipmap/index_lab02"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/pop_main_addr2"
+                style="@style/Font14_black"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dimen_size_10"
+                android:layout_weight="1"
+                android:lineSpacingExtra="@dimen/dimen_size_3"
+                android:text="地址" />
+
+            <TextView
+                android:id="@+id/pop_main_grab"
+                style="@style/Font14_white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rec_bg_red_shade"
+                android:gravity="center"
+                android:paddingBottom="@dimen/dimen_size_3"
+                android:paddingEnd="@dimen/dimen_size_10"
+                android:paddingStart="@dimen/dimen_size_10"
+                android:paddingTop="@dimen/dimen_size_3"
+                android:text="抢单" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

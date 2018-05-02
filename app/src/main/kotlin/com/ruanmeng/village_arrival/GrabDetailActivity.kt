@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.support.v7.app.AlertDialog
 import android.text.Html
 import android.view.View
 import com.lzg.extend.BaseResponse
@@ -62,7 +63,13 @@ class GrabDetailActivity : BaseActivity() {
                 when (bt_done.text.toString()) {
                     "代买抢单", "顺风抢单" -> {
                         if (getString("status") != "1") {
-                            showToast("未通过抢单审核，无法进行抢单")
+                            AlertDialog.Builder(baseContext)
+                                    .setTitle("温馨提示")
+                                    .setMessage("您还未通过抢单审核，是否现在去申请抢单？")
+                                    .setPositiveButton("去申请") { _, _ -> startActivity<ApplyActivity>() }
+                                    .setNegativeButton("取消") { _, _ -> }
+                                    .create()
+                                    .show()
                             return
                         }
 

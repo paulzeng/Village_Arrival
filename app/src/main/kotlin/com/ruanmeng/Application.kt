@@ -28,6 +28,7 @@
 package com.ruanmeng
 
 import android.support.multidex.MultiDexApplication
+import cn.jpush.android.api.JPushInterface
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.cache.CacheEntity
 import com.lzy.okgo.cache.CacheMode
@@ -36,6 +37,7 @@ import com.lzy.okgo.cookie.store.DBCookieStore
 import com.lzy.okgo.https.HttpsUtils
 import com.lzy.okgo.interceptor.HttpLoggingInterceptor
 import com.lzy.okgo.utils.OkLogger
+import com.ruanmeng.utils.PreferencesUtils
 import com.ruanmeng.village_arrival.BuildConfig
 import com.umeng.commonsdk.UMConfigure
 import com.umeng.socialize.Config
@@ -55,6 +57,12 @@ class Application : MultiDexApplication() {
         super.onCreate()
 
         initOkGo()
+
+        //极光推送
+        JPushInterface.setDebugMode(BuildConfig.LOG_DEBUG) //设置开启日志,发布时请关闭日志
+        JPushInterface.init(this@Application)              //初始化 JPush
+        if (!PreferencesUtils.getBoolean(this, "isLogin"))
+            JPushInterface.stopPush(this@Application)      //停止推送服务
 
         //友盟分享
         UMConfigure.init(this@Application, "5ae40549f29d984bc9000283", "umeng", UMConfigure.DEVICE_TYPE_PHONE, "")

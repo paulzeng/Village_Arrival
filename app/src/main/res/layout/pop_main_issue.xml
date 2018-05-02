@@ -49,7 +49,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dimen_size_5"
-                android:text="1小时内送达" />
+                android:text="服务就是好" />
 
         </LinearLayout>
 

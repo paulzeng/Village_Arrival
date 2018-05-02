@@ -2,6 +2,7 @@ package com.ruanmeng.village_arrival
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.LinearLayout
@@ -116,7 +117,13 @@ class TaskGrabActivity : BaseActivity() {
 
                             .clicked(R.id.item_task_grab) {
                                 if (getString("status") != "1") {
-                                    showToast("未通过抢单审核，无法进行抢单")
+                                    AlertDialog.Builder(baseContext)
+                                            .setTitle("温馨提示")
+                                            .setMessage("您还未通过抢单审核，是否现在去申请抢单？")
+                                            .setPositiveButton("去申请") { _, _ -> startActivity<ApplyActivity>() }
+                                            .setNegativeButton("取消") { _, _ -> }
+                                            .create()
+                                            .show()
                                     return@clicked
                                 }
 

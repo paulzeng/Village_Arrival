@@ -1,6 +1,7 @@
 package com.ruanmeng.village_arrival
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import com.lzg.extend.StringDialogCallback
@@ -43,6 +44,11 @@ class RegisterActivity : BaseActivity() {
         super.doClick(v)
         when (v.id) {
             R.id.tv_login -> onBackPressed()
+            R.id.register_xieyi -> {
+                val intent = Intent(baseContext, WebActivity::class.java)
+                intent.putExtra("title", "注册协议")
+                startActivity(intent)
+            }
             R.id.bt_yzm -> {
                 if (et_name.text.isBlank()) {
                     et_name.requestFocus()

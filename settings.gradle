@@ -1,1 +1,1 @@
-include ':app', ':okgo', ':AMap', ':UmengSocial'
+include ':app', ':okgo', ':AMap'

@@ -175,4 +175,30 @@
         android:onClick="doClick"
         android:text="注册账号" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dimen_size_15"
+        android:layout_marginStart="@dimen/dimen_size_20"
+        android:layout_marginTop="@dimen/dimen_size_10"
+        android:gravity="center_vertical">
+
+        <TextView
+            style="@style/Font13_gray"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="注册或使用账户登录即视为同意" />
+
+        <TextView
+            android:id="@+id/register_xieyi"
+            style="@style/Font13_gray"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:onClick="doClick"
+            android:text="《用户服务协议》"
+            android:textColor="@color/colorAccent" />
+
+    </LinearLayout>
+
 </LinearLayout>
