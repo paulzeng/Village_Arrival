@@ -45,6 +45,7 @@ public class BaseHttp {
     public static String weightprice_list_data = baseIp + "/weightprice_address_list_data.rm"; //商品重量√
     public static String order_commission = baseIp + "/order_commission.rm";                   //获取佣金√
     public static String add_goodsorde = baseIp + "/add_goodsorde.rm";                         //新增订单√
+    public static String user_voucer_list = baseIp + "/user_voucer_list.rm.rm";                //优惠券√
     public static String balance_pay_order = baseIp + "/balance_pay_order.rm";                 //余额支付√
     public static String order_pay = baseIp + "/order_pay.rm";                                 //支付√
     public static String add_order_tip_balance = baseIp + "/add_order_tip_balance.rm";         //余额支付小费√
@@ -78,5 +79,6 @@ public class BaseHttp {
     public static String help_center = baseIp + "/help_center.rm";             //帮助中心√
     public static String newsnotice_Info = baseIp + "/newsnotice_Info.rm";     //公告详情√
     public static String get_versioninfo = baseIp + "/get_versioninfo.rm";     //版本信息√
+    public static String commonphone_list = baseIp + "/commonphone_list.rm";   //常用电话√
     public static String invite_index = baseUrl + "/forend/invite_index.hm";   //分享√
 }

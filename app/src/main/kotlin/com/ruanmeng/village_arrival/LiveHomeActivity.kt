@@ -36,6 +36,7 @@ class LiveHomeActivity : BaseActivity() {
     private val list = ArrayList<Any>()
     private val listSlider = ArrayList<CommonData>()
     private val listModule = ArrayList<CommonData>()
+    private val listModuleSix = ArrayList<CommonData>()
     private val listNew = ArrayList<CommonData>()
 
     private lateinit var banner: RollPagerView
@@ -83,24 +84,27 @@ class LiveHomeActivity : BaseActivity() {
                                 .register<CommonData>(R.layout.item_live_grid) { data, injector ->
                                     injector.text(R.id.item_live_name, data.moduleName)
                                             .with<GlideImageView>(R.id.item_live_img) {
-                                                it.loadImage(BaseHttp.baseImg + data.moduleIcon)
+                                                if (data.moduleType != "2") it.loadImage(BaseHttp.baseImg + data.moduleIcon)
+                                                else it.setImageResource(R.mipmap.ass_icon06)
                                             }
                                             .clicked(R.id.item_live) {
-                                                if (data.moduleType == "0") {
-                                                    val intent = Intent(baseContext, WebActivity::class.java)
-                                                    intent.putExtra("title", "常用电话")
-                                                    intent.putExtra("moduleName", data.moduleName)
-                                                    intent.putExtra("moduleContent", data.value)
-                                                    startActivity(intent)
-                                                } else {
-                                                    intent.setClass(baseContext, LiveActivity::class.java)
-                                                    intent.putExtra("type", data.appmoduleId)
-                                                    startActivity(intent)
+                                                when (data.moduleType) {
+                                                    "0" -> startActivity<LiveContactActivity>()
+                                                    "1" -> {
+                                                        intent.setClass(baseContext, LiveActivity::class.java)
+                                                        intent.putExtra("type", data.appmoduleId)
+                                                        startActivity(intent)
+                                                    }
+                                                    "2" -> {
+                                                        intent.setClass(baseContext, LiveMoreActivity::class.java)
+                                                        intent.putExtra("list", listModule)
+                                                        startActivity(intent)
+                                                    }
                                                 }
                                             }
                                 }
                                 .attachTo(this)
-                        (adapter as SlimAdapter).updateData(listModule)
+                        (adapter as SlimAdapter).updateData(listModuleSix)
                     }
 
                     addHeader(view)
@@ -144,6 +148,7 @@ class LiveHomeActivity : BaseActivity() {
                         list.clear()
                         listSlider.clear()
                         listModule.clear()
+                        listModuleSix.clear()
                         listNew.clear()
                         list.addItems(response.body().cooperationList)
                         listSlider.addItems(response.body().sliders)
@@ -169,6 +174,14 @@ class LiveHomeActivity : BaseActivity() {
                                 startActivity(intent)
                             }, tvSwitcher)
                         }
+
+                        if (listModule.size > 5) {
+                            (0 until 5).forEach { listModuleSix.add(listModule[it]) }
+                            listModuleSix.add(CommonData().apply {
+                                moduleName = "更多服务"
+                                moduleType = "2"
+                            })
+                        } else listModuleSix.addAll(listModule)
 
                         (recycler.adapter as SlimAdapter).notifyDataSetChanged()
                         mAdapterEx.updateData(list)

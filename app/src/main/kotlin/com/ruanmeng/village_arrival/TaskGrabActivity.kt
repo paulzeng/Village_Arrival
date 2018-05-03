@@ -116,52 +116,51 @@ class TaskGrabActivity : BaseActivity() {
                             .visibility(R.id.item_task_divider, if (list.indexOf(data) != 0) View.GONE else View.VISIBLE)
 
                             .clicked(R.id.item_task_grab) {
-                                if (getString("status") != "1") {
-                                    AlertDialog.Builder(baseContext)
-                                            .setTitle("温馨提示")
-                                            .setMessage("您还未通过抢单审核，是否现在去申请抢单？")
-                                            .setPositiveButton("去申请") { _, _ -> startActivity<ApplyActivity>() }
-                                            .setNegativeButton("取消") { _, _ -> }
-                                            .create()
-                                            .show()
-                                    return@clicked
+                                when (getString("status")) {
+                                    "-1" -> showToast("您的抢单申请正在审核中，请耐心等待!")
+                                    "1" -> {
+                                        OkGo.post<String>(BaseHttp.grab_order)
+                                                .tag(this@TaskGrabActivity)
+                                                .headers("token", getString("token"))
+                                                .params("goodsOrderId", data.goodsOrderId)
+                                                .execute(object : StringDialogCallback(baseContext) {
+
+                                                    override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
+
+                                                        EventBus.getDefault().post(RefreshMessageEvent("快速抢单"))
+                                                        val intent = Intent(baseContext, TaskContactActivity::class.java)
+                                                        intent.putExtra("title", "抢单成功")
+                                                        intent.putExtra("goodsOrderId", data.goodsOrderId)
+                                                        intent.putExtra("type", data.type)
+                                                        intent.putExtra("buyAddress", data.buyAddress + data.buyDetailAdress)
+                                                        intent.putExtra("buyName", "${data.buyname}  ${data.buyMobile}")
+                                                        intent.putExtra("receiptAddress", data.receiptAddress + data.receiptDetailAdress)
+                                                        intent.putExtra("receiptName", "${data.receiptName}  ${data.receiptMobile}")
+                                                        intent.putExtra("buyMobile", data.buyMobile)
+                                                        intent.putExtra("receiptMobile", data.receiptMobile)
+                                                        startActivity(intent)
+                                                    }
+
+                                                    override fun onSuccessResponseErrorCode(response: Response<String>, msg: String, msgCode: String) {
+                                                        val intent = Intent(baseContext, TaskContactActivity::class.java)
+                                                        intent.putExtra("title", "抢单失败")
+                                                        intent.putExtra("message", msg)
+                                                        startActivity(intent)
+                                                    }
+
+                                                })
+                                    }
+                                    else -> {
+                                        AlertDialog.Builder(baseContext)
+                                                .setTitle("温馨提示")
+                                                .setMessage("您还未通过抢单审核，是否现在去申请抢单？")
+                                                .setPositiveButton("去申请") { _, _ -> startActivity<ApplyActivity>() }
+                                                .setNegativeButton("取消") { _, _ -> }
+                                                .create()
+                                                .show()
+                                        return@clicked
+                                    }
                                 }
-
-                                OkGo.post<String>(BaseHttp.grab_order)
-                                        .tag(this@TaskGrabActivity)
-                                        .headers("token", getString("token"))
-                                        .params("goodsOrderId", data.goodsOrderId)
-                                        .execute(object : StringDialogCallback(baseContext) {
-
-                                            override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
-
-                                                showToast(msg)
-                                                list.remove(data)
-                                                mAdapter.notifyDataSetChanged()
-                                                empty_view.apply { if (list.isEmpty()) visible() else gone() }
-                                                EventBus.getDefault().post(RefreshMessageEvent("快速抢单"))
-
-                                                val intent = Intent(baseContext, TaskContactActivity::class.java)
-                                                intent.putExtra("title", "抢单成功")
-                                                intent.putExtra("goodsOrderId", data.goodsOrderId)
-                                                intent.putExtra("type", data.type)
-                                                intent.putExtra("buyAddress", data.buyAddress + data.buyDetailAdress)
-                                                intent.putExtra("buyName", "${data.buyname}  ${data.buyMobile}")
-                                                intent.putExtra("receiptAddress", data.receiptAddress + data.receiptDetailAdress)
-                                                intent.putExtra("receiptName", "${data.receiptName}  ${data.receiptMobile}")
-                                                intent.putExtra("buyMobile", data.buyMobile)
-                                                intent.putExtra("receiptMobile", data.receiptMobile)
-                                                startActivity(intent)
-                                            }
-
-                                            override fun onSuccessResponseErrorCode(response: Response<String>, msg: String, msgCode: String) {
-                                                val intent = Intent(baseContext, TaskContactActivity::class.java)
-                                                intent.putExtra("title", "抢单失败")
-                                                intent.putExtra("message", msg)
-                                                startActivity(intent)
-                                            }
-
-                                        })
                             }
 
                             .clicked(R.id.item_task) {

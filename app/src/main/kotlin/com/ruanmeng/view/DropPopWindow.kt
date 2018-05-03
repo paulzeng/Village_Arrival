@@ -10,6 +10,7 @@ import android.os.Handler
 import android.support.annotation.LayoutRes
 import android.view.LayoutInflater
 import android.view.View
+import android.view.WindowManager
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.PopupWindow
@@ -32,7 +33,7 @@ abstract class DropPopWindow @JvmOverloads constructor(
     init {
         contentView = window
         width = CommonUtil.getScreenWidth(context)
-        height = CommonUtil.getScreenHeight(context)
+        height = WindowManager.LayoutParams.WRAP_CONTENT
         animationStyle = R.style.WindowStyle
         isFocusable = true
         isOutsideTouchable = true

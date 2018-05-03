@@ -21,6 +21,7 @@ import com.lzy.okgo.model.Response
 import com.ruanmeng.base.*
 import com.ruanmeng.model.CommonData
 import com.ruanmeng.model.LocationMessageEvent
+import com.ruanmeng.model.RefreshMessageEvent
 import com.ruanmeng.share.BaseHttp
 import com.ruanmeng.utils.ActivityStack
 import com.ruanmeng.utils.DialogHelper
@@ -63,8 +64,10 @@ class TaskActivity : BaseActivity() {
     private var receiptName = ""
     private var receiptMobile = ""
     private var weightPriceId = ""
+    private var voucherId = ""
     private lateinit var deliveryTime: String
     private val list = ArrayList<CommonData>()
+    private val listCoupon = ArrayList<CommonData>()
 
     private lateinit var geocoderSearch: GeocodeSearch
 
@@ -77,6 +80,7 @@ class TaskActivity : BaseActivity() {
 
         startLocation()
         getData()
+        getCouponData()
     }
 
     override fun init_title() {
@@ -123,6 +127,33 @@ class TaskActivity : BaseActivity() {
             override fun onGeocodeSearched(result: GeocodeResult, code: Int) {}
 
         })
+
+        task_coupon.setOnClickListener {
+            if (listCoupon.isEmpty()) {
+                showToast("暂无可用优惠券")
+                return@setOnClickListener
+            }
+
+            if (task_check2.isChecked && task_get_addr.text.isEmpty()) {
+                showToast("请选择取货地址")
+                return@setOnClickListener
+            }
+
+            if (task_put_addr.text.isEmpty()) {
+                showToast("请选择收货地址")
+                return@setOnClickListener
+            }
+
+            if (task_weight.text.isEmpty()) {
+                showToast("请选择商品重量")
+                return@setOnClickListener
+            }
+
+
+            val intent = Intent(baseContext, TaskCouponActivity::class.java)
+            intent.putExtra("list", listCoupon)
+            startActivity(intent)
+        }
     }
 
     override fun doClick(v: View) {
@@ -190,11 +221,6 @@ class TaskActivity : BaseActivity() {
                     return
                 }
 
-                if (task_fee.text.toString().toDouble() == 0.0) {
-                    showToast("费用价格计算失败，请重新选择地址和重量")
-                    return
-                }
-
                 OkGo.post<String>(BaseHttp.add_goodsorde)
                         .tag(this@TaskActivity)
                         .isMultipart(true)
@@ -230,17 +256,29 @@ class TaskActivity : BaseActivity() {
                         .params("receiptTownship", receiptTownship)
                         .params("receiptName", receiptName)
                         .params("receiptMobile", receiptMobile)
+                        .params("voucherId", voucherId)
                         .execute(object : StringDialogCallback(baseContext) {
 
                             override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
 
                                 val obj = JSONObject(response.body()).getJSONObject("object") ?: JSONObject()
-                                val intent = Intent(baseContext, IssuePayActivity::class.java)
-                                intent.putExtra("hint", "提交订单")
-                                intent.putExtra("goodsOrderId", obj.optString("goodsOrderId"))
-                                intent.putExtra("commission", obj.optString("commission", "0.00"))
-                                startActivity(intent)
-                                ActivityStack.screenManager.popActivities(this@TaskActivity::class.java)
+                                val status = obj.optString("status")
+                                if (status == "1") {
+                                    EventBus.getDefault().post(RefreshMessageEvent("支付成功"))
+                                    val intent = Intent(baseContext, TaskResultActivity::class.java)
+                                    intent.putExtra("goodsOrderId", obj.optString("goodsOrderId"))
+                                    intent.putExtra("title", "支付成功")
+                                    intent.putExtra("hint", "提交订单")
+                                    startActivity(intent)
+                                    ActivityStack.screenManager.popActivities(this@TaskActivity::class.java)
+                                } else {
+                                    val intent = Intent(baseContext, IssuePayActivity::class.java)
+                                    intent.putExtra("hint", "提交订单")
+                                    intent.putExtra("goodsOrderId", obj.optString("goodsOrderId"))
+                                    intent.putExtra("commission", obj.optString("commission", "0.00"))
+                                    startActivity(intent)
+                                    ActivityStack.screenManager.popActivities(this@TaskActivity::class.java)
+                                }
                             }
 
                         })
@@ -281,17 +319,35 @@ class TaskActivity : BaseActivity() {
                 })
     }
 
+    private fun getCouponData() {
+        OkGo.post<BaseResponse<ArrayList<CommonData>>>(BaseHttp.user_voucer_list)
+                .tag(this@TaskActivity)
+                .headers("token", getString("token"))
+                .execute(object : JacksonDialogCallback<BaseResponse<ArrayList<CommonData>>>(baseContext) {
+
+                    override fun onSuccess(response: Response<BaseResponse<ArrayList<CommonData>>>) {
+                        listCoupon.addItems(response.body().`object`)
+                        if (listCoupon.isEmpty()) task_coupon.setRightString("暂无可用")
+                        else task_coupon.setRightString("选择优惠券")
+                    }
+
+                })
+    }
+
     private fun getFeeData() {
         if (buyLat.isNotEmpty() && buyLng.isNotEmpty()
                 && receiptLat.isNotEmpty() && receiptLng.isNotEmpty()
                 && weightPriceId.isNotEmpty()) {
             OkGo.post<String>(BaseHttp.order_commission)
                     .tag(this@TaskActivity)
+                    .headers("token", getString("token"))
                     .params("weightPriceId", weightPriceId)
                     .params("lat1Str", buyLat)
                     .params("lng1Str", buyLng)
                     .params("lat2Str", receiptLat)
                     .params("lng2Str", receiptLng)
+                    .params("voucherId", voucherId)
+                    .params("buyType", if (buyAddress == "就近购买") "1" else "")
                     .execute(object : StringDialogCallback(baseContext, false) {
 
                         override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
@@ -433,6 +489,12 @@ class TaskActivity : BaseActivity() {
                     task_put_name.visible()
                     task_put_name.text = "${event.name}  ${event.mobile}"
                 }
+            }
+            "优惠券" -> {
+                voucherId = event.addressId
+                @Suppress("DEPRECATION")
+                task_coupon.setRightTVColor(resources.getColor(R.color.red))
+                task_coupon.setRightString("已优惠${event.address}元")
             }
         }
 

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/item_contact"
+        style="@style/Font14_black_dark"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_height"
+        android:gravity="center_vertical"
+        android:paddingEnd="@dimen/dimen_size_15"
+        android:paddingStart="@dimen/dimen_size_15"
+        android:text="名称" />
+
+    <View
+        android:id="@+id/item_contact_divider1"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_height"
+        android:layout_marginLeft="@dimen/dimen_size_15"
+        android:layout_marginRight="@dimen/dimen_size_15"
+        android:background="@color/divider" />
+
+    <View
+        android:id="@+id/item_contact_divider2"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_height"
+        android:background="@color/divider"
+        android:visibility="gone" />
+
+</LinearLayout>

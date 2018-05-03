@@ -62,48 +62,52 @@ class GrabDetailActivity : BaseActivity() {
             R.id.bt_done -> {
                 when (bt_done.text.toString()) {
                     "代买抢单", "顺风抢单" -> {
-                        if (getString("status") != "1") {
-                            AlertDialog.Builder(baseContext)
-                                    .setTitle("温馨提示")
-                                    .setMessage("您还未通过抢单审核，是否现在去申请抢单？")
-                                    .setPositiveButton("去申请") { _, _ -> startActivity<ApplyActivity>() }
-                                    .setNegativeButton("取消") { _, _ -> }
-                                    .create()
-                                    .show()
-                            return
+                        when (getString("status")) {
+                            "-1" -> showToast("您的抢单申请正在审核中，请耐心等待!")
+                            "1" -> {
+                                OkGo.post<String>(BaseHttp.grab_order)
+                                        .tag(this@GrabDetailActivity)
+                                        .headers("token", getString("token"))
+                                        .params("goodsOrderId", intent.getStringExtra("goodsOrderId"))
+                                        .execute(object : StringDialogCallback(baseContext) {
+
+                                            override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
+                                                handler.sendEmptyMessage(0)
+                                                EventBus.getDefault().post(RefreshMessageEvent("抢单成功"))
+
+                                                intent.setClass(baseContext, TaskContactActivity::class.java)
+                                                intent.putExtra("title", "抢单成功")
+                                                intent.putExtra("isDetail", true)
+                                                intent.putExtra("type", mType)
+                                                intent.putExtra("buyAddress", grab_addr1.text.toString())
+                                                intent.putExtra("buyName", grab_name1.text.toString())
+                                                intent.putExtra("receiptAddress", grab_addr2.text.toString())
+                                                intent.putExtra("receiptName", grab_name2.text.toString())
+                                                intent.putExtra("buyMobile", grab_name2.text.toString())
+                                                intent.putExtra("receiptMobile", grab_name2.text.toString())
+                                                startActivity(intent)
+                                            }
+
+                                            override fun onSuccessResponseErrorCode(response: Response<String>, msg: String, msgCode: String) {
+                                                intent.setClass(baseContext, TaskContactActivity::class.java)
+                                                intent.putExtra("title", "抢单失败")
+                                                intent.putExtra("message", msg)
+                                                startActivity(intent)
+                                            }
+
+                                        })
+                            }
+                            else -> {
+                                AlertDialog.Builder(baseContext)
+                                        .setTitle("温馨提示")
+                                        .setMessage("您还未通过抢单审核，是否现在去申请抢单？")
+                                        .setPositiveButton("去申请") { _, _ -> startActivity<ApplyActivity>() }
+                                        .setNegativeButton("取消") { _, _ -> }
+                                        .create()
+                                        .show()
+                                return
+                            }
                         }
-
-                        OkGo.post<String>(BaseHttp.grab_order)
-                                .tag(this@GrabDetailActivity)
-                                .headers("token", getString("token"))
-                                .params("goodsOrderId", intent.getStringExtra("goodsOrderId"))
-                                .execute(object : StringDialogCallback(baseContext) {
-
-                                    override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
-                                        handler.sendEmptyMessage(0)
-                                        EventBus.getDefault().post(RefreshMessageEvent("抢单成功"))
-
-                                        intent.setClass(baseContext, TaskContactActivity::class.java)
-                                        intent.putExtra("title", "抢单成功")
-                                        intent.putExtra("isDetail", true)
-                                        intent.putExtra("type", mType)
-                                        intent.putExtra("buyAddress", grab_addr1.text.toString())
-                                        intent.putExtra("buyName", grab_name1.text.toString())
-                                        intent.putExtra("receiptAddress", grab_addr2.text.toString())
-                                        intent.putExtra("receiptName", grab_name2.text.toString())
-                                        intent.putExtra("buyMobile", grab_name2.text.toString())
-                                        intent.putExtra("receiptMobile", grab_name2.text.toString())
-                                        startActivity(intent)
-                                    }
-
-                                    override fun onSuccessResponseErrorCode(response: Response<String>, msg: String, msgCode: String) {
-                                        intent.setClass(baseContext, TaskContactActivity::class.java)
-                                        intent.putExtra("title", "抢单失败")
-                                        intent.putExtra("message", msg)
-                                        startActivity(intent)
-                                    }
-
-                                })
                     }
                     "我已完成" -> {
                         DialogHelper.showDoneDialog(baseContext, false) {

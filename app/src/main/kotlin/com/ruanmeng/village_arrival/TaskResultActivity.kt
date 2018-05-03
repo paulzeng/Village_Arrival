@@ -79,14 +79,11 @@ class TaskResultActivity : BaseActivity() {
                         "提交订单", "发布列表" -> {
                             intent.setClass(baseContext, IssueDetailActivity::class.java)
                             startActivity(intent)
-                            ActivityStack.screenManager.popActivities(
-                                    this@TaskResultActivity::class.java,
-                                    IssuePayActivity::class.java)
                         }
-                        "发布详情" -> ActivityStack.screenManager.popActivities(
-                                this@TaskResultActivity::class.java,
-                                IssuePayActivity::class.java)
                     }
+                    ActivityStack.screenManager.popActivities(
+                            this@TaskResultActivity::class.java,
+                            IssuePayActivity::class.java)
                 }
             }
             R.id.task_look -> {
@@ -97,10 +94,9 @@ class TaskResultActivity : BaseActivity() {
                         "提交订单", "发布列表" -> {
                             intent.setClass(baseContext, IssueDetailActivity::class.java)
                             startActivity(intent)
-                            ActivityStack.screenManager.popActivities(this@TaskResultActivity::class.java)
                         }
-                        "发布详情" -> ActivityStack.screenManager.popActivities(this@TaskResultActivity::class.java)
                     }
+                    ActivityStack.screenManager.popActivities(this@TaskResultActivity::class.java)
                 }
             }
         }

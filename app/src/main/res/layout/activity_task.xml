@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -428,11 +429,24 @@
 
             </RadioGroup>
 
-            <View
+            <com.allen.library.SuperTextView
+                android:id="@+id/task_coupon"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/divider_height"
+                android:layout_height="@dimen/dimen_size_46"
                 android:layout_marginBottom="@dimen/dimen_size_10"
-                android:background="@color/divider" />
+                app:sBottomLineMargin="@dimen/dimen_size_0"
+                app:sLeftTextColor="@color/black"
+                app:sLeftTextMarginLeft="@dimen/dimen_size_10"
+                app:sLeftTextString="选择优惠券"
+                app:sLineShow="both"
+                app:sRightIconMarginRight="@dimen/dimen_size_10"
+                app:sRightIconRes="@mipmap/per_ent"
+                app:sRightIconSize="@dimen/dimen_size_15"
+                app:sRightTextColor="@color/light"
+                app:sRightTextMarginRight="@dimen/dimen_size_30"
+                app:sRightTextSize="@dimen/sp_size_13"
+                app:sRightTextString="选择优惠券"
+                app:sTopLineMargin="@dimen/dimen_size_10" />
 
         </LinearLayout>
 

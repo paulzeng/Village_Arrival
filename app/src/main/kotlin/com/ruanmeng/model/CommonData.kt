@@ -89,6 +89,16 @@ data class CommonData(
         //商品重量
         var weightPriceId: String = "",
         var weightDescribe: String = "",
+        //优惠券
+        var endTime: String = "",
+        var memo: String = "",
+        var surplusCtn: String = "",
+        var voucherCondition: String = "",
+        var voucherCtn: String = "",
+        var voucherExplain: String = "",
+        var voucherId: String = "",
+        var voucherType: String = "",
+        var voucherSum: String = "",
         //互助列表
         var province: String = "",
         var city: String = "",
@@ -129,6 +139,9 @@ data class CommonData(
         var msgId: String = "",
         var msgType: String = "",
         var sendDate: String = "",
+        //常用电话
+        var commonExplain: String = "",
+        var commonphone: String = "",
         //乡镇列表
         var isChecked: Boolean = false,
         var areaCode: String = "",

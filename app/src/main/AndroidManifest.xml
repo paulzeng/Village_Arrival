@@ -121,6 +121,9 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
+            android:name=".TaskCouponActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".TaskResultActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -147,6 +150,13 @@
         <activity
             android:name=".LiveHomeActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".LiveMoreActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".LiveContactActivity"
+            android:screenOrientation="portrait" />
+
 
         <!-- 支付宝 start -->
         <activity
@@ -215,6 +225,7 @@
             </intent-filter>
         </receiver>
         <!-- JPush end -->
+
 
     </application>
 

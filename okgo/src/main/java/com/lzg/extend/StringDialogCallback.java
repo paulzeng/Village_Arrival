@@ -67,7 +67,6 @@ public abstract class StringDialogCallback extends StringCallback {
             String msg = obj.optString("msg", obj.optString("info", "请求成功！"));
 
             if (!TextUtils.equals("100", msgCode)) {
-                showToast(msg);
                 onSuccessResponseErrorCode(response, msg, msgCode);
             } else {
                 onSuccessResponse(response, msg, msgCode);
@@ -79,7 +78,9 @@ public abstract class StringDialogCallback extends StringCallback {
 
     public abstract void onSuccessResponse(Response<String> response, String msg, String msgCode);
 
-    public void onSuccessResponseErrorCode(Response<String> response, String msg, String msgCode) {}
+    public void onSuccessResponseErrorCode(Response<String> response, String msg, String msgCode) {
+        showToast(msg);
+    }
 
     /**
      * 当缓存读取成功后，回调该方法
