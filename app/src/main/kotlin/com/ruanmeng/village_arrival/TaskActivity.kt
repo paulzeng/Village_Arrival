@@ -139,7 +139,7 @@ class TaskActivity : BaseActivity() {
                 startActivity(intent)
             }
             R.id.task_time_ll -> {
-                DialogHelper.showDateDialog(baseContext) { hint, date ->
+                DialogHelper.showDateDialog(baseContext, true) { hint, date ->
                     task_time.text = hint
                     deliveryTime = date
                 }
@@ -309,7 +309,7 @@ class TaskActivity : BaseActivity() {
             R.id.task_check1 -> {
                 type = "0"
                 task_name.hint = "请输入要买的商品：如香烟，酒水"
-                task_get_hint.text = "购买店铺"
+                task_get_hint.text = "购买地址"
                 task_get_addr.hint = "未填写则就近购买"
                 task_get_addr.setHintTextColor(resources.getColor(R.color.orange))
                 task_price_ll.visibility = View.VISIBLE

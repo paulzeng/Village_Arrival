@@ -27,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 public class DialogHelper {
@@ -235,7 +236,9 @@ public class DialogHelper {
         dialog.show();
     }
 
-    public static void showDateDialog(final Context context, final DateItemCallBack callback) {
+    public static void showDateDialog(final Context context,
+                                      final boolean isCurrent,
+                                      final DateItemCallBack callback) {
 
         BottomBaseDialog dialog = new BottomBaseDialog(context) {
 
@@ -298,6 +301,11 @@ public class DialogHelper {
                 loop_day.setItems(list_day);
                 loop_hour.setItems(dateToList(0, 23, "%d时"));
                 loop_minute.setItems(dateToList(0, 59, "%d分"));
+
+                if (isCurrent) {
+                    loop_hour.setInitPosition(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
+                    loop_minute.setInitPosition(Calendar.getInstance().get(Calendar.MINUTE));
+                }
             }
 
         };

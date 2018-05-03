@@ -43,10 +43,6 @@ class IssueCommentActivity : BaseActivity() {
         issue_img.loadImage(BaseHttp.baseImg + sendUserHead)
         issue_rating.rating = if (userGrade.isEmpty()) 0f else userGrade.toFloat()
 
-        bt_press.setBackgroundResource(R.drawable.rec_bg_d0d0d0)
-        bt_press.isClickable = false
-
-        comment_content.addTextChangedListener(this@IssueCommentActivity)
         comment_service.setOnRatingChangeListener { _, rating -> serveGrade = rating }
         comment_speed.setOnRatingChangeListener { _, rating -> speedGrade = rating }
     }
@@ -103,16 +99,6 @@ class IssueCommentActivity : BaseActivity() {
 
                         })
             }
-        }
-    }
-
-    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-        if (comment_content.text.isNotBlank()) {
-            bt_press.setBackgroundResource(R.drawable.rec_bg_blue_shade)
-            bt_press.isClickable = true
-        } else {
-            bt_press.setBackgroundResource(R.drawable.rec_bg_d0d0d0)
-            bt_press.isClickable = false
         }
     }
 }

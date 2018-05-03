@@ -1,7 +1,10 @@
 package com.ruanmeng.village_arrival
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.support.design.widget.TabLayout
 import android.text.InputFilter
 import android.view.View
@@ -301,6 +304,13 @@ class AddressAddActivity : BaseActivity() {
                 ActivityStack.screenManager.popActivities(this@AddressAddActivity::class.java)
             }
         }
+
+        address_img.setOnClickListener {
+            startActivityForResult(Intent(
+                    Intent.ACTION_PICK,
+                    ContactsContract.Contacts.CONTENT_URI),
+                    10)
+        }
     }
 
     private fun initPoiSearch() {
@@ -361,5 +371,29 @@ class AddressAddActivity : BaseActivity() {
                     }
 
                 })
+    }
+
+    @Suppress("DEPRECATION")
+    @SuppressLint("Recycle")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK && requestCode == 10) {
+            val reContentResolver = contentResolver
+            val cursor = managedQuery(data?.data, null, null, null, null)
+            cursor.moveToFirst()
+            val userName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
+            val contactId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID))
+            val phone = reContentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                    null,
+                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactId,
+                    null,
+                    null)
+            while (phone.moveToNext()) {
+                val userNumber = phone.getString(phone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+                et_name.setText(userName)
+                et_tel.setText(userNumber.replace("-", "")
+                        .replace(" ", ""))
+            }
+        }
     }
 }
