@@ -12,28 +12,50 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/dimen_size_120"
-            android:gravity="center"
-            android:orientation="vertical">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_size_120">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dimen_size_120"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/Font14_white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="账户总额(元)" />
+
+                <TextView
+                    android:id="@+id/account_total"
+                    style="@style/Font14_white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_size_5"
+                    android:text="0"
+                    android:textSize="@dimen/sp_size_30" />
+
+            </LinearLayout>
 
             <TextView
+                android:id="@+id/account_recharge"
                 style="@style/Font14_white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="账户总额(元)" />
+                android:layout_gravity="end"
+                android:layout_margin="@dimen/dimen_size_15"
+                android:background="@drawable/rec_ova_bg_30000000"
+                android:onClick="doClick"
+                android:paddingBottom="@dimen/dimen_size_5"
+                android:paddingEnd="@dimen/dimen_size_15"
+                android:paddingStart="@dimen/dimen_size_15"
+                android:paddingTop="@dimen/dimen_size_5"
+                android:text="去充值" />
 
-            <TextView
-                android:id="@+id/account_total"
-                style="@style/Font14_white"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dimen_size_5"
-                android:text="0"
-                android:textSize="@dimen/sp_size_30" />
-
-        </LinearLayout>
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

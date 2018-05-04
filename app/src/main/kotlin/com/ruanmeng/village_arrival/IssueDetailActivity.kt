@@ -176,6 +176,11 @@ class IssueDetailActivity : BaseActivity() {
                 return@setOnClickListener
             }
 
+            if (payCount.text.toString().toDouble() == 0.0) {
+                showToast("输入金额为0元，请重新输入")
+                return@setOnClickListener
+            }
+
             dialog.dismiss()
 
             when (payGroup.checkedRadioButtonId) {
