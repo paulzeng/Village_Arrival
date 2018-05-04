@@ -46,6 +46,23 @@ fun TextView.setColor(text: String, key: String, color: String) {
     setText(Html.fromHtml(text.replace(key, "<font color='$color'>$key</font>")))
 }
 
+fun TextView.setUnicodeText(text: String) {
+    if (text.isEmpty()) setText(text)
+    else {
+        var start = 0
+        var end: Int
+        val buffer = StringBuilder()
+        while (start > -1) {
+            end = text.indexOf("\\u", start + 2)
+            val charStr = text.substring(start + 2, if (end == -1) text.length else end)
+            val letter = Integer.parseInt(charStr, 16).toChar() // 16进制parse整形字符串
+            buffer.append(Character.valueOf(letter).toString())
+            start = end
+        }
+        setText(buffer.toString())
+    }
+}
+
 @Suppress("DEPRECATION")
 fun getColorText(text: String, key: String): Spanned = Html.fromHtml(text.replace(key, "<font color='#F90629'>$key</font>"))
 

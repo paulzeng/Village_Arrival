@@ -504,6 +504,43 @@ public class Tools {
         return mImage;
     }
 
+    /**
+     * 将中文转为Unicode
+     * @param gbString 中文字符串
+     */
+    public static String gbEncoding(final String gbString) {
+        if (TextUtils.isEmpty(gbString)) return "";
+
+        char[] utfBytes = gbString.toCharArray();
+        StringBuilder unicodeBytes = new StringBuilder();
+        for (char utfByte : utfBytes) {
+            String hexB = Integer.toHexString(utfByte); //转换为16进制整型字符串
+            if (hexB.length() == 3) hexB = "0" + hexB;
+            if (hexB.length() <= 2) hexB = "00" + hexB;
+            unicodeBytes.append("\\u").append(hexB);
+        }
+        return unicodeBytes.toString();
+    }
+
+    /**
+     * 将Unicode转为中文
+     * @param dataStr Unicode字符串
+     */
+    public static String decodeUnicode(final String dataStr) {
+        if (TextUtils.isEmpty(dataStr)) return "";
+
+        int start = 0, end;
+        final StringBuilder buffer = new StringBuilder();
+        while (start > -1) {
+            end = dataStr.indexOf("\\u", start + 2);
+            String charStr = dataStr.substring(start + 2, end == -1 ? dataStr.length() : end);
+            char letter = (char) Integer.parseInt(charStr, 16); // 16进制parse整形字符串。
+            buffer.append(Character.valueOf(letter).toString());
+            start = end;
+        }
+        return buffer.toString();
+    }
+
     public static void setIndicator(TabLayout tabs, int leftDip, int rightDip) {
         Class<?> tabLayout = tabs.getClass();
         Field tabStrip = null;

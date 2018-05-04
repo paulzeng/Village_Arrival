@@ -14,6 +14,7 @@ import com.ruanmeng.model.CommonModel
 import com.ruanmeng.model.RefreshMessageEvent
 import com.ruanmeng.share.BaseHttp
 import com.ruanmeng.utils.TimeHelper
+import com.ruanmeng.utils.Tools
 import com.sunfusheng.glideimageview.GlideImageView
 import kotlinx.android.synthetic.main.activity_live_detail.*
 import kotlinx.android.synthetic.main.header_live.*
@@ -53,9 +54,9 @@ class LiveDetailActivity : BaseActivity() {
         mAdapterEx = SlimAdapter.create(SlimAdapterEx::class.java)
                 .addHeader(baseContext, R.layout.header_live)
                 .register<CommonData>(R.layout.item_live_detail) { data, injector ->
-                    injector.text(R.id.item_live_title, data.nickName)
+                    injector.text(R.id.item_live_title, Tools.decodeUnicode(data.nickName))
                             .text(R.id.item_live_time, TimeHelper.getDiffTime(TimeHelper.getInstance().millisecondToLong(data.createDate)))
-                            .text(R.id.item_live_content, data.content)
+                            .text(R.id.item_live_content, Tools.decodeUnicode(data.content))
 
                             .with<GlideImageView>(R.id.item_live_img) {
                                 it.loadImage(BaseHttp.baseImg + data.userhead)
@@ -119,6 +120,7 @@ class LiveDetailActivity : BaseActivity() {
 
                 OkGo.post<String>(BaseHttp.add_cooperation_collect)
                         .tag(this@LiveDetailActivity)
+                        .isMultipart(true)
                         .headers("token", getString("token"))
                         .params("cooperationId", intent.getStringExtra("cooperationId"))
                         .params("content", live_input.text.trim().toString())
@@ -154,7 +156,7 @@ class LiveDetailActivity : BaseActivity() {
 
                         ivRight.setImageResource(if (collectStatus == "1") R.mipmap.ass_check_icon01 else R.mipmap.ass_check_icon02)
                         live_title.text = data.title
-                        live_content.text = data.content
+                        live_content.setUnicodeText(data.content)
                         live_time.text = TimeHelper.getDiffTime(TimeHelper.getInstance().millisecondToLong(data.createDate))
                         live_comment.text = if (data.commentCtn.isEmpty()) "0" else data.commentCtn
                         live_area.text = data.district

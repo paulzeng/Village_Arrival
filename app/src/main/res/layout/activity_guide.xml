@@ -8,8 +8,8 @@
         android:id="@+id/guide"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:background="@drawable/guide"
+        android:scaleType="fitXY"
+        android:background="@mipmap/guide"
         tools:ignore="ContentDescription" />
 
 </FrameLayout>

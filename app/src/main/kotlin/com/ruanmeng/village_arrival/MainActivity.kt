@@ -46,6 +46,7 @@ import com.ruanmeng.share.BaseHttp
 import com.ruanmeng.share.Const
 import com.ruanmeng.utils.CommonUtil
 import com.ruanmeng.utils.DensityUtil
+import com.ruanmeng.utils.Tools
 import kotlinx.android.synthetic.main.activity_main.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -441,13 +442,12 @@ class MainActivity : BaseActivity() {
                     @SuppressLint("SetTextI18n")
                     override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
 
-                        val obj = JSONObject(response.body()).getJSONObject("userMsg")
-                                ?: JSONObject()
-                        putString("nickName", obj.getString("nickName"))
-                        putString("userhead", obj.getString("userhead"))
-                        putString("sex", obj.getString("sex"))
-                        putString("pass", obj.getString("pass"))
-                        putString("status", obj.getString("astatus"))
+                        val obj = JSONObject(response.body()).getJSONObject("userMsg") ?: JSONObject()
+                        putString("nickName", Tools.decodeUnicode(obj.optString("nickName")))
+                        putString("userhead", obj.optString("userhead"))
+                        putString("sex", obj.optString("sex"))
+                        putString("pass", obj.optString("pass"))
+                        putString("status", obj.optString("astatus"))
 
                         nav_name.text = getString("nickName")
                         nav_tel.text = "手机  ${CommonUtil.phoneReplaceWithStar(getString("mobile"))}"

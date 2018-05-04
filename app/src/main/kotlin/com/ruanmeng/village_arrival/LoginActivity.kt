@@ -171,6 +171,11 @@ class LoginActivity : BaseActivity() {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        UMShareAPI.get(this@LoginActivity).onActivityResult(requestCode, resultCode, data)
+    }
+
     private fun getThirdLogin(loginType: String,
                               openId: String,
                               nickName: String,

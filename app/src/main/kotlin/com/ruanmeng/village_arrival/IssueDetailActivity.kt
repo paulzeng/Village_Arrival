@@ -29,6 +29,7 @@ import com.ruanmeng.model.CommonData
 import com.ruanmeng.model.RefreshMessageEvent
 import com.ruanmeng.share.BaseHttp
 import com.ruanmeng.utils.DialogHelper
+import com.ruanmeng.utils.Tools
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_issue_detail.*
 import org.greenrobot.eventbus.EventBus
@@ -334,7 +335,7 @@ class IssueDetailActivity : BaseActivity() {
 
                         if (data.sendUserInfoId.isNotEmpty()) {
                             issue_info_ll.visible()
-                            sendNickName = data.sendNickName
+                            sendNickName = Tools.decodeUnicode(data.sendNickName)
                             sendUserHead = data.sendUserHead
                             sendTelephone = data.sendTelephone
                             userGrade = data.userGrade
