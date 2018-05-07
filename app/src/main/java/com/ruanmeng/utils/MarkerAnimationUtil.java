@@ -18,7 +18,7 @@ import com.amap.api.maps.model.Marker;
  */
 public class MarkerAnimationUtil {
 
-    public static void dropInto(AMap aMap, final Marker marker) {
+    public static void startJump(AMap aMap, final Marker marker) {
 
         final Handler handler = new Handler();
         final long start = SystemClock.uptimeMillis();
@@ -27,7 +27,7 @@ public class MarkerAnimationUtil {
         Point markerPoint = proj.toScreenLocation(markerLatlng);
         Point startPoint = new Point(markerPoint.x, markerPoint.y - 100);
         final LatLng startLatLng = proj.fromScreenLocation(startPoint);
-        final long duration = 1000;// 动画总时长
+        final long duration = 1000;
 
         final Interpolator interpolator = new BounceInterpolator();
         handler.post(new Runnable() {

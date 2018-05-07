@@ -10,10 +10,7 @@ import android.text.InputFilter
 import android.view.View
 import com.amap.api.maps.AMap
 import com.amap.api.maps.CameraUpdateFactory
-import com.amap.api.maps.model.BitmapDescriptorFactory
-import com.amap.api.maps.model.CameraPosition
-import com.amap.api.maps.model.LatLng
-import com.amap.api.maps.model.MyLocationStyle
+import com.amap.api.maps.model.*
 import com.amap.api.services.core.AMapException
 import com.amap.api.services.core.LatLonPoint
 import com.amap.api.services.core.PoiItem
@@ -45,6 +42,7 @@ class AddressAddActivity : BaseActivity() {
 
     private lateinit var aMap: AMap
     private var centerLatLng: LatLng? = null
+
     private lateinit var query: PoiSearch.Query
     private lateinit var poiSearch: PoiSearch
     private lateinit var geocoderSearch: GeocodeSearch
@@ -119,6 +117,17 @@ class AddressAddActivity : BaseActivity() {
                 //设置定位蓝点的icon图标方法
                 myLocationIcon(BitmapDescriptorFactory.fromResource(R.mipmap.gps_point))
                 setOnMyLocationChangeListener { centerLatLng = LatLng(it.latitude, it.longitude) }
+            }
+
+            // 地图加载完成监听接口
+            setOnMapLoadedListener {
+                val latLng = aMap.cameraPosition.target
+                val screenPosition = aMap.projection.toScreenLocation(latLng)
+                val screenMarker = aMap.addMarker(MarkerOptions()
+                        .anchor(0.5f, 0.5f)
+                        .icon(BitmapDescriptorFactory.fromResource(R.mipmap.index_pos_small)))
+                //设置Marker在屏幕上,不跟随地图移动
+                screenMarker.setPositionByPixels(screenPosition.x, screenPosition.y)
             }
 
             setOnMapTouchListener { address_card.goneAnimation() }

@@ -16,6 +16,9 @@ import com.umeng.socialize.UMShareAPI
 import com.umeng.socialize.bean.SHARE_MEDIA
 import kotlinx.android.synthetic.main.activity_login.*
 import org.json.JSONObject
+import com.umeng.socialize.UMShareConfig
+
+
 
 class LoginActivity : BaseActivity() {
 
@@ -85,6 +88,8 @@ class LoginActivity : BaseActivity() {
                         })
             }
             R.id.login_wx -> {
+                UMShareAPI.get(this@LoginActivity).setShareConfig(UMShareConfig().apply { isNeedAuthOnGetUserInfo = true })
+
                 UMShareAPI.get(baseContext).getPlatformInfo(
                         this@LoginActivity,
                         SHARE_MEDIA.WEIXIN,
@@ -127,6 +132,8 @@ class LoginActivity : BaseActivity() {
                         })
             }
             R.id.login_qq -> {
+                UMShareAPI.get(this@LoginActivity).setShareConfig(UMShareConfig().apply { isNeedAuthOnGetUserInfo = true })
+
                 UMShareAPI.get(baseContext).getPlatformInfo(
                         this@LoginActivity,
                         SHARE_MEDIA.QQ,

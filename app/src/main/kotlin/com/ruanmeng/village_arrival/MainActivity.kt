@@ -51,12 +51,11 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.json.JSONObject
-import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivity : BaseActivity() {
 
     private val list = ArrayList<CommonData>()
-    private val listMaker = ArrayList<Marker>()
     private lateinit var aMap: AMap
     private var centerLatLng: LatLng? = null
     private var locationLatLng: LatLng? = null
@@ -179,10 +178,13 @@ class MainActivity : BaseActivity() {
                     handler.sendMessageDelayed(msg, 500)
                 }
 
-                override fun onCameraChange(position: CameraPosition) {
-                    listMaker.forEach { it.destroy() }
-                    listMaker.clear()
-                }
+                /**
+                 * clear(boolean isKeepMyLocationOverlay)
+                 * 从地图上删除所有的覆盖物（marker，circle，polyline 等），但myLocationOverlay（内置定位覆盖物）除外
+                 *
+                 * isKeepMyLocationOverlay - 是否保留myLocationOverlay
+                 */
+                override fun onCameraChange(position: CameraPosition) = aMap.clear(true)
 
             })
 
@@ -492,9 +494,6 @@ class MainActivity : BaseActivity() {
                             addItems(response.body().`object`.orders)
                         }
 
-                        listMaker.forEach { it.destroy() }
-                        listMaker.clear()
-
                         if (list.isNotEmpty()) {
                             list.filter { it.status == "1" }.forEach {
                                 //绘制marker
@@ -508,11 +507,18 @@ class MainActivity : BaseActivity() {
                                         .anchor(0.45f, 0.5f) //设置Marker的锚点
                                         .draggable(false)    //设置Marker是否可拖动
                                 markerOption.isFlat = true
-                                val marker = aMap.addMarker(markerOption)
-                                startGrowAnimation(marker)
-                                listMaker.add(marker)
+                                startGrowAnimation(aMap.addMarker(markerOption))
                             }
                         }
+
+                        /**
+                         * addMarkers(java.util.ArrayList<MarkerOptions> options, boolean moveToCenter)
+                         * 在地图上添一组图片标记（marker），并设置是否改变地图状态以至于所有marker都在当前地图可视区域内显示
+                         *
+                         * options - 多个markerOptions对象，它们分别定义了对应marker的属性信息。
+                         * moveToCenter - 是否改变地图状态，默认为false
+                         */
+                        //aMap.addMarkers(listMarkerOption, false)
 
                         nowCtn = response.body().`object`.nowCtn
                         cyCtn = response.body().`object`.cyCtn

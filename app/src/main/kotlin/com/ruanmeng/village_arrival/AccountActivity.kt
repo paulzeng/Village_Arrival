@@ -51,7 +51,7 @@ class AccountActivity : BaseActivity() {
         account_detail.setOnClickListener { startActivity<AccountDetailActivity>() }
         bt_withdraw.setOnClickListener {
             val intent = Intent(baseContext, WithdrawActivity::class.java)
-            intent.putExtra("balance", mBalance.toString())
+            intent.putExtra("balance", (mBalance - mEnsureSum).toString())
             startActivity(intent)
         }
         tvRight.setOnClickListener {

@@ -33,6 +33,7 @@ import android.animation.ValueAnimator
 import android.view.View
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
+import android.view.animation.BounceInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.widget.TextView
 
@@ -50,20 +51,9 @@ import android.widget.TextView
  */
 
 /**
- * 旋转动画，默认300ms
+ * 旋转动画，设置指定的时间，单位毫秒（默认300ms）
  */
-inline fun <reified T : View> T.startRotateAnimator(from: Float, to: Float) {
-    ObjectAnimator.ofFloat(this, "rotation", from, to).apply {
-        duration = 300
-        interpolator = DecelerateInterpolator()
-        start()
-    }
-}
-
-/**
- * 旋转动画，设置指定的时间，单位毫秒
- */
-inline fun <reified T : View> T.startRotateAnimator(from: Float, to: Float, milliseconds: Long) {
+inline fun <reified T : View> T.startRotateAnimator(from: Float, to: Float, milliseconds: Long = 300) {
     ObjectAnimator.ofFloat(this, "rotation", from, to).apply {
         duration = milliseconds
         interpolator = DecelerateInterpolator()
@@ -72,35 +62,9 @@ inline fun <reified T : View> T.startRotateAnimator(from: Float, to: Float, mill
 }
 
 /**
- * 数字文本加载动画，默认1000ms
+ * 数字文本加载动画，设置指定的时间，单位毫秒（默认1000ms）
  */
-inline fun <reified T : TextView> T.startIncreaseAnimator(to: Int) {
-    ValueAnimator.ofInt(0, to).apply {
-        addUpdateListener { valueAnimator -> text = valueAnimator.animatedValue.toString() }
-        duration = 1000
-        interpolator = DecelerateInterpolator()
-        start()
-    }
-}
-
-/**
- * 数字文本加载动画，默认1000ms
- */
-inline fun <reified T : TextView> T.startIncreaseAnimator(to: Float) {
-    ValueAnimator.ofFloat(0f, to).apply {
-        addUpdateListener { valueAnimator ->
-            text = String.format("%.2f", valueAnimator.animatedValue)
-        }
-        duration = 1000
-        interpolator = DecelerateInterpolator()
-        start()
-    }
-}
-
-/**
- * 数字文本加载动画，设置指定的时间，单位毫秒
- */
-inline fun <reified T : TextView> T.startIncreaseAnimator(to: Int, milliseconds: Long) {
+inline fun <reified T : TextView> T.startIncreaseAnimator(to: Int, milliseconds: Long = 1000) {
     ValueAnimator.ofInt(0, to).apply {
         addUpdateListener { valueAnimator -> text = valueAnimator.animatedValue.toString() }
         duration = milliseconds
@@ -110,15 +74,26 @@ inline fun <reified T : TextView> T.startIncreaseAnimator(to: Int, milliseconds:
 }
 
 /**
- * 数字文本加载动画，设置指定的时间，单位毫秒
+ * 数字文本加载动画，设置指定的时间，单位毫秒（默认1000ms）
  */
-inline fun <reified T : TextView> T.startIncreaseAnimator(to: Float, milliseconds: Long) {
+inline fun <reified T : TextView> T.startIncreaseAnimator(to: Float, milliseconds: Long = 1000) {
     ValueAnimator.ofFloat(0f, to).apply {
         addUpdateListener { valueAnimator ->
             text = String.format("%.2f", valueAnimator.animatedValue)
         }
         duration = milliseconds
         interpolator = DecelerateInterpolator()
+        start()
+    }
+}
+
+/**
+ * 跳动动画，设置指定的时间，单位毫秒（默认1000ms）
+ */
+inline fun <reified T : View> T.startJumpAnimator(from: Float, height: Float, milliseconds: Long = 1000) {
+    ObjectAnimator.ofFloat(this, "y", from - height, from).apply {
+        duration = 1000
+        interpolator = BounceInterpolator()
         start()
     }
 }

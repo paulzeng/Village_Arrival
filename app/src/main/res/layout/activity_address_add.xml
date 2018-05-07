@@ -17,6 +17,7 @@
         android:layout_gravity="center"
         android:adjustViewBounds="true"
         android:src="@mipmap/index_pos"
+        android:visibility="gone"
         tools:ignore="ContentDescription" />
 
     <android.support.v7.widget.CardView
@@ -155,7 +156,7 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="220dp">
+                android:layout_height="@dimen/dimen_size_180">
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@id/address_list"
