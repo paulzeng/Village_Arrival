@@ -157,7 +157,7 @@ class LiveMineActivity : BaseActivity() {
                             if (count(response.body().cooperationList) > 0) pageNum++
                         }
 
-                        if (count(response.body().cooperationList) > 0) mAdapter.updateData(list)
+                        mAdapter.updateData(list)
                     }
 
                     override fun onFinish() {

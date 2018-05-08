@@ -313,7 +313,8 @@ class TaskGrabActivity : BaseActivity() {
         dropPopWindowArea!!.showAsDropDown(task_divider2)
     }
 
-    override fun getData(pindex: Int) {
+    override fun
+            getData(pindex: Int) {
         OkGo.post<BaseResponse<ArrayList<CommonData>>>(BaseHttp.order_list_data)
                 .tag(this@TaskGrabActivity)
                 .isMultipart(true)
@@ -342,7 +343,7 @@ class TaskGrabActivity : BaseActivity() {
                             if (count(response.body().`object`) > 0) pageNum++
                         }
 
-                        if (count(response.body().`object`) > 0) mAdapter.updateData(list)
+                        mAdapter.updateData(list)
                     }
 
                     override fun onFinish() {

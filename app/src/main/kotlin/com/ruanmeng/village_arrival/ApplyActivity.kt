@@ -142,7 +142,8 @@ class ApplyActivity : BaseActivity() {
                                 apply_hint.text = "抢单申请审核成功"
                             }
                             else -> {
-                                apply_expand.collapse()
+                                apply_expand.expand()
+                                apply_hint.text = "您还未提交审核，审核通过后方可抢单"
                                 bt_apply.visible()
                             }
                         }
