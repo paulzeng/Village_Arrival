@@ -70,6 +70,7 @@ class AddressAddActivity : BaseActivity() {
                 aMap.setOnCameraChangeListener(object : AMap.OnCameraChangeListener {
 
                     override fun onCameraChangeFinish(position: CameraPosition) {
+                        address_center.startJumpAnimator(100f)
                         pageNum = 1
                         getData(pageNum)
                     }
@@ -120,7 +121,7 @@ class AddressAddActivity : BaseActivity() {
             }
 
             // 地图加载完成监听接口
-            setOnMapLoadedListener {
+            /*setOnMapLoadedListener {
                 val latLng = aMap.cameraPosition.target
                 val screenPosition = aMap.projection.toScreenLocation(latLng)
                 val screenMarker = aMap.addMarker(MarkerOptions()
@@ -128,7 +129,7 @@ class AddressAddActivity : BaseActivity() {
                         .icon(BitmapDescriptorFactory.fromResource(R.mipmap.index_pos_small)))
                 //设置Marker在屏幕上,不跟随地图移动
                 screenMarker.setPositionByPixels(screenPosition.x, screenPosition.y)
-            }
+            }*/
 
             setOnMapTouchListener { address_card.goneAnimation() }
         }

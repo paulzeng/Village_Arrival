@@ -27,14 +27,10 @@
  */
 package com.ruanmeng.utils
 
-import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.view.View
-import android.view.animation.AlphaAnimation
-import android.view.animation.Animation
-import android.view.animation.BounceInterpolator
-import android.view.animation.DecelerateInterpolator
+import android.view.animation.*
 import android.widget.TextView
 
 /**
@@ -90,52 +86,55 @@ inline fun <reified T : TextView> T.startIncreaseAnimator(to: Float, millisecond
 /**
  * 跳动动画，设置指定的时间，单位毫秒（默认1000ms）
  */
-inline fun <reified T : View> T.startJumpAnimator(from: Float, height: Float, milliseconds: Long = 1000) {
-    ObjectAnimator.ofFloat(this, "y", from - height, from).apply {
-        duration = 1000
+inline fun <reified T : View> T.startJumpAnimator(height: Float, milliseconds: Long = 1000) {
+    startAnimation(TranslateAnimation(
+            0f,
+            0f,
+            0 - height,
+            0f).apply {
+        duration = milliseconds
         interpolator = BounceInterpolator()
-        start()
-    }
+    })
 }
 
 /**
- * 显示动画，默认300ms
+ * 显示动画，设置指定的时间，单位毫秒（默认300ms）
  */
-inline fun <reified T : View> T.visibleAnimation() {
-    if (visibility == View.GONE || visibility == View.INVISIBLE) {
-        val appearAnimation = AlphaAnimation(0f, 1f)
-        appearAnimation.duration = 300
-        appearAnimation.setAnimationListener(object : Animation.AnimationListener {
+inline fun <reified T : View> T.visibleAnimation(milliseconds: Long = 300) {
+    if (visibility != View.VISIBLE) {
+        startAnimation(AlphaAnimation(0f, 1f).apply {
+            duration = milliseconds
+            setAnimationListener(object : Animation.AnimationListener {
 
-            override fun onAnimationRepeat(animation: Animation) {}
-            override fun onAnimationEnd(animation: Animation) {
-                visibility = View.VISIBLE
-            }
+                override fun onAnimationRepeat(animation: Animation) {}
+                override fun onAnimationEnd(animation: Animation) {
+                    visibility = View.VISIBLE
+                }
 
-            override fun onAnimationStart(animation: Animation) {}
+                override fun onAnimationStart(animation: Animation) {}
 
+            })
         })
-        startAnimation(appearAnimation)
     }
 }
 
 /**
- * 隐藏动画，默认300ms
+ * 隐藏动画，设置指定的时间，单位毫秒（默认300ms）
  */
-inline fun <reified T : View> T.goneAnimation() {
+inline fun <reified T : View> T.goneAnimation(milliseconds: Long = 300) {
     if (visibility == View.VISIBLE) {
-        val disappearAnimation = AlphaAnimation(1f, 0f)
-        disappearAnimation.duration = 300
-        disappearAnimation.setAnimationListener(object : Animation.AnimationListener {
+        startAnimation(AlphaAnimation(1f, 0f).apply {
+            duration = milliseconds
+            setAnimationListener(object : Animation.AnimationListener {
 
-            override fun onAnimationRepeat(animation: Animation) {}
-            override fun onAnimationEnd(animation: Animation) {
-                visibility = View.GONE
-            }
+                override fun onAnimationRepeat(animation: Animation) {}
+                override fun onAnimationEnd(animation: Animation) {
+                    visibility = View.GONE
+                }
 
-            override fun onAnimationStart(animation: Animation) {}
+                override fun onAnimationStart(animation: Animation) {}
 
+            })
         })
-        startAnimation(disappearAnimation)
     }
 }
