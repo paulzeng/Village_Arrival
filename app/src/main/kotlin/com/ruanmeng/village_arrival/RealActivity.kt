@@ -273,20 +273,20 @@ class RealActivity : BaseActivity() {
 
     private fun compress(type: Int, path: String) {
         Flowable.just<List<LocalMedia>>(listOf(LocalMedia().apply { this.path = path }))
-                .map { list ->
+                .map {
                     return@map Luban.with(baseContext)
                             .setTargetDir(cacheDir.absolutePath)
                             .ignoreBy(400)
-                            .loadLocalMedia(list)
+                            .loadLocalMedia(it)
                             .get()
                 }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { files ->
+                .subscribe {
                     when (type) {
-                        1 -> image_first = files[0].absolutePath
-                        2 -> image_second = files[0].absolutePath
-                        3 -> image_third = files[0].absolutePath
+                        1 -> image_first = it[0].absolutePath
+                        2 -> image_second = it[0].absolutePath
+                        3 -> image_third = it[0].absolutePath
                     }
                 }
     }
