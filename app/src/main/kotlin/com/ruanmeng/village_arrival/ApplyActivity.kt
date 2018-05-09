@@ -133,7 +133,7 @@ class ApplyActivity : BaseActivity() {
                             "-1" -> apply_expand.expand()
                             "0" -> {
                                 apply_expand.expand()
-                                apply_hint.text = if (reason.isNotEmpty()) "审核失败" else "审核失败：$reason"
+                                apply_hint.text = if (reason.isEmpty()) "审核失败" else "审核失败：$reason"
                                 bt_apply.visible()
                                 bt_apply.text = "重新申请"
                             }

@@ -27,7 +27,9 @@ class GrabDetailActivity : BaseActivity() {
 
     private var mStauts = ""
     private var mType = ""
+    private var buyname = ""
     private var buyMobile = ""
+    private var receiptName = ""
     private var receiptMobile = ""
 
     private var agreeCancel = "0.0"
@@ -81,11 +83,11 @@ class GrabDetailActivity : BaseActivity() {
                                                 intent.putExtra("isDetail", true)
                                                 intent.putExtra("type", mType)
                                                 intent.putExtra("buyAddress", grab_addr1.text.toString())
-                                                intent.putExtra("buyName", grab_name1.text.toString())
+                                                intent.putExtra("buyName", buyname)
                                                 intent.putExtra("receiptAddress", grab_addr2.text.toString())
-                                                intent.putExtra("receiptName", grab_name2.text.toString())
-                                                intent.putExtra("buyMobile", grab_name2.text.toString())
-                                                intent.putExtra("receiptMobile", grab_name2.text.toString())
+                                                intent.putExtra("receiptName", receiptName)
+                                                intent.putExtra("buyMobile", buyMobile)
+                                                intent.putExtra("receiptMobile", receiptMobile)
                                                 startActivity(intent)
                                             }
 
@@ -213,7 +215,9 @@ class GrabDetailActivity : BaseActivity() {
 
                         mStauts = data.status
                         mType = data.type
+                        buyname = data.buyname
                         buyMobile = data.buyMobile
+                        receiptName = data.receiptName
                         receiptMobile = data.receiptMobile
                         agreeCancel = data.agreeCancel
                         unAgreeCancel = data.unAgreeCancel

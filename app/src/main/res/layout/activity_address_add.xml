@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dimen_size_15"
         android:animateLayoutChanges="true"
-        android:visibility="visible"
+        android:visibility="gone"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="@dimen/dimen_size_5"
         app:cardElevation="@dimen/dimen_size_3"

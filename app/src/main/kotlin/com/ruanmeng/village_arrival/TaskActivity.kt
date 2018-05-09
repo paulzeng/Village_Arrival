@@ -275,7 +275,7 @@ class TaskActivity : BaseActivity() {
                                     val intent = Intent(baseContext, IssuePayActivity::class.java)
                                     intent.putExtra("hint", "提交订单")
                                     intent.putExtra("goodsOrderId", obj.optString("goodsOrderId"))
-                                    intent.putExtra("commission", obj.optString("commission", "0.00"))
+                                    intent.putExtra("commission", obj.optString("realPaySum", "0.00"))
                                     startActivity(intent)
                                     ActivityStack.screenManager.popActivities(this@TaskActivity::class.java)
                                 }
