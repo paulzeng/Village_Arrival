@@ -21,10 +21,7 @@ import com.luck.picture.lib.entity.LocalMedia
 import com.lzg.extend.StringDialogCallback
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
-import com.ruanmeng.base.BaseActivity
-import com.ruanmeng.base.getString
-import com.ruanmeng.base.setImageURL
-import com.ruanmeng.base.showToast
+import com.ruanmeng.base.*
 import com.ruanmeng.model.RefreshMessageEvent
 import com.ruanmeng.share.BaseHttp
 import com.ruanmeng.share.Const
@@ -91,6 +88,65 @@ class LiveIssueActivity : BaseActivity() {
             override fun onGeocodeSearched(result: GeocodeResult, code: Int) {}
 
         })
+
+        bt_issue.setOneClickListener(View.OnClickListener {
+            if (locationTownship.isEmpty()) {
+                showToast("当前位置信息获取失败")
+                return@OnClickListener
+            }
+
+            if (et_tel.text.isNotEmpty() && !CommonUtil.isMobile(et_tel.text.toString())) {
+                showToast("手机号码格式不正确，请重新输入")
+                return@OnClickListener
+            }
+
+            OkGo.post<String>(BaseHttp.add_cooperation)
+                    .tag(this@LiveIssueActivity)
+                    .isMultipart(true)
+                    .headers("token", getString("token"))
+                    .params("lat", locationLat)
+                    .params("lng", locationLng)
+                    .params("province", locationProvince)
+                    .params("city", locationCity)
+                    .params("district", locationDistrict)
+                    .params("township", locationTownship)
+                    .params("title", et_title.text.trim().toString())
+                    .params("content", et_content.text.trim().toString())
+                    .params("type", intent.getStringExtra("type"))
+                    .apply {
+                        if (liveImg.isNotEmpty()) params("img1", File(liveImg))
+                        params("mobile", et_tel.text.toString())
+                        params("name", et_name.text.toString())
+                    }
+                    .execute(object : StringDialogCallback(baseContext) {
+
+                        @SuppressLint("SetTextI18n")
+                        override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
+
+                            val obj = JSONObject(response.body()).getJSONObject("object") ?: JSONObject()
+                            val cooperationId = obj.optString("cooperationId")
+
+                            if (cooperationId.isNotEmpty()) {
+                                val intent = Intent(baseContext, LiveDoneActivity::class.java)
+                                intent.putExtra("title", "发布成功")
+                                intent.putExtra("cooperationId", cooperationId)
+                                startActivity(intent)
+                                EventBus.getDefault().post(RefreshMessageEvent("发布需求"))
+                            }
+                            else showToast(msg)
+
+                            ActivityStack.screenManager.popActivities(this@LiveIssueActivity::class.java)
+                        }
+
+                        override fun onSuccessResponseErrorCode(response: Response<String>, msg: String, msgCode: String) {
+                            val intent = Intent(baseContext, LiveDoneActivity::class.java)
+                            intent.putExtra("title", "发布失败")
+                            intent.putExtra("message", msg)
+                            startActivity(intent)
+                        }
+
+                    })
+        })
     }
 
     override fun doClick(v: View) {
@@ -127,63 +183,6 @@ class LiveIssueActivity : BaseActivity() {
                         .minimumCompressSize(100)
                         .isDragFrame(false)
                         .forResult(PictureConfig.CHOOSE_REQUEST)
-            }
-            R.id.bt_issue -> {
-                if (locationTownship.isEmpty()) {
-                    showToast("当前位置信息获取失败")
-                    return
-                }
-                if (et_tel.text.isNotEmpty() && !CommonUtil.isMobile(et_tel.text.toString())) {
-                    showToast("手机号码格式不正确，请重新输入")
-                    return
-                }
-
-                OkGo.post<String>(BaseHttp.add_cooperation)
-                        .tag(this@LiveIssueActivity)
-                        .isMultipart(true)
-                        .headers("token", getString("token"))
-                        .params("lat", locationLat)
-                        .params("lng", locationLng)
-                        .params("province", locationProvince)
-                        .params("city", locationCity)
-                        .params("district", locationDistrict)
-                        .params("township", locationTownship)
-                        .params("title", et_title.text.trim().toString())
-                        .params("content", et_content.text.trim().toString())
-                        .params("type", intent.getStringExtra("type"))
-                        .apply {
-                            if (liveImg.isNotEmpty()) params("img1", File(liveImg))
-                            params("mobile", et_tel.text.toString())
-                            params("name", et_name.text.toString())
-                        }
-                        .execute(object : StringDialogCallback(baseContext) {
-
-                            @SuppressLint("SetTextI18n")
-                            override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
-
-                                val obj = JSONObject(response.body()).getJSONObject("object") ?: JSONObject()
-                                val cooperationId = obj.optString("cooperationId")
-
-                                if (cooperationId.isNotEmpty()) {
-                                    val intent = Intent(baseContext, LiveDoneActivity::class.java)
-                                    intent.putExtra("title", "发布成功")
-                                    intent.putExtra("cooperationId", cooperationId)
-                                    startActivity(intent)
-                                    EventBus.getDefault().post(RefreshMessageEvent("发布需求"))
-                                }
-                                else showToast(msg)
-
-                                ActivityStack.screenManager.popActivities(this@LiveIssueActivity::class.java)
-                            }
-
-                            override fun onSuccessResponseErrorCode(response: Response<String>, msg: String, msgCode: String) {
-                                val intent = Intent(baseContext, LiveDoneActivity::class.java)
-                                intent.putExtra("title", "发布失败")
-                                intent.putExtra("message", msg)
-                                startActivity(intent)
-                            }
-
-                        })
             }
         }
     }

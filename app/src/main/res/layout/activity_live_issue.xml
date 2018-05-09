@@ -139,7 +139,8 @@
                     android:hint="请输入您的姓名（非必填）"
                     android:maxLength="12"
                     android:paddingEnd="@dimen/dimen_size_10"
-                    android:paddingStart="@dimen/dimen_size_10" />
+                    android:paddingStart="@dimen/dimen_size_10"
+                    android:singleLine="true" />
 
             </LinearLayout>
 

@@ -14,10 +14,7 @@ import com.ruanmeng.base.*
 import com.ruanmeng.model.CommonData
 import com.ruanmeng.model.RefreshMessageEvent
 import com.ruanmeng.share.BaseHttp
-import com.ruanmeng.utils.DensityUtil
-import com.ruanmeng.utils.DialogHelper
-import com.ruanmeng.utils.TimeHelper
-import com.ruanmeng.utils.Tools
+import com.ruanmeng.utils.*
 import kotlinx.android.synthetic.main.activity_grab.*
 import kotlinx.android.synthetic.main.layout_empty.*
 import kotlinx.android.synthetic.main.layout_list.*
@@ -108,8 +105,8 @@ class GrabActivity : BaseActivity() {
                             .image(R.id.item_grab_img1, if (data.type == "1") R.mipmap.index_lab05 else R.mipmap.index_lab01)
                             .text(R.id.item_grab_addr1, data.buyAddress + data.buyDetailAdress)
                             .text(R.id.item_grab_addr2, data.receiptAddress + data.receiptDetailAdress)
-                            .text(R.id.item_grab_name1, "${data.buyname}  ${data.buyMobile}")
-                            .text(R.id.item_grab_name2, "${data.receiptName}  ${data.receiptMobile}")
+                            .text(R.id.item_grab_name1, "${data.buyname}  ${data.buyMobile.phoneReplaceWithStar()}")
+                            .text(R.id.item_grab_name2, "${data.receiptName}  ${data.receiptMobile.phoneReplaceWithStar()}")
                             .text(R.id.item_grab_yong, data.commission)
                             .text(R.id.item_grab_yu, "（商品预估：${data.goodsPrice}元）")
 

@@ -15,6 +15,7 @@ import com.ruanmeng.model.RefreshMessageEvent
 import com.ruanmeng.share.BaseHttp
 import com.ruanmeng.utils.DensityUtil
 import com.ruanmeng.utils.TimeHelper
+import com.ruanmeng.utils.phoneReplaceWithStar
 import kotlinx.android.synthetic.main.activity_issue.*
 import kotlinx.android.synthetic.main.layout_empty.*
 import kotlinx.android.synthetic.main.layout_list.*
@@ -107,8 +108,8 @@ class IssueActivity : BaseActivity() {
                             .image(R.id.item_issue_img1, if (data.type == "1") R.mipmap.index_lab05 else R.mipmap.index_lab01)
                             .text(R.id.item_issue_addr1, data.buyAddress + data.buyDetailAdress)
                             .text(R.id.item_issue_addr2, data.receiptAddress + data.receiptDetailAdress)
-                            .text(R.id.item_issue_name1, "${data.buyname}  ${data.buyMobile}")
-                            .text(R.id.item_issue_name2, "${data.receiptName}  ${data.receiptMobile}")
+                            .text(R.id.item_issue_name1, "${data.buyname}  ${data.buyMobile.phoneReplaceWithStar()}")
+                            .text(R.id.item_issue_name2, "${data.receiptName}  ${data.receiptMobile.phoneReplaceWithStar()}")
                             .text(R.id.item_issue_yong, data.commission)
                             .text(R.id.item_issue_yu, "（商品预估：${data.goodsPrice}元）")
 

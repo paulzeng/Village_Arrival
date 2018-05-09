@@ -54,7 +54,7 @@
                     android:layout_marginTop="@dimen/dimen_size_5"
                     android:ellipsize="end"
                     android:lineSpacingExtra="@dimen/dimen_size_3"
-                    android:maxLines="1"
+                    android:maxLines="2"
                     android:text="内容" />
 
             </LinearLayout>

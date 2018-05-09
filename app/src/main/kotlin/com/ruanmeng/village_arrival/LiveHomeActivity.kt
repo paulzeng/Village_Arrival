@@ -73,7 +73,7 @@ class LiveHomeActivity : BaseActivity() {
                     mLoopAdapter = LoopAdapter(baseContext, banner)
                     banner.apply {
                         setAdapter(mLoopAdapter)
-                        setOnItemClickListener { position -> /*轮播图点击事件*/ }
+                        setOnItemClickListener { /*轮播图点击事件*/ }
                     }
 
                     recycler.apply {
@@ -97,7 +97,7 @@ class LiveHomeActivity : BaseActivity() {
                                                     }
                                                     "2" -> {
                                                         intent.setClass(baseContext, LiveMoreActivity::class.java)
-                                                        intent.putExtra("list", listModule)
+                                                        intent.putExtra("list", listModule.filter { it.moduleType != "0" } as ArrayList<CommonData>)
                                                         startActivity(intent)
                                                     }
                                                 }

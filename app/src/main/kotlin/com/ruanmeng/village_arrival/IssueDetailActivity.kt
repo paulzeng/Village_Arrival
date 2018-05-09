@@ -30,6 +30,7 @@ import com.ruanmeng.model.RefreshMessageEvent
 import com.ruanmeng.share.BaseHttp
 import com.ruanmeng.utils.DialogHelper
 import com.ruanmeng.utils.Tools
+import com.ruanmeng.utils.phoneReplaceWithStar
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_issue_detail.*
 import org.greenrobot.eventbus.EventBus
@@ -219,10 +220,9 @@ class IssueDetailActivity : BaseActivity() {
 
     @Suppress("DEPRECATION")
     private fun showCancelAgreeDialog() {
-        val hintUnAgree = DecimalFormat("0.##").format(unAgreeCancel.toDouble() * 100)
         val hint = "骑手申请取消订单<br>" +
                 "您同意取消，此单将等待其他人抢单<br>" +
-                "您不同意取消，<font color='#F23030'>获得违约金金额为$hintUnAgree%佣金</font>"
+                "您不同意取消，<font color='#F23030'>获得违约金金额为50%佣金</font>"
 
         DialogHelper.showHintDialog(baseContext,
                 "骑手取消订单",
@@ -355,10 +355,10 @@ class IssueDetailActivity : BaseActivity() {
                         issue_time.text = data.createDate
                         issue_img1.setImageResource(if (mType == "1") R.mipmap.index_lab05 else R.mipmap.index_lab01)
                         issue_addr1.text = data.buyAddress + data.buyDetailAdress
-                        issue_name1.text = "${data.buyname}  ${data.buyMobile}"
+                        issue_name1.text = "${data.buyname}  ${data.buyMobile.phoneReplaceWithStar()}"
                         if (data.buyMobile.isEmpty()) issue_name1.gone()
                         issue_addr2.text = data.receiptAddress + data.receiptDetailAdress
-                        issue_name2.text = "${data.receiptName}  ${data.receiptMobile}"
+                        issue_name2.text = "${data.receiptName}  ${data.receiptMobile.phoneReplaceWithStar()}"
                         issue_check.text = when (data.inspection) {
                             "0" -> "否"
                             "1" -> "是"

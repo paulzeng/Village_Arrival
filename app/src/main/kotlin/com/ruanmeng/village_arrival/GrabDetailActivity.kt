@@ -18,6 +18,7 @@ import com.ruanmeng.model.RefreshMessageEvent
 import com.ruanmeng.share.BaseHttp
 import com.ruanmeng.utils.DialogHelper
 import com.ruanmeng.utils.TimeHelper
+import com.ruanmeng.utils.phoneReplaceWithStar
 import kotlinx.android.synthetic.main.activity_grab_detail.*
 import org.greenrobot.eventbus.EventBus
 import java.text.DecimalFormat
@@ -137,12 +138,10 @@ class GrabDetailActivity : BaseActivity() {
 
     @Suppress("DEPRECATION")
     private fun showCancelDialog() {
-        val hintAgree = DecimalFormat("0.##").format(agreeCancel.toDouble() * 100)
-        val hintUnAgree = DecimalFormat("0.##").format(unAgreeCancel.toDouble() * 100)
         val hintGrab = TimeHelper.getDiffTimeAfter(TimeHelper.getInstance().millisecondToLong(grabsingleTime))
         val hint = "您已接单$hintGrab<br>" +
-                "用户同意取消，<font color='#F23030'>支付违约金金额为$hintAgree%佣金</font><br>" +
-                "用户不同意您需要<font color='#F23030'>支付佣金的$hintUnAgree%作为违约金</font>"
+                "用户同意取消则取消成功<br>" +
+                "用户不同意您需要<font color='#F23030'>支付佣金的50%作为违约金</font>"
 
         DialogHelper.showHintDialog(baseContext,
                 "取消订单",
@@ -252,10 +251,10 @@ class GrabDetailActivity : BaseActivity() {
                         grab_time.text = data.createDate
                         grab_img1.setImageResource(if (mType == "1") R.mipmap.index_lab05 else R.mipmap.index_lab01)
                         grab_addr1.text = data.buyAddress + data.buyDetailAdress
-                        grab_name1.text = "${data.buyname}  ${data.buyMobile}"
+                        grab_name1.text = "${data.buyname}  ${data.buyMobile.phoneReplaceWithStar()}"
                         if (data.buyMobile.isEmpty()) grab_name1.gone()
                         grab_addr2.text = data.receiptAddress + data.receiptDetailAdress
-                        grab_name2.text = "${data.receiptName}  ${data.receiptMobile}"
+                        grab_name2.text = "${data.receiptName}  ${data.receiptMobile.phoneReplaceWithStar()}"
                         grab_check.text = when (data.inspection) {
                             "0" -> "否"
                             "1" -> "是"
