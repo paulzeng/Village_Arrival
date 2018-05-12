@@ -58,13 +58,33 @@
                     android:layout_height="wrap_content"
                     android:text="地址" />
 
-                <TextView
-                    android:id="@+id/item_address_name"
-                    style="@style/Font14_light"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dimen_size_10"
-                    android:text="姓名    电话" />
+                    android:layout_marginTop="@dimen/dimen_size_8"
+                    android:gravity="bottom">
+
+                    <TextView
+                        android:id="@+id/item_address_name"
+                        style="@style/Font14_light"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="姓名    电话" />
+
+                    <TextView
+                        android:id="@+id/item_address_change"
+                        style="@style/Font14_white"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="@dimen/dimen_size_10"
+                        android:paddingEnd="@dimen/dimen_size_10"
+                        android:paddingTop="@dimen/dimen_size_3"
+                        android:paddingBottom="@dimen/dimen_size_3"
+                        android:background="@drawable/rec_bg_blue_shade"
+                        android:text="变更" />
+
+                </LinearLayout>
 
             </LinearLayout>
 

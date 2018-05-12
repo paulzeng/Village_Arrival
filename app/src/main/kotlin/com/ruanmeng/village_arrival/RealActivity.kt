@@ -79,6 +79,8 @@ class RealActivity : BaseActivity() {
         et_name.filters = arrayOf<InputFilter>(NameLengthFilter(10))
         et_name.addTextChangedListener(this@RealActivity)
         et_card.addTextChangedListener(this@RealActivity)
+
+        real_addresss.setOnClickListener { startActivity<AddressActivity>() }
     }
 
     override fun doClick(v: View) {

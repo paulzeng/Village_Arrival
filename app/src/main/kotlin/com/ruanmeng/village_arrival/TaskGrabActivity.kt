@@ -116,8 +116,8 @@ class TaskGrabActivity : BaseActivity() {
                             .visibility(R.id.item_task_divider, if (list.indexOf(data) != 0) View.GONE else View.VISIBLE)
 
                             .clicked(R.id.item_task_grab) {
-                                when (getString("status")) {
-                                    "-1" -> showToast("您的抢单申请正在审核中，请耐心等待!")
+                                when (getString("pass")) {
+                                    "-1" -> showToast("您的实名认证正在审核中，请耐心等待!")
                                     "1" -> {
                                         OkGo.post<String>(BaseHttp.grab_order)
                                                 .tag(this@TaskGrabActivity)
@@ -153,8 +153,8 @@ class TaskGrabActivity : BaseActivity() {
                                     else -> {
                                         AlertDialog.Builder(baseContext)
                                                 .setTitle("温馨提示")
-                                                .setMessage("您还未通过抢单审核，是否现在去申请抢单？")
-                                                .setPositiveButton("去申请") { _, _ -> startActivity<ApplyActivity>() }
+                                                .setMessage("您还未通过实名认证，是否现在去认证？")
+                                                .setPositiveButton("去认证") { _, _ -> startActivity<RealActivity>() }
                                                 .setNegativeButton("取消") { _, _ -> }
                                                 .create()
                                                 .show()

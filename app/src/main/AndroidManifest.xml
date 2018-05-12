@@ -64,6 +64,9 @@
             android:name=".AccountDetailActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".AccountTicketActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".WithdrawResultActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -162,7 +165,6 @@
         <activity
             android:name=".LiveSearchActivity"
             android:screenOrientation="portrait" />
-
 
         <!-- 支付宝 start -->
         <activity

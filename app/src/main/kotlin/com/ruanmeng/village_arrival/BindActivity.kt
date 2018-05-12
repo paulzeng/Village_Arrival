@@ -73,7 +73,7 @@ class BindActivity : BaseActivity() {
                     }
                 }
 
-                OkGo.post<String>(BaseHttp.identify_get)
+                OkGo.post<String>(BaseHttp.identify_get2)
                         .tag(this@BindActivity)
                         .params("mobile", et_name.text.trim().toString())
                         .params("time", Const.MAKER)

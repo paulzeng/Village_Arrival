@@ -198,8 +198,8 @@ class MainActivity : BaseActivity() {
                     grab.setBackgroundResource(if (data.type == "1") R.drawable.rec_bg_blue_shade else R.drawable.rec_bg_red_shade)
 
                     grab.setOnClickListener {
-                        when (getString("status")) {
-                            "-1" -> showToast("您的抢单申请正在审核中，请耐心等待!")
+                        when (getString("pass")) {
+                            "-1" -> showToast("您的实名认证正在审核中，请耐心等待!")
                             "1" -> {
                                 OkGo.post<String>(BaseHttp.grab_order)
                                         .tag(this@MainActivity)
@@ -235,8 +235,8 @@ class MainActivity : BaseActivity() {
                             else -> {
                                 AlertDialog.Builder(baseContext)
                                         .setTitle("温馨提示")
-                                        .setMessage("您还未通过抢单审核，是否现在去申请抢单？")
-                                        .setPositiveButton("去申请") { _, _ -> startActivity<ApplyActivity>() }
+                                        .setMessage("您还未通过实名认证，是否现在去认证？")
+                                        .setPositiveButton("去认证") { _, _ -> startActivity<RealActivity>() }
                                         .setNegativeButton("取消") { _, _ -> }
                                         .create()
                                         .show()
@@ -423,7 +423,7 @@ class MainActivity : BaseActivity() {
                     R.id.nav_person -> startActivity<InfoActivity>()
                     R.id.nav_account -> startActivity<AccountActivity>()
                     R.id.nav_addr -> startActivity<AddressActivity>()
-                    R.id.nav_status -> startActivity<ApplyActivity>()
+                    R.id.nav_status -> startActivity<RealActivity>()
                     R.id.nav_share -> startActivity<ShareActivity>()
                     R.id.nav_live -> startActivity<LiveMineActivity>()
                 }
@@ -460,11 +460,11 @@ class MainActivity : BaseActivity() {
                             }
                         }
 
-                        nav_status.setRightString(when (getString("status")) {
+                        nav_status.setRightString(when (getString("pass")) {
                             "-1" -> "审核中"
                             "0" -> "未通过"
                             "1" -> "已审核"
-                            else -> "未审核"
+                            else -> "未认证"
                         })
                     }
 

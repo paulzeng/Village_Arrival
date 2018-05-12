@@ -26,6 +26,7 @@ import com.ruanmeng.utils.startIncreaseAnimator
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_account.*
 import org.json.JSONObject
+import java.math.BigDecimal
 import java.text.DecimalFormat
 
 class AccountActivity : BaseActivity() {
@@ -36,7 +37,7 @@ class AccountActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_account)
-        init_title("我的账户", "说明")
+        init_title("我的账户", "开发票")
     }
 
     override fun onStart() {
@@ -51,14 +52,10 @@ class AccountActivity : BaseActivity() {
         account_detail.setOnClickListener { startActivity<AccountDetailActivity>() }
         bt_withdraw.setOnClickListener {
             val intent = Intent(baseContext, WithdrawActivity::class.java)
-            intent.putExtra("balance", (mBalance - mEnsureSum - 0.005).toString())
+            intent.putExtra("balance", (mBalance - mEnsureSum).toString())
             startActivity(intent)
         }
-        tvRight.setOnClickListener {
-            val intent = Intent(baseContext, WebActivity::class.java)
-            intent.putExtra("title", "账户说明")
-            startActivity(intent)
-        }
+        tvRight.setOnClickListener { startActivity<AccountTicketActivity>() }
     }
 
     override fun doClick(v: View) {
@@ -77,12 +74,15 @@ class AccountActivity : BaseActivity() {
                     override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
 
                         val obj = JSONObject(response.body())
-                        mBalance = obj.optString("balance", "0").toFloat()
+                        val balance = obj.optString("balance", "0").toFloat()
                         mEnsureSum = obj.optString("ensureSum", "0").toDouble()
                         val profitSum = obj.optString("profitSum", "0").toDouble()
 
-                        account_total.startIncreaseAnimator(mBalance - 0.005f)
-                        account_commission.text = DecimalFormat(",##0.##").format(profitSum - 0.005)
+                        val mProfitSum = BigDecimal(profitSum).setScale(2, BigDecimal.ROUND_DOWN).toDouble()
+                        mBalance = BigDecimal(balance.toDouble()).setScale(2, BigDecimal.ROUND_DOWN).toFloat()
+
+                        account_total.startIncreaseAnimator(mBalance)
+                        account_commission.text = DecimalFormat(",##0.##").format(mProfitSum)
                         account_save.text = DecimalFormat(",##0.##").format(mEnsureSum)
 
                         account_promise.setRightString(when {

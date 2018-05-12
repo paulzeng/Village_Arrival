@@ -55,7 +55,11 @@ class AddressActivity : BaseActivity() {
         super.init_title()
         address_list.load_Linear(baseContext)
         adapter = AddressAdapter(baseContext, list)
-        adapter.setOnItemClickListener { }
+        adapter.setOnItemClickListener {
+            val intent = Intent(baseContext, AddressAddActivity::class.java)
+            intent.putExtra("title", "我的地址")
+            startActivity(intent)
+        }
         adapter.setOnItemDeleteClickListener { position ->
 
             DialogHelper.showHintDialog(baseContext,

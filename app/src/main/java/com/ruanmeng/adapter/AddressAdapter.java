@@ -88,7 +88,7 @@ public class AddressAdapter extends RecyclerView.Adapter {
     private class ViewHolder extends RecyclerView.ViewHolder {
         private SwipeRevealLayout swipeLayout;
         private View frontLayout;
-        private TextView tv_addr, tv_name, tv_del;
+        private TextView tv_addr, tv_name, tv_modify, tv_del;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -96,13 +96,22 @@ public class AddressAdapter extends RecyclerView.Adapter {
             frontLayout = itemView.findViewById(R.id.front_layout);
             tv_addr = itemView.findViewById(R.id.item_address_addr);
             tv_name = itemView.findViewById(R.id.item_address_name);
+            tv_modify = itemView.findViewById(R.id.item_address_change);
             tv_del = itemView.findViewById(R.id.item_address_delete);
         }
 
         @SuppressLint("SetTextI18n")
         void bind(final CommonData data) {
+            swipeLayout.setLockDrag(true);
             tv_addr.setText(data.getAddress() + data.getDetailAdress());
             tv_name.setText(data.getName() + "    " + data.getMobile());
+
+            tv_modify.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onItemClickListener != null) onItemClickListener.onClick(getAdapterPosition());
+                }
+            });
 
             tv_del.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -116,7 +125,7 @@ public class AddressAdapter extends RecyclerView.Adapter {
             frontLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (onItemClickListener != null) onItemClickListener.onClick(getAdapterPosition());
+                    // if (onItemClickListener != null) onItemClickListener.onClick(getAdapterPosition());
                 }
             });
         }

@@ -18,6 +18,7 @@ public class BaseHttp {
     public static String register_sub = baseIp + "/register_sub.rm";                 //注册√
     public static String identify_getbyforget = baseIp + "/identify_getbyforget.rm"; //忘记验证码√
     public static String pwd_forget_sub = baseIp + "/pwd_forget_sub.rm";             //忘记密码√
+    public static String identify_get2 = baseIp + "/identify_get2.rm";               //第三方登录验证码√
 
     public static String user_msg_data = baseIp + "/user_msg_data.rm";                       //个人资料√
     public static String userinfo_uploadhead_sub = baseIp + "/userinfo_uploadhead_sub.rm";   //修改头像√
@@ -41,6 +42,8 @@ public class BaseHttp {
     public static String recharge_balance = baseIp + "/recharge_balance.rm";                 //保证金余额充值√
     public static String trade_list_data = baseIp + "/trade_list_data.rm";                   //交易列表√
     public static String user_withdraw = baseIp + "/user_withdraw.rm";                       //提现√
+    public static String hinvoice_data = baseIp + "/hinvoice_data.rm";                       //发票信息√
+    public static String add_invoice = baseIp + "/add_invoice.rm";                           //开发票√
 
     public static String frist_index_data = baseIp + "/frist_index_data.rm";                   //首页√
     public static String weightprice_list_data = baseIp + "/weightprice_address_list_data.rm"; //商品重量√
