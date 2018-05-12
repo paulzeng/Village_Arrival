@@ -26,6 +26,7 @@ import com.ruanmeng.view.FullyGridLayoutManager
 import com.ruanmeng.view.SwitcherTextView
 import com.sunfusheng.glideimageview.GlideImageView
 import kotlinx.android.synthetic.main.layout_list.*
+import kotlinx.android.synthetic.main.layout_title_task.*
 import net.idik.lib.slimadapter.SlimAdapter
 import net.idik.lib.slimadapter.SlimAdapterEx
 import org.greenrobot.eventbus.EventBus
@@ -44,10 +45,13 @@ class LiveHomeActivity : BaseActivity() {
     private lateinit var recycler: RecyclerView
     private lateinit var tvSwitcher: SwitcherTextView
 
+    private var mCity = ""
+    private var mDistrict = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_live_home)
-        transparentStatusBar(false)
+        setToolbarVisibility(false)
         init_title()
 
         EventBus.getDefault().register(this@LiveHomeActivity)
@@ -58,18 +62,21 @@ class LiveHomeActivity : BaseActivity() {
 
     @SuppressLint("InflateParams")
     override fun init_title() {
+        mCity = intent.getStringExtra("city")
+        mDistrict = intent.getStringExtra("title")
+        task_title.text = mDistrict
+        task_right.visible()
+
         swipe_refresh.refresh { getData() }
         recycle_list.load_Linear(baseContext, swipe_refresh)
 
         mAdapterEx = SlimAdapter.create(SlimAdapterEx::class.java)
                 .apply {
                     val view = LayoutInflater.from(baseContext).inflate(R.layout.header_live_home, null)
-                    val tvTitle = view.findViewById<TextView>(R.id.live_title)
                     banner = view.findViewById(R.id.live_banner)
                     recycler = view.findViewById(R.id.live_list)
                     tvSwitcher = view.findViewById(R.id.live_switcher)
 
-                    tvTitle.text = intent.getStringExtra("title")
                     mLoopAdapter = LoopAdapter(baseContext, banner)
                     banner.apply {
                         setAdapter(mLoopAdapter)
@@ -89,14 +96,23 @@ class LiveHomeActivity : BaseActivity() {
                                             }
                                             .clicked(R.id.item_live) {
                                                 when (data.moduleType) {
-                                                    "0" -> startActivity<LiveContactActivity>()
+                                                    "0" -> {
+                                                        intent = Intent(baseContext, LiveContactActivity::class.java)
+                                                        intent.putExtra("city", mCity)
+                                                        intent.putExtra("district", mDistrict)
+                                                        startActivity(intent)
+                                                    }
                                                     "1" -> {
-                                                        intent.setClass(baseContext, LiveActivity::class.java)
+                                                        intent = Intent(baseContext, LiveActivity::class.java)
+                                                        intent.putExtra("city", mCity)
+                                                        intent.putExtra("district", mDistrict)
                                                         intent.putExtra("type", data.appmoduleId)
                                                         startActivity(intent)
                                                     }
                                                     "2" -> {
-                                                        intent.setClass(baseContext, LiveMoreActivity::class.java)
+                                                        intent = Intent(baseContext, LiveMoreActivity::class.java)
+                                                        intent.putExtra("city", mCity)
+                                                        intent.putExtra("district", mDistrict)
                                                         intent.putExtra("list", listModule.filter { it.moduleType != "0" } as ArrayList<CommonData>)
                                                         startActivity(intent)
                                                     }
@@ -135,12 +151,22 @@ class LiveHomeActivity : BaseActivity() {
         super.doClick(v)
         when (v.id) {
             R.id.bt_issue -> showSheetDialog()
+            R.id.task_title -> startActivity<LiveCityActivity>()
+            R.id.task_right -> {
+                intent = Intent(baseContext, LiveSearchActivity::class.java)
+                intent.putExtra("city", mCity)
+                intent.putExtra("district", mDistrict)
+                startActivity(intent)
+            }
         }
     }
 
     override fun getData() {
         OkGo.post<CommonModel>(BaseHttp.index_data)
                 .tag(this@LiveHomeActivity)
+                .isMultipart(true)
+                .params("city", mCity)
+                .params("district", mDistrict)
                 .execute(object : JacksonDialogCallback<CommonModel>(baseContext, CommonModel::class.java) {
 
                     override fun onSuccess(response: Response<CommonModel>) {
@@ -251,7 +277,18 @@ class LiveHomeActivity : BaseActivity() {
     @Subscribe
     fun onMessageEvent(event: RefreshMessageEvent) {
         when (event.type) {
-            "发布需求", "添加评论" -> getData()
+            "发布需求", "添加评论" -> {
+                swipe_refresh.isRefreshing = true
+                getData()
+            }
+            "选择城市" -> {
+                mDistrict = event.name
+                mCity = event.id
+                task_title.text = mDistrict
+
+                swipe_refresh.isRefreshing = true
+                getData()
+            }
         }
     }
 }

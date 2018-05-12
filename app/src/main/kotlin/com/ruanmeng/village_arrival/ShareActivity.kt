@@ -101,8 +101,8 @@ class ShareActivity : BaseActivity() {
                             .setPlatform(SHARE_MEDIA.WEIXIN)
                             .withText(getString(R.string.app_name))
                             .withMedia(UMWeb(urlShare).apply {
-                                title = "邀请好友"
-                                description = "在线注册"
+                                title = getString(R.string.share_title)
+                                description = getString(R.string.share_content)
                                 setThumb(UMImage(baseContext, R.mipmap.ic_launcher_logo))
                             })
                             .share()
@@ -114,8 +114,8 @@ class ShareActivity : BaseActivity() {
                             .setPlatform(SHARE_MEDIA.WEIXIN_CIRCLE)
                             .withText(getString(R.string.app_name))
                             .withMedia(UMWeb(urlShare).apply {
-                                title = "邀请好友"
-                                description = "在线注册"
+                                title = getString(R.string.share_title)
+                                description = getString(R.string.share_content)
                                 setThumb(UMImage(baseContext, R.mipmap.ic_launcher_logo))
                             })
                             .share()
@@ -127,8 +127,8 @@ class ShareActivity : BaseActivity() {
                             .setPlatform(SHARE_MEDIA.QQ)
                             .withText(getString(R.string.app_name))
                             .withMedia(UMWeb(urlShare).apply {
-                                title = "邀请好友"
-                                description = "在线注册"
+                                title = getString(R.string.share_title)
+                                description = getString(R.string.share_content)
                                 setThumb(UMImage(baseContext, R.mipmap.ic_launcher_logo))
                             })
                             .share()
@@ -140,8 +140,8 @@ class ShareActivity : BaseActivity() {
                             .setPlatform(SHARE_MEDIA.QZONE)
                             .withText(getString(R.string.app_name))
                             .withMedia(UMWeb(urlShare).apply {
-                                title = "邀请好友"
-                                description = "在线注册"
+                                title = getString(R.string.share_title)
+                                description = getString(R.string.share_content)
                                 setThumb(UMImage(baseContext, R.mipmap.ic_launcher_logo))
                             })
                             .share()
@@ -153,8 +153,8 @@ class ShareActivity : BaseActivity() {
                             .setPlatform(SHARE_MEDIA.SMS)
                             .withText(getString(R.string.app_name))
                             .withMedia(UMWeb(urlShare).apply {
-                                title = "邀请好友"
-                                description = "在线注册"
+                                title = getString(R.string.share_title)
+                                description = getString(R.string.share_content)
                                 setThumb(UMImage(baseContext, R.mipmap.ic_launcher_logo))
                             })
                             .share()

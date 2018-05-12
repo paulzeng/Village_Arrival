@@ -6,48 +6,12 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <FrameLayout
+    <com.jude.rollviewpager.RollPagerView
+        android:id="@+id/live_banner"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.jude.rollviewpager.RollPagerView
-            android:id="@+id/live_banner"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen_size_200"
-            app:rollviewpager_hint_gravity="center"
-            app:rollviewpager_play_delay="3000" />
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/line_height"
-            android:layout_marginTop="@dimen/toolbar_padding_top">
-
-            <TextView
-                android:id="@+id/live_title"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_marginEnd="@dimen/dimen_size_45"
-                android:layout_marginStart="@dimen/dimen_size_45"
-                android:gravity="center"
-                android:textColor="@color/white"
-                android:text="城市"
-                android:textSize="@dimen/sp_size_18" />
-
-            <ImageView
-                android:id="@id/iv_nav_back"
-                android:layout_width="@dimen/dimen_size_90"
-                android:layout_height="@dimen/dimen_size_45"
-                android:layout_gravity="center_vertical"
-                android:onClick="doClick"
-                android:paddingEnd="@dimen/dimen_size_55"
-                android:paddingStart="@dimen/dimen_size_0"
-                android:src="@mipmap/nav_back_white"
-                tools:ignore="ContentDescription" />
-
-        </FrameLayout>
-
-    </FrameLayout>
+        android:layout_height="@dimen/dimen_size_200"
+        app:rollviewpager_hint_gravity="center"
+        app:rollviewpager_play_delay="3000" />
 
     <View
         android:layout_width="match_parent"

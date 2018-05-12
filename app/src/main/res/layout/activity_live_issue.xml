@@ -43,15 +43,11 @@
                 android:minLines="3"
                 android:padding="@dimen/dimen_size_10" />
 
-            <ImageView
-                android:id="@+id/live_img"
-                android:layout_width="@dimen/dimen_size_60"
-                android:layout_height="@dimen/dimen_size_60"
-                android:layout_marginStart="@dimen/dimen_size_10"
-                android:onClick="doClick"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/ass_camera_icon01"
-                tools:ignore="ContentDescription" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/live_list"
+                android:layout_width="210dp"
+                android:layout_height="wrap_content"
+                android:overScrollMode="never" />
 
             <TextView
                 android:id="@+id/live_loc"

@@ -1,125 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <com.amap.api.maps.MapView
-        android:id="@+id/address_map"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-    <ImageView
-        android:id="@+id/address_center"
-        android:layout_width="@dimen/dimen_size_20"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:adjustViewBounds="true"
-        android:src="@mipmap/index_pos"
-        android:visibility="visible"
-        tools:ignore="ContentDescription" />
+        <com.amap.api.maps.TextureMapView
+            android:id="@+id/address_map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/address_card"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dimen_size_15"
-        android:animateLayoutChanges="true"
-        android:visibility="gone"
-        app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="@dimen/dimen_size_5"
-        app:cardElevation="@dimen/dimen_size_3"
-        app:contentPaddingLeft="@dimen/dimen_size_15"
-        app:contentPaddingRight="@dimen/dimen_size_15"
-        app:contentPaddingTop="@dimen/dimen_size_15">
+        <ImageView
+            android:id="@+id/address_center"
+            android:layout_width="@dimen/dimen_size_20"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:src="@mipmap/index_pos"
+            android:visibility="visible"
+            tools:ignore="ContentDescription" />
 
-        <LinearLayout
+        <android.support.v7.widget.CardView
+            android:id="@+id/address_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/address_title"
-                style="@style/Font14_black"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:lineSpacingExtra="@dimen/dimen_size_3"
-                android:text="地址" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/divider_height"
-                android:layout_marginTop="@dimen/dimen_size_15"
-                android:background="@color/divider" />
-
-            <EditText
-                android:id="@+id/et_detail"
-                style="@style/Font14_black"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/line_height"
-                android:background="@color/white"
-                android:hint="请补充地址：详细门牌号、楼号、房间号"
-                android:maxLines="1"
-                android:singleLine="true" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/divider_height"
-                android:background="@color/divider" />
+            android:layout_margin="@dimen/dimen_size_15"
+            android:animateLayoutChanges="true"
+            android:visibility="gone"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="@dimen/dimen_size_5"
+            app:cardElevation="@dimen/dimen_size_3"
+            app:contentPaddingLeft="@dimen/dimen_size_15"
+            app:contentPaddingRight="@dimen/dimen_size_15"
+            app:contentPaddingTop="@dimen/dimen_size_15">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical">
+                android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/et_name"
+                <TextView
+                    android:id="@+id/address_title"
                     style="@style/Font14_black"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@color/white"
-                    android:hint="请输入姓名"
                     android:lineSpacingExtra="@dimen/dimen_size_3"
-                    android:maxLength="12"
-                    android:paddingBottom="@dimen/dimen_size_15"
-                    android:paddingTop="@dimen/dimen_size_15"
-                    android:singleLine="true" />
+                    android:text="地址" />
 
                 <View
-                    android:layout_width="@dimen/divider_height"
-                    android:layout_height="@dimen/dimen_size_20"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/divider_height"
+                    android:layout_marginTop="@dimen/dimen_size_15"
                     android:background="@color/divider" />
 
                 <EditText
-                    android:id="@+id/et_tel"
+                    android:id="@+id/et_detail"
                     style="@style/Font14_black"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dimen_size_10"
-                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/line_height"
                     android:background="@color/white"
-                    android:hint="请输入手机号"
-                    android:inputType="phone"
-                    android:lineSpacingExtra="@dimen/dimen_size_3"
-                    android:maxLength="11"
-                    android:paddingBottom="@dimen/dimen_size_15"
-                    android:paddingTop="@dimen/dimen_size_15" />
+                    android:hint="请补充地址：详细门牌号、楼号、房间号"
+                    android:maxLines="1"
+                    android:singleLine="true" />
 
-                <ImageView
-                    android:id="@+id/address_img"
-                    android:layout_width="@dimen/dimen_size_20"
-                    android:layout_height="@dimen/dimen_size_20"
-                    android:layout_marginStart="@dimen/dimen_size_10"
-                    android:src="@mipmap/buy_lab03"
-                    tools:ignore="ContentDescription" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/divider_height"
+                    android:background="@color/divider" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical">
+
+                    <EditText
+                        android:id="@+id/et_name"
+                        style="@style/Font14_black"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@color/white"
+                        android:hint="请输入姓名"
+                        android:lineSpacingExtra="@dimen/dimen_size_3"
+                        android:maxLength="12"
+                        android:paddingBottom="@dimen/dimen_size_15"
+                        android:paddingTop="@dimen/dimen_size_15"
+                        android:singleLine="true" />
+
+                    <View
+                        android:layout_width="@dimen/divider_height"
+                        android:layout_height="@dimen/dimen_size_20"
+                        android:background="@color/divider" />
+
+                    <EditText
+                        android:id="@+id/et_tel"
+                        style="@style/Font14_black"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dimen_size_10"
+                        android:layout_weight="1"
+                        android:background="@color/white"
+                        android:hint="请输入手机号"
+                        android:inputType="phone"
+                        android:lineSpacingExtra="@dimen/dimen_size_3"
+                        android:maxLength="11"
+                        android:paddingBottom="@dimen/dimen_size_15"
+                        android:paddingTop="@dimen/dimen_size_15" />
+
+                    <ImageView
+                        android:id="@+id/address_img"
+                        android:layout_width="@dimen/dimen_size_20"
+                        android:layout_height="@dimen/dimen_size_20"
+                        android:layout_marginStart="@dimen/dimen_size_10"
+                        android:src="@mipmap/buy_lab03"
+                        tools:ignore="ContentDescription" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
-        </LinearLayout>
+        </android.support.v7.widget.CardView>
 
-    </android.support.v7.widget.CardView>
+        <ImageView
+            android:id="@+id/address_search"
+            android:layout_width="@dimen/dimen_size_40"
+            android:layout_height="@dimen/dimen_size_40"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="@dimen/dimen_size_60"
+            android:layout_marginStart="@dimen/dimen_size_10"
+            android:adjustViewBounds="true"
+            android:onClick="doClick"
+            android:src="@mipmap/icon_map_search"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/address_location"
+            android:layout_width="@dimen/dimen_size_40"
+            android:layout_height="@dimen/dimen_size_40"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="@dimen/dimen_size_10"
+            android:layout_marginStart="@dimen/dimen_size_10"
+            android:adjustViewBounds="true"
+            android:onClick="doClick"
+            android:src="@mipmap/icon_map_location"
+            tools:ignore="ContentDescription" />
+
+    </FrameLayout>
 
     <net.cachapa.expandablelayout.ExpandableLayout
         android:id="@+id/address_expand"
@@ -155,7 +187,7 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dimen_size_180">
+                android:layout_height="@dimen/dimen_size_200">
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@id/address_list"
@@ -187,4 +219,4 @@
 
     </net.cachapa.expandablelayout.ExpandableLayout>
 
-</FrameLayout>
+</LinearLayout>

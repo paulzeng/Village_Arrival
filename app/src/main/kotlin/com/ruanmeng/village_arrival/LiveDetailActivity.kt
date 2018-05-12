@@ -1,7 +1,11 @@
 package com.ruanmeng.village_arrival
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.support.v7.widget.RecyclerView
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageView
 import com.lzg.extend.BaseResponse
 import com.lzg.extend.StringDialogCallback
 import com.lzg.extend.jackson.JacksonDialogCallback
@@ -15,6 +19,8 @@ import com.ruanmeng.model.RefreshMessageEvent
 import com.ruanmeng.share.BaseHttp
 import com.ruanmeng.utils.TimeHelper
 import com.ruanmeng.utils.Tools
+import com.ruanmeng.utils.TopDecoration
+import com.ruanmeng.view.FullyGridLayoutManager
 import com.sunfusheng.glideimageview.GlideImageView
 import kotlinx.android.synthetic.main.activity_live_detail.*
 import kotlinx.android.synthetic.main.header_live.*
@@ -27,7 +33,8 @@ class LiveDetailActivity : BaseActivity() {
 
     private val list = ArrayList<Any>()
     private var collectStatus = ""
-    private var imgs = ""
+    private val listImgs = ArrayList<Any>()
+    private lateinit var recycler: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +46,7 @@ class LiveDetailActivity : BaseActivity() {
         getData()
     }
 
+    @SuppressLint("InflateParams")
     override fun init_title() {
         super.init_title()
         ivRight.visibility = View.VISIBLE
@@ -52,7 +60,32 @@ class LiveDetailActivity : BaseActivity() {
         }
 
         mAdapterEx = SlimAdapter.create(SlimAdapterEx::class.java)
-                .addHeader(baseContext, R.layout.header_live)
+                .apply {
+                    val view = LayoutInflater.from(baseContext).inflate(R.layout.header_live, null)
+                    recycler = view.findViewById(R.id.live_list)
+
+                    recycler.apply {
+                        layoutManager = FullyGridLayoutManager(baseContext, 3).apply { setScrollEnabled(false) }
+                        addItemDecoration(TopDecoration(10))
+
+                        mAdapter = SlimAdapter.create()
+                                .register<String>(R.layout.item_detail_grid) { data, injector ->
+                                    injector.with<ImageView>(R.id.item_img) {
+                                        it.setImageURL(BaseHttp.baseImg + data, R.mipmap.default_logo)
+                                    }
+                                            .clicked(R.id.item_img) {
+                                                MNImageBrowser.showImageBrowser(
+                                                        baseContext,
+                                                        it,
+                                                        listImgs.indexOf(data),
+                                                        listImgs.mapTo(ArrayList()) { BaseHttp.baseImg + it })
+                                            }
+                                }
+                                .attachTo(this)
+                    }
+
+                    addHeader(view)
+                }
                 .register<CommonData>(R.layout.item_live_detail) { data, injector ->
                     injector.text(R.id.item_live_title, Tools.decodeUnicode(data.nickName))
                             .text(R.id.item_live_time, TimeHelper.getDiffTime(TimeHelper.getInstance().millisecondToLong(data.createDate)))
@@ -72,11 +105,6 @@ class LiveDetailActivity : BaseActivity() {
     override fun doClick(v: View) {
         super.doClick(v)
         when (v.id) {
-            R.id.live_img -> MNImageBrowser.showImageBrowser(
-                    baseContext,
-                    live_img,
-                    0,
-                    arrayListOf(BaseHttp.baseImg + imgs))
             R.id.iv_nav_right -> {
                 if (collectStatus == "1") {
                     OkGo.post<String>(BaseHttp.delete_collect_cooperatio)
@@ -165,10 +193,10 @@ class LiveDetailActivity : BaseActivity() {
 
                         if (data.name.isEmpty()) live_name.gone()
                         if (data.mobile.isEmpty()) live_tel.gone()
-                        if (data.imgs.isEmpty()) live_img.gone()
+                        if (data.imgs.isEmpty()) recycler.gone()
                         else {
-                            imgs = data.imgs
-                            live_img.setImageURL(BaseHttp.baseImg + imgs, R.mipmap.default_logo)
+                            listImgs.addAll(data.imgs.split(","))
+                            (recycler.adapter as SlimAdapter).updateData(listImgs)
                         }
                     }
 

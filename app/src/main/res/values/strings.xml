@@ -11,4 +11,9 @@
     <string name="del_address">删除常用地址\n您确定要删除该常用地址吗？</string>
     <string name="grab_success">您已抢单成功，可尽快与他们联系</string>
     <string name="del_live">删除发布信息\n您确定要删除该发布信息吗？</string>
+    <string name="share_title">邀亲友用嘿噗，可得10元优惠券，多邀多得！</string>
+    <string name="share_content">嘿噗顺送，服务就是好！好友注册并首用顺风取送、代买，您即可获得10元优惠券，赶快一起来体验吧！</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

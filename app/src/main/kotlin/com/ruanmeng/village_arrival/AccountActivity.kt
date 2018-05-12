@@ -51,7 +51,7 @@ class AccountActivity : BaseActivity() {
         account_detail.setOnClickListener { startActivity<AccountDetailActivity>() }
         bt_withdraw.setOnClickListener {
             val intent = Intent(baseContext, WithdrawActivity::class.java)
-            intent.putExtra("balance", (mBalance - mEnsureSum).toString())
+            intent.putExtra("balance", (mBalance - mEnsureSum - 0.005).toString())
             startActivity(intent)
         }
         tvRight.setOnClickListener {
@@ -81,8 +81,8 @@ class AccountActivity : BaseActivity() {
                         mEnsureSum = obj.optString("ensureSum", "0").toDouble()
                         val profitSum = obj.optString("profitSum", "0").toDouble()
 
-                        account_total.startIncreaseAnimator(mBalance)
-                        account_commission.text = DecimalFormat(",##0.##").format(profitSum)
+                        account_total.startIncreaseAnimator(mBalance - 0.005f)
+                        account_commission.text = DecimalFormat(",##0.##").format(profitSum - 0.005)
                         account_save.text = DecimalFormat(",##0.##").format(mEnsureSum)
 
                         account_promise.setRightString(when {

@@ -37,6 +37,7 @@ import net.idik.lib.slimadapter.SlimAdapter
 import net.idik.lib.slimadapter.ex.loadmore.SimpleLoadMoreViewCreator
 import net.idik.lib.slimadapter.ex.loadmore.SlimMoreLoader
 import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 
 class AddressAddActivity : BaseActivity() {
 
@@ -65,12 +66,20 @@ class AddressAddActivity : BaseActivity() {
         mTitle = intent.getStringExtra("title")
         init_title(mTitle)
 
+        EventBus.getDefault().register(this@AddressAddActivity)
+
         window.decorView.postDelayed({
             runOnUiThread {
                 aMap.setOnCameraChangeListener(object : AMap.OnCameraChangeListener {
 
                     override fun onCameraChangeFinish(position: CameraPosition) {
                         address_center.startJumpAnimator(100f)
+
+                        geocoderSearch.getFromLocationAsyn(RegeocodeQuery(LatLonPoint(
+                                position.target.latitude, position.target.longitude),
+                                100f,
+                                GeocodeSearch.AMAP))
+
                         pageNum = 1
                         getData(pageNum)
                     }
@@ -253,12 +262,6 @@ class AddressAddActivity : BaseActivity() {
                 return@setOnClickListener
             }
 
-            if (et_detail.text.isEmpty()) {
-                et_detail.requestFocus()
-                showToast("请输入详细地址")
-                return@setOnClickListener
-            }
-
             if (mTitle != "购买地址" && et_name.text.isEmpty()) {
                 et_name.requestFocus()
                 showToast("请输入姓名")
@@ -332,10 +335,8 @@ class AddressAddActivity : BaseActivity() {
             override fun onPoiItemSearched(poiItem: PoiItem, code: Int) {}
 
             override fun onPoiSearched(result: PoiResult?, code: Int) {
-                if (code != AMapException.CODE_AMAP_SUCCESS) {
-                    empty_view.visibility = View.VISIBLE
-                    return
-                }
+                cancelLoadingDialog()
+                if (code != AMapException.CODE_AMAP_SUCCESS) return
 
                 if (result != null && result.query != null) {
                     if (pageNum == 1) {
@@ -349,7 +350,7 @@ class AddressAddActivity : BaseActivity() {
                     mAdapter.updateData(list)
 
                     empty_view.apply { if (list.isEmpty()) visible() else gone() }
-                } else empty_view.visible()
+                }
             }
 
         })
@@ -358,6 +359,7 @@ class AddressAddActivity : BaseActivity() {
     override fun getData(pindex: Int) {
         val latLng = aMap.cameraPosition.target
 
+        if (pindex == 1) showLoadingDialog()
         query.pageNum = pindex
         poiSearch.bound = PoiSearch.SearchBound(LatLonPoint(latLng.latitude, latLng.longitude), 20000)
         poiSearch.searchPOIAsyn()
@@ -383,6 +385,22 @@ class AddressAddActivity : BaseActivity() {
                 })
     }
 
+    override fun doClick(v: View) {
+        super.doClick(v)
+        when (v.id) {
+            R.id.address_location -> {
+                if (centerLatLng != null)
+                    aMap.animateCamera(CameraUpdateFactory.changeLatLng(centerLatLng))
+            }
+            R.id.address_search -> {
+                val intent = Intent(baseContext, AddressSearchActivity::class.java)
+                intent.putExtra("title", "选择地址")
+                intent.putExtra("city", city)
+                startActivity(intent)
+            }
+        }
+    }
+
     @Suppress("DEPRECATION")
     @SuppressLint("Recycle")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -403,6 +421,37 @@ class AddressAddActivity : BaseActivity() {
                 et_name.setText(userName)
                 et_tel.setText(userNumber.replace("-", "")
                         .replace(" ", ""))
+            }
+        }
+    }
+
+    override fun finish() {
+        EventBus.getDefault().unregister(this@AddressAddActivity)
+        super.finish()
+    }
+
+    @Subscribe
+    fun onMessageEvent(event: LocationMessageEvent) {
+        when (event.type) {
+            "选择地址" -> {
+                aMap.animateCamera(CameraUpdateFactory.changeLatLng(LatLng(
+                        event.lat.toDouble(),
+                        event.lng.toDouble())))
+
+                address_card.visible()
+                address = event.address
+                lat = event.lat
+                lng = event.lng
+                township = ""
+                address_title.text = address
+                et_detail.setText("")
+
+                window.decorView.post {
+                    geocoderSearch.getFromLocationAsyn(RegeocodeQuery(LatLonPoint(
+                            lat.toDouble(), lng.toDouble()),
+                            100f,
+                            GeocodeSearch.AMAP))
+                }
             }
         }
     }

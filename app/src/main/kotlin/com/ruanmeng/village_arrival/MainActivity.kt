@@ -19,7 +19,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import cn.jpush.android.api.JPushInterface
 import com.amap.api.maps.AMap
-import com.amap.api.maps.AMapUtils
 import com.amap.api.maps.CameraUpdateFactory
 import com.amap.api.maps.model.*
 import com.amap.api.maps.model.animation.ScaleAnimation
@@ -41,6 +40,7 @@ import com.lzy.okgo.model.Response
 import com.ruanmeng.base.*
 import com.ruanmeng.model.CommonData
 import com.ruanmeng.model.CommonModel
+import com.ruanmeng.model.LocationMessageEvent
 import com.ruanmeng.model.RefreshMessageEvent
 import com.ruanmeng.share.BaseHttp
 import com.ruanmeng.share.Const
@@ -57,7 +57,6 @@ class MainActivity : BaseActivity() {
 
     private val list = ArrayList<CommonData>()
     private lateinit var aMap: AMap
-    private var centerLatLng: LatLng? = null
     private var locationLatLng: LatLng? = null
     private lateinit var geocoderSearch: GeocodeSearch
 
@@ -118,19 +117,7 @@ class MainActivity : BaseActivity() {
         getPersonData()
         getAddressData()
 
-        if (centerLatLng == null) {
-            if (locationLatLng != null) {
-                aMap.animateCamera(CameraUpdateFactory.changeLatLng(locationLatLng))
-            }
-        } else getNearData(centerLatLng!!.latitude, centerLatLng!!.longitude)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        if (centerLatLng != null && locationLatLng != null) {
-            val distance = AMapUtils.calculateLineDistance(centerLatLng, locationLatLng)
-            if (distance > 0.5) centerLatLng = null
-        }
+        // if (locationLatLng != null) getNearData(aMap.cameraPosition.target.latitude, aMap.cameraPosition.target.longitude)
     }
 
     override fun init_title() {
@@ -169,8 +156,6 @@ class MainActivity : BaseActivity() {
             setOnCameraChangeListener(object : AMap.OnCameraChangeListener {
 
                 override fun onCameraChangeFinish(position: CameraPosition) {
-                    centerLatLng = position.target
-
                     handler.removeMessages(1)
                     val msg = Message()
                     msg.what = 1
@@ -366,10 +351,21 @@ class MainActivity : BaseActivity() {
             }
             R.id.main_live -> {
                 val intent = Intent(baseContext, LiveHomeActivity::class.java)
-                intent.putExtra("title", nowCity)
+                intent.putExtra("title", nowDistrict)
+                intent.putExtra("city", nowCity)
                 startActivity(intent)
             }
             R.id.main_often_ll -> if (listAddress.isEmpty()) startActivity<AddressActivity>()
+            R.id.main_location -> {
+                if (locationLatLng != null)
+                    aMap.animateCamera(CameraUpdateFactory.changeLatLng(locationLatLng))
+            }
+            R.id.main_search -> {
+                val intent = Intent(baseContext, AddressSearchActivity::class.java)
+                intent.putExtra("title", "首页地址")
+                intent.putExtra("city", nowCity)
+                startActivity(intent)
+            }
             R.id.main_issue -> {
                 val inflate = View.inflate(baseContext, R.layout.pop_main_issue, null)
                 val popBuy = inflate.findViewById<LinearLayout>(R.id.pop_buy)
@@ -596,6 +592,17 @@ class MainActivity : BaseActivity() {
     override fun finish() {
         EventBus.getDefault().unregister(this@MainActivity)
         super.finish()
+    }
+
+    @Subscribe
+    fun onMessageEvent(event: LocationMessageEvent) {
+        when (event.type) {
+            "首页地址" -> {
+                aMap.animateCamera(CameraUpdateFactory.changeLatLng(LatLng(
+                        event.lat.toDouble(),
+                        event.lng.toDouble())))
+            }
+        }
     }
 
     @Subscribe

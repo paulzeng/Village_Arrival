@@ -2,7 +2,6 @@ package com.ruanmeng.village_arrival
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
 import android.text.InputFilter
 import android.view.View
 import com.lzg.extend.StringDialogCallback
@@ -14,6 +13,7 @@ import com.ruanmeng.base.showToast
 import com.ruanmeng.share.BaseHttp
 import com.ruanmeng.utils.ActivityStack
 import com.ruanmeng.utils.BankcardHelper
+import com.ruanmeng.utils.DecimalNumberFilter
 import com.ruanmeng.utils.NameLengthFilter
 import kotlinx.android.synthetic.main.activity_withdraw.*
 import java.text.DecimalFormat
@@ -37,6 +37,7 @@ class WithdrawActivity : BaseActivity() {
         bt_submit.isClickable = false
 
         et_name.filters = arrayOf<InputFilter>(NameLengthFilter(10))
+        et_count.filters = arrayOf<InputFilter>(DecimalNumberFilter())
         et_count.addTextChangedListener(this@WithdrawActivity)
         et_card.addTextChangedListener(this@WithdrawActivity)
         et_name.addTextChangedListener(this@WithdrawActivity)
@@ -46,7 +47,22 @@ class WithdrawActivity : BaseActivity() {
         super.doClick(v)
         when (v.id) {
             R.id.bt_submit -> {
+                if (et_card.rawText.isEmpty()) {
+                    showToast("请输入银行卡卡号")
+                    return
+                }
+
+                if (et_name.text.isEmpty()) {
+                    showToast("请输入银行卡姓名")
+                    return
+                }
+
                 val inputCount = et_count.text.toString().toDouble()
+
+                if (inputCount > withdrawSum) {
+                    showToast("提现金额已超出范围")
+                    return
+                }
 
                 if (!BankcardHelper.checkBankCard(et_card.rawText)) {
                     showToast("请输入正确的银行卡卡号")
@@ -65,6 +81,7 @@ class WithdrawActivity : BaseActivity() {
 
                 OkGo.post<String>(BaseHttp.user_withdraw)
                         .tag(this@WithdrawActivity)
+                        .isMultipart(true)
                         .headers("token", getString("token"))
                         .params("withdrawSum", et_count.text.toString())
                         .params("carno", et_card.rawText)
@@ -109,37 +126,6 @@ class WithdrawActivity : BaseActivity() {
         } else {
             bt_submit.setBackgroundResource(R.drawable.rec_bg_d0d0d0)
             bt_submit.isClickable = false
-        }
-
-        if (et_count.isFocused && s.isNotEmpty()) {
-            if ("." == s.toString()) {
-                et_count.setText("0.")
-                et_count.setSelection(et_count.text.length) //设置光标的位置
-                return
-            }
-
-            val inputCount = s.toString().toDouble()
-            if (inputCount > withdrawSum) {
-                et_count.setText(String.format("%.2f", withdrawSum))
-                et_count.setSelection(et_count.text.length)
-            } else {
-                if (s.length > String.format("%.2f", withdrawSum).length) {
-                    et_count.setText(String.format("%.2f", withdrawSum))
-                    et_count.setSelection(et_count.text.length)
-                }
-            }
-        }
-    }
-
-    override fun afterTextChanged(s: Editable) {
-        if (et_count.isFocused) {
-            val temp = s.toString()
-            val posDot = temp.indexOf(".")
-            if (posDot < 0) {
-                if (temp.length > 7) s.delete(7, 8)
-            } else {
-                if (temp.length - posDot - 1 > 2) s.delete(posDot + 3, posDot + 4)
-            }
         }
     }
 }

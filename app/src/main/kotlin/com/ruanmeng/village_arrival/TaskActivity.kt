@@ -366,7 +366,7 @@ class TaskActivity : BaseActivity() {
                 type = "0"
                 task_name.hint = "请输入要买的商品：如香烟，酒水"
                 task_get_hint.text = "购买地址"
-                task_get_addr.hint = "未填写则就近购买"
+                task_get_addr.hint = "未填写则就近购买(2公里内)"
                 task_get_addr.setHintTextColor(resources.getColor(R.color.orange))
                 task_price_ll.visibility = View.VISIBLE
                 task_open.visibility = View.GONE

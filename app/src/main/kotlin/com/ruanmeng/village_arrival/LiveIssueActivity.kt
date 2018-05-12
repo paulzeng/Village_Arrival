@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.InputFilter
 import android.view.View
+import android.widget.ImageView
 import com.amap.api.AMapLocationHelper
 import com.amap.api.services.core.AMapException
 import com.amap.api.services.core.LatLonPoint
@@ -28,10 +29,12 @@ import com.ruanmeng.share.Const
 import com.ruanmeng.utils.ActivityStack
 import com.ruanmeng.utils.CommonUtil
 import com.ruanmeng.utils.NameLengthFilter
+import com.ruanmeng.view.FullyGridLayoutManager
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_live_issue.*
+import net.idik.lib.slimadapter.SlimAdapter
 import org.greenrobot.eventbus.EventBus
 import org.json.JSONObject
 import java.io.File
@@ -46,7 +49,6 @@ class LiveIssueActivity : BaseActivity() {
     private var locationCity = ""
     private var locationDistrict = ""
     private var locationTownship = ""
-    private var liveImg = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +56,9 @@ class LiveIssueActivity : BaseActivity() {
         init_title("我要发布")
 
         startLocation()
+
+        selectList.add(LocalMedia().apply { compressPath = "" })
+        (live_list.adapter as SlimAdapter).updateData(selectList)
     }
 
     override fun init_title() {
@@ -114,7 +119,9 @@ class LiveIssueActivity : BaseActivity() {
                     .params("content", et_content.text.trim().toString())
                     .params("type", intent.getStringExtra("type"))
                     .apply {
-                        if (liveImg.isNotEmpty()) params("img1", File(liveImg))
+                        (0 until (selectList.filter { it.compressPath.isNotEmpty() }.size)).forEach {
+                            params("img${it + 1}", File(selectList[it].compressPath))
+                        }
                         params("mobile", et_tel.text.toString())
                         params("name", et_name.text.toString())
                     }
@@ -132,8 +139,7 @@ class LiveIssueActivity : BaseActivity() {
                                 intent.putExtra("cooperationId", cooperationId)
                                 startActivity(intent)
                                 EventBus.getDefault().post(RefreshMessageEvent("发布需求"))
-                            }
-                            else showToast(msg)
+                            } else showToast(msg)
 
                             ActivityStack.screenManager.popActivities(this@LiveIssueActivity::class.java)
                         }
@@ -147,43 +153,48 @@ class LiveIssueActivity : BaseActivity() {
 
                     })
         })
-    }
 
-    override fun doClick(v: View) {
-        super.doClick(v)
-        when (v.id) {
-            R.id.live_img -> {
-                PictureSelector.create(this@LiveIssueActivity)
-                        .openGallery(PictureMimeType.ofImage())
-                        .theme(R.style.picture_customer_style)
-                        .maxSelectNum(1)
-                        .minSelectNum(1)
-                        .imageSpanCount(4)
-                        .selectionMode(PictureConfig.MULTIPLE)
-                        .previewImage(true)
-                        .previewVideo(false)
-                        .isCamera(true)
-                        .imageFormat(PictureMimeType.PNG)
-                        .isZoomAnim(true)
-                        .setOutputCameraPath(Const.SAVE_FILE)
-                        .compress(true)
-                        .glideOverride(160, 160)
-                        .enableCrop(false)
-                        .withAspectRatio(4, 3)
-                        .hideBottomControls(true)
-                        .compressSavePath(cacheDir.absolutePath)
-                        .freeStyleCropEnabled(false)
-                        .circleDimmedLayer(false)
-                        .showCropFrame(true)
-                        .showCropGrid(true)
-                        .isGif(false)
-                        .openClickSound(false)
-                        .selectionMedia(selectList.apply { clear() })
-                        .previewEggs(true)
-                        .minimumCompressSize(100)
-                        .isDragFrame(false)
-                        .forResult(PictureConfig.CHOOSE_REQUEST)
-            }
+        live_list.apply {
+            layoutManager = FullyGridLayoutManager(baseContext, 3)
+            adapter = SlimAdapter.create()
+                    .register<LocalMedia>(R.layout.item_img_grid) { data, injector ->
+                        injector.with<ImageView>(R.id.item_img) {
+                            it.setImageURL(data.compressPath, R.mipmap.ass_camera_icon01)
+                        }
+                                .clicked(R.id.item_img) {
+                                    PictureSelector.create(this@LiveIssueActivity)
+                                            .openGallery(PictureMimeType.ofImage())
+                                            .theme(R.style.picture_customer_style)
+                                            .maxSelectNum(3)
+                                            .minSelectNum(1)
+                                            .imageSpanCount(4)
+                                            .selectionMode(PictureConfig.MULTIPLE)
+                                            .previewImage(true)
+                                            .previewVideo(false)
+                                            .isCamera(true)
+                                            .imageFormat(PictureMimeType.PNG)
+                                            .isZoomAnim(true)
+                                            .setOutputCameraPath(Const.SAVE_FILE)
+                                            .compress(true)
+                                            .glideOverride(160, 160)
+                                            .enableCrop(false)
+                                            .withAspectRatio(4, 3)
+                                            .hideBottomControls(true)
+                                            .compressSavePath(cacheDir.absolutePath)
+                                            .freeStyleCropEnabled(false)
+                                            .circleDimmedLayer(false)
+                                            .showCropFrame(true)
+                                            .showCropGrid(true)
+                                            .isGif(false)
+                                            .openClickSound(false)
+                                            .selectionMedia(selectList.filter { it.compressPath.isNotEmpty() })
+                                            .previewEggs(true)
+                                            .minimumCompressSize(100)
+                                            .isDragFrame(false)
+                                            .forResult(PictureConfig.CHOOSE_REQUEST)
+                                }
+                    }
+                    .attachTo(this)
         }
     }
 
@@ -217,26 +228,30 @@ class LiveIssueActivity : BaseActivity() {
                     // 3.media.getCompressPath();为压缩后path，需判断media.isCompressed();是否为true
                     // 如果裁剪并压缩了，已取压缩路径为准，因为是先裁剪后压缩的
 
-                    liveImg = selectList[0].compressPath
-                    live_img.setImageURL(liveImg, R.mipmap.ass_camera_icon01)
-                    compress(selectList[0].compressPath)
+                    compress()
                 }
             }
         }
     }
 
-    private fun compress(path: String) {
-        Flowable.just<List<LocalMedia>>(listOf(LocalMedia().apply { this.path = path }))
-                .map { list ->
+    private fun compress() {
+        Flowable.just(selectList)
+                .map {
                     return@map Luban.with(baseContext)
                             .setTargetDir(cacheDir.absolutePath)
                             .ignoreBy(400)
-                            .loadLocalMedia(list)
+                            .loadLocalMedia(it)
                             .get()
                 }
                 .subscribeOn(Schedulers.io())
+                .doOnSubscribe { showLoadingDialog() }
+                .doFinally { cancelLoadingDialog() }
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { liveImg = it[0].absolutePath }
+                .subscribe { list ->
+                    (0 until list.size).forEach { selectList[it].compressPath = list[it].absolutePath }
+                    if (selectList.size < 3) selectList.add(LocalMedia().apply { compressPath = "" })
+                    (live_list.adapter as SlimAdapter).updateData(selectList)
+                }
     }
 
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {

@@ -1,6 +1,7 @@
 package com.ruanmeng.village_arrival
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import com.lzg.extend.StringDialogCallback
@@ -41,6 +42,11 @@ class BindActivity : BaseActivity() {
     override fun doClick(v: View) {
         super.doClick(v)
         when (v.id) {
+            R.id.bind_xieyi -> {
+                val intent = Intent(baseContext, WebActivity::class.java)
+                intent.putExtra("title", "注册协议")
+                startActivity(intent)
+            }
             R.id.bt_yzm -> {
                 if (et_name.text.isBlank()) {
                     et_name.requestFocus()
@@ -116,6 +122,7 @@ class BindActivity : BaseActivity() {
 
                 OkGo.post<String>(BaseHttp.login_sub)
                         .tag(this@BindActivity)
+                        .isMultipart(true)
                         .params("mobile", mTel)
                         .params("smscode", et_yzm.text.trim().toString())
                         .params("password", et_pwd.text.trim().toString())

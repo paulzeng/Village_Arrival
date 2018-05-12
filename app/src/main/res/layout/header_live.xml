@@ -69,16 +69,11 @@
             android:lineSpacingExtra="@dimen/dimen_size_3"
             android:text="内容" />
 
-        <ImageView
-            android:id="@+id/live_img"
-            android:layout_width="@dimen/dimen_size_100"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/live_list"
+            android:layout_width="330dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dimen_size_10"
-            android:adjustViewBounds="true"
-            android:onClick="doClick"
-            android:scaleType="centerCrop"
-            android:src="@mipmap/default_logo"
-            tools:ignore="ContentDescription" />
+            android:overScrollMode="never"/>
 
         <LinearLayout
             android:layout_width="match_parent"

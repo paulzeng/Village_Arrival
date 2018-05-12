@@ -1,5 +1,7 @@
 package com.ruanmeng.village_arrival
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import com.lzg.extend.BaseResponse
@@ -12,11 +14,6 @@ import com.ruanmeng.share.BaseHttp
 import kotlinx.android.synthetic.main.layout_empty.*
 import kotlinx.android.synthetic.main.layout_list.*
 import net.idik.lib.slimadapter.SlimAdapter
-import android.content.Intent
-import android.R.attr.phoneNumber
-import android.content.ClipData.newIntent
-import android.net.Uri
-
 
 class LiveContactActivity : BaseActivity() {
 
@@ -60,7 +57,10 @@ class LiveContactActivity : BaseActivity() {
     override fun getData(pindex: Int) {
         OkGo.post<BaseResponse<ArrayList<CommonData>>>(BaseHttp.commonphone_list)
                 .tag(this@LiveContactActivity)
+                .isMultipart(true)
                 .params("page", pindex)
+                .params("city", intent.getStringExtra("city"))
+                .params("district", intent.getStringExtra("district"))
                 .execute(object : JacksonDialogCallback<BaseResponse<ArrayList<CommonData>>>(baseContext) {
 
                     override fun onSuccess(response: Response<BaseResponse<ArrayList<CommonData>>>) {

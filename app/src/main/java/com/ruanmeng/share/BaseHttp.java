@@ -72,6 +72,7 @@ public class BaseHttp {
     public static String cooperation_collect_list = baseIp + "/cooperation_collect_list.rm";   //我的收藏√
     public static String delete_cooperation = baseIp + "/delete_cooperation.rm";               //删除互助√
 
+    public static String city_name_data = baseIp + "/city_name_data.rm";       //获取省市区√
     public static String area_street2 = baseIp + "/area_street2.rm";           //获取乡镇√
     public static String area_street3 = baseIp + "/area_street3.rm";           //获取区√
     public static String leave_message_sub = baseIp + "/leave_message_sub.rm"; //意见反馈√

@@ -45,4 +45,15 @@
 
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/task_right"
+        android:layout_width="@dimen/dimen_size_45"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical|end"
+        android:onClick="doClick"
+        android:padding="13dp"
+        android:src="@mipmap/ass_top_icon02"
+        android:visibility="invisible"
+        tools:ignore="ContentDescription" />
+
 </FrameLayout>

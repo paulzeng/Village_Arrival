@@ -156,6 +156,12 @@
         <activity
             android:name=".LiveContactActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".LiveCityActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".LiveSearchActivity"
+            android:screenOrientation="portrait" />
 
 
         <!-- 支付宝 start -->

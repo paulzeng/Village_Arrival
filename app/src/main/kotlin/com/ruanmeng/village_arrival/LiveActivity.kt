@@ -84,6 +84,8 @@ class LiveActivity : BaseActivity() {
                 .tag(this@LiveActivity)
                 .isMultipart(true)
                 .headers("token", getString("token"))
+                .params("city", intent.getStringExtra("city"))
+                .params("district", intent.getStringExtra("district"))
                 .params("address", mAddress)
                 .params("sartDate", mStartDate)
                 .params("endDate", mEndDate)
@@ -121,10 +123,10 @@ class LiveActivity : BaseActivity() {
         when (v.id) {
             R.id.live_qu_ll -> {
                 if (dropPopWindowArea == null || listArea.isEmpty()) {
-                    OkGo.post<BaseResponse<ArrayList<CommonData>>>(BaseHttp.area_street3)
+                    OkGo.post<BaseResponse<ArrayList<CommonData>>>(BaseHttp.area_street2)
                             .tag(this@LiveActivity)
                             .isMultipart(true)
-                            .params("areaName", intent.getStringExtra("title"))
+                            .params("areaName", intent.getStringExtra("district"))
                             .execute(object : JacksonDialogCallback<BaseResponse<ArrayList<CommonData>>>(baseContext, true) {
 
                                 @Suppress("DEPRECATION")
