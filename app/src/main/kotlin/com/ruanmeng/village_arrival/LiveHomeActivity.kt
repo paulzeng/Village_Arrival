@@ -91,7 +91,8 @@ class LiveHomeActivity : BaseActivity() {
                                 .register<CommonData>(R.layout.item_live_grid) { data, injector ->
                                     injector.text(R.id.item_live_name, data.moduleName)
                                             .with<GlideImageView>(R.id.item_live_img) {
-                                                if (data.moduleType != "2") it.loadImage(BaseHttp.baseImg + data.moduleIcon)
+                                                if (data.moduleType != "2")
+                                                    it.loadImage(BaseHttp.baseImg + data.moduleIcon, R.mipmap.default_logo)
                                                 else it.setImageResource(R.mipmap.ass_icon06)
                                             }
                                             .clicked(R.id.item_live) {

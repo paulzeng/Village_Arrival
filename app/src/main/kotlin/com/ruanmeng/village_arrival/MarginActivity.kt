@@ -83,8 +83,8 @@ class MarginActivity : BaseActivity() {
                     margin_status .text = "余额不足"
                     bt_freeze.text = "充值"
                 }
-                bt_freeze.setBackgroundResource(R.drawable.rec_bg_d0d0d0)
-                bt_freeze.isClickable = false
+                bt_freeze.setBackgroundResource(R.drawable.rec_bg_blue_shade)
+                bt_freeze.isClickable = true
             }
         }
     }

@@ -37,7 +37,7 @@ class TaskCouponActivity : BaseActivity() {
                             .visibility(R.id.item_coupon_divider, if (list.indexOf(data) != 0) View.GONE else View.VISIBLE)
 
                             .clicked(R.id.item_coupon) {
-                                EventBus.getDefault().post(LocationMessageEvent("优惠券", data.voucherId, data.voucherSum))
+                                EventBus.getDefault().post(LocationMessageEvent("优惠券", data.userVoucherId, data.voucherSum))
                                 ActivityStack.screenManager.popActivities(this@TaskCouponActivity::class.java)
                             }
                 }

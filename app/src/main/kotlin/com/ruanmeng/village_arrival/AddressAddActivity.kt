@@ -126,7 +126,14 @@ class AddressAddActivity : BaseActivity() {
                 showMyLocation(true)               //设置是否显示定位小蓝点
                 //设置定位蓝点的icon图标方法
                 myLocationIcon(BitmapDescriptorFactory.fromResource(R.mipmap.gps_point))
-                setOnMyLocationChangeListener { centerLatLng = LatLng(it.latitude, it.longitude) }
+                setOnMyLocationChangeListener {
+                    centerLatLng = LatLng(it.latitude, it.longitude)
+
+                    geocoderSearch.getFromLocationAsyn(RegeocodeQuery(
+                            LatLonPoint(it.latitude, it.longitude),
+                            100f,
+                            GeocodeSearch.AMAP))
+                }
             }
 
             // 地图加载完成监听接口
@@ -184,8 +191,8 @@ class AddressAddActivity : BaseActivity() {
                                 et_detail.setText("")
 
                                 window.decorView.post {
-                                    geocoderSearch.getFromLocationAsyn(RegeocodeQuery(LatLonPoint(
-                                            data.latLonPoint.latitude, data.latLonPoint.longitude),
+                                    geocoderSearch.getFromLocationAsyn(RegeocodeQuery(
+                                            LatLonPoint(data.latLonPoint.latitude, data.latLonPoint.longitude),
                                             100f,
                                             GeocodeSearch.AMAP))
                                 }

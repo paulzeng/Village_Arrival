@@ -141,7 +141,7 @@ class BindActivity : BaseActivity() {
                                 putString("loginType", intent.getStringExtra("loginType"))
 
                                 startActivity<MainActivity>()
-                                ActivityStack.screenManager.popActivities(this@BindActivity::class.java)
+                                ActivityStack.screenManager.popActivities(this@BindActivity::class.java, LoginActivity::class.java)
                             }
 
                         })

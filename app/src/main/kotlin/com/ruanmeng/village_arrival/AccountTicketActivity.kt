@@ -10,6 +10,7 @@ import com.ruanmeng.base.BaseActivity
 import com.ruanmeng.base.getString
 import com.ruanmeng.base.showToast
 import com.ruanmeng.share.BaseHttp
+import com.ruanmeng.utils.ActivityStack
 import com.ruanmeng.utils.CommonUtil
 import com.ruanmeng.utils.NameLengthFilter
 import kotlinx.android.synthetic.main.activity_account_ticket.*
@@ -64,6 +65,7 @@ class AccountTicketActivity : BaseActivity() {
                             override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
 
                                 showToast(msg)
+                                ActivityStack.screenManager.popActivities(this@AccountTicketActivity::class.java)
                             }
 
                         })

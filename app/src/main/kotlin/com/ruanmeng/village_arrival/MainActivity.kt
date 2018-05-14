@@ -378,6 +378,8 @@ class MainActivity : BaseActivity() {
                 val bubblePopup = BubblePopup(baseContext, inflate)
                 bubblePopup.anchorView(main_issue)
                         .bubbleColor(resources.getColor(R.color.transparent))
+                        .triangleWidth(15f)
+                        .triangleHeight(10f)
                         .showAnim(FadeEnter().duration(300))
                         .dismissAnim(FadeExit().duration(300))
                         .gravity(Gravity.TOP)
@@ -464,7 +466,7 @@ class MainActivity : BaseActivity() {
                             "-1" -> "审核中"
                             "0" -> "未通过"
                             "1" -> "已审核"
-                            else -> "未认证"
+                            else -> "未审核"
                         })
                     }
 
@@ -610,7 +612,7 @@ class MainActivity : BaseActivity() {
         when (event.type) {
             "新增地址", "删除地址", "支付成功", "抢单成功",
             "快速抢单", "客户取消", "客户同意", "骑手同意",
-            "添加评论" -> {
+            "客户推送", "添加评论" -> {
                 getNearData(
                         aMap.cameraPosition.target.latitude,
                         aMap.cameraPosition.target.longitude)

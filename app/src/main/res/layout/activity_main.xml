@@ -145,7 +145,7 @@
                     android:layout_width="@dimen/dimen_size_40"
                     android:layout_height="@dimen/dimen_size_40"
                     android:layout_gravity="bottom"
-                    android:layout_marginBottom="@dimen/dimen_size_70"
+                    android:layout_marginBottom="@dimen/dimen_size_130"
                     android:layout_marginStart="@dimen/dimen_size_10"
                     android:adjustViewBounds="true"
                     android:onClick="doClick"

@@ -234,7 +234,7 @@ class IssueDetailActivity : BaseActivity() {
                     .tag(this@IssueDetailActivity)
                     .headers("token", getString("token"))
                     .params("goodsOrderId", intent.getStringExtra("goodsOrderId"))
-                    .params("agree", if (it == "right") "1" else "0")
+                    .params("agree", if (it == "right") "0" else "1")
                     .execute(object : StringDialogCallback(baseContext) {
 
                         override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {

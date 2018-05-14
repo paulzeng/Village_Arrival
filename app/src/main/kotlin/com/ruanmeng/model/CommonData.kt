@@ -97,6 +97,7 @@ data class CommonData(
         var voucherCtn: String = "",
         var voucherExplain: String = "",
         var voucherId: String = "",
+        var userVoucherId: String = "",
         var voucherType: String = "",
         var voucherSum: String = "",
         //互助列表

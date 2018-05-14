@@ -82,6 +82,7 @@
                         android:paddingTop="@dimen/dimen_size_3"
                         android:paddingBottom="@dimen/dimen_size_3"
                         android:background="@drawable/rec_bg_blue_shade"
+                        android:visibility="gone"
                         android:text="变更" />
 
                 </LinearLayout>

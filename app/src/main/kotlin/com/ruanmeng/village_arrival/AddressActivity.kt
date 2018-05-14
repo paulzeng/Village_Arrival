@@ -28,7 +28,7 @@ class AddressActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_address)
-        init_title("常用地址")
+        init_title("常用地址", "变更")
 
         EventBus.getDefault().register(this@AddressActivity)
 
@@ -53,6 +53,7 @@ class AddressActivity : BaseActivity() {
 
     override fun init_title() {
         super.init_title()
+        tvRight.gone()
         address_list.load_Linear(baseContext)
         adapter = AddressAdapter(baseContext, list)
         adapter.setOnItemClickListener {
@@ -94,7 +95,7 @@ class AddressActivity : BaseActivity() {
     override fun doClick(v: View) {
         super.doClick(v)
         when (v.id) {
-            R.id.empty_add -> {
+            R.id.empty_add, R.id.tv_nav_right -> {
                 val intent = Intent(baseContext, AddressAddActivity::class.java)
                 intent.putExtra("title", "我的地址")
                 startActivity(intent)
@@ -121,6 +122,7 @@ class AddressActivity : BaseActivity() {
                     override fun onFinish() {
                         super.onFinish()
                         empty_view.apply { if (list.isNotEmpty()) gone() else visible() }
+                        tvRight.apply { if (list.isEmpty()) gone() else visible() }
                     }
 
                 })

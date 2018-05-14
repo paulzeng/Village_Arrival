@@ -6,10 +6,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.ruanmeng.model.RefreshMessageEvent;
 import com.ruanmeng.village_arrival.GrabDetailActivity;
 import com.ruanmeng.village_arrival.IssueDetailActivity;
 import com.ruanmeng.village_arrival.LiveDetailActivity;
+import com.ruanmeng.village_arrival.MessageActivity;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -46,6 +49,23 @@ public class JPushReceiver extends BroadcastReceiver {
             Log.d(TAG, "[JPushReceiver] 接收到推送下来的通知");
             int notifactionId = bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);
             Log.d(TAG, "[JPushReceiver] 接收到推送下来的通知的ID: " + notifactionId);
+
+            try {
+                JSONObject json = new JSONObject(bundle.getString(JPushInterface.EXTRA_EXTRA));
+                if (!json.isNull("type")) {
+                    String push_type = json.getString("type");
+                    switch (push_type) {
+                        case "ORDER_CUSTOMER":
+                            EventBus.getDefault().post(new RefreshMessageEvent("客户推送", "", ""));
+                            break;
+                        case "ORDER_RIDER":
+                            EventBus.getDefault().post(new RefreshMessageEvent("骑手推送", "", ""));
+                            break;
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
             Log.d(TAG, "[JPushReceiver] 用户点击打开了通知");
 
@@ -57,6 +77,9 @@ public class JPushReceiver extends BroadcastReceiver {
                     String businessId = json.optString("businessId");
                     switch (push_type) {
                         case "SYS":
+                            intent = new Intent(context, MessageActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            context.startActivity(intent);
                             break;
                         case "ORDER_CUSTOMER":
                             intent = new Intent(context, IssueDetailActivity.class);

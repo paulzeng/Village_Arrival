@@ -211,6 +211,7 @@
                 android:background="@color/white"
                 android:gravity="top"
                 android:hint="请输入详细地址"
+                android:lineSpacingExtra="@dimen/dimen_size_3"
                 android:minLines="3"
                 android:padding="@dimen/dimen_size_10" />
 
