@@ -285,9 +285,23 @@ public class DialogHelper {
                         String hour_hint = " " + (hour < 10 ? ("0" + hour) : hour);
                         String minute_hint = ":" + (minute < 10 ? ("0" + minute) : minute);
 
-                        callback.doWork(
-                                day + hour_hint + minute_hint,
-                                date_now + hour_hint + minute_hint);
+                        String date1 = TimeHelper.getInstance().getNowTime("yyyy-MM-dd HH:mm");
+                        String date2 = date_now + hour_hint + minute_hint;
+                        long strLong1 = TimeHelper.getInstance().millisecondToLong(date1 + ":00");
+                        long strLong2 = TimeHelper.getInstance().millisecondToLong(date2 + ":00");
+
+                        if (strLong1 > strLong2 && isCurrent) {
+                            hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+                            minute = Calendar.getInstance().get(Calendar.MINUTE);
+                            hour_hint = " " + (hour < 10 ? ("0" + hour) : hour);
+                            minute_hint = ":" + (minute < 10 ? ("0" + minute) : minute);
+
+                            callback.doWork(
+                                    day + hour_hint + minute_hint,
+                                    TimeHelper.getInstance().getNowTime("yyyy-MM-dd HH:mm"));
+                        } else {
+                            callback.doWork(day + hour_hint + minute_hint, date2);
+                        }
                     }
                 });
 
