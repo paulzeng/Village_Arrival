@@ -81,29 +81,32 @@ class SettingActivity : BaseActivity() {
     private fun checkUpdate() {
         //下载路径
         val path = Environment.getExternalStorageDirectory().absolutePath + Const.SAVE_FILE
+        //自定义参数
+        val params = HashMap<String, String>()
+        params["_api_key"] = "bdcb07efb995304f749c50ade9a8f7ad"
+        params["appKey"] = "343e3003e32d6d1531a244bce7b74430"
 
-        updateApp(BaseHttp.get_versioninfo, OkGoUpdateHttpUtil()) {
-            //设置请求方式，默认get
-            isPost = true
-            //设置apk下砸路径
-            targetPath = path
+        updateApp(BaseHttp.version, OkGoUpdateHttpUtil()) {
+            isPost = true     //设置请求方式，默认get
+            setParams(params) //添加自定义参数
+            targetPath = path //设置apk下载路径
         }.check {
             onBefore { showLoadingDialog() }
             parseJson {
-                val obj = JSONObject(it)
-                val versionNew = obj.optString("versionNo").replace(".", "").toInt()
+                val obj = JSONObject(it).optJSONObject("data")
+                val versionNew = obj.optString("buildVersionNo").toInt()
                 val versionOld = Tools.getVerCode(baseContext)
 
                 UpdateAppBean()
                         //（必须）是否更新Yes,No
                         .setUpdate(if (versionNew > versionOld) "Yes" else "No")
                         //（必须）新版本号，
-                        .setNewVersion(obj.optString("versionNo"))
+                        .setNewVersion(obj.optString("buildVersionNo"))
                         //（必须）下载地址
                         // .setApkFileUrl(obj.optString("url"))
                         .setApkFileUrl(Const.URL_DOWNLOAD)
                         //（必须）更新内容
-                        .setUpdateLog(obj.optString("content"))
+                        .setUpdateLog(obj.optString("buildUpdateDescription"))
                         //是否强制更新，可以不设置
                         .setConstraint(false)
             }
