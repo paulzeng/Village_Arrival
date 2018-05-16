@@ -12,6 +12,7 @@ import com.ruanmeng.base.showToast
 import com.ruanmeng.share.BaseHttp
 import com.ruanmeng.utils.ActivityStack
 import com.ruanmeng.utils.CommonUtil
+import com.ruanmeng.utils.DialogHelper
 import com.ruanmeng.utils.NameLengthFilter
 import kotlinx.android.synthetic.main.activity_account_ticket.*
 import org.json.JSONObject
@@ -33,7 +34,7 @@ class AccountTicketActivity : BaseActivity() {
 
         et_name.filters = arrayOf<InputFilter>(NameLengthFilter(16))
         et_title.addTextChangedListener(this@AccountTicketActivity)
-        et_content.addTextChangedListener(this@AccountTicketActivity)
+        ticket_time.addTextChangedListener(this@AccountTicketActivity)
         et_name.addTextChangedListener(this@AccountTicketActivity)
         et_phone.addTextChangedListener(this@AccountTicketActivity)
         et_detail.addTextChangedListener(this@AccountTicketActivity)
@@ -42,6 +43,11 @@ class AccountTicketActivity : BaseActivity() {
     override fun doClick(v: View) {
         super.doClick(v)
         when (v.id) {
+            R.id.ticket_time_ll -> {
+                DialogHelper.showTimeDialog(baseContext) { _, date ->
+                    ticket_time.text = date
+                }
+            }
             R.id.bt_save -> {
                 if (!CommonUtil.isMobile(et_phone.text.toString())) {
                     et_phone.requestFocus()
@@ -60,6 +66,7 @@ class AccountTicketActivity : BaseActivity() {
                         .params("contacts", et_name.text.trim().toString())
                         .params("tel", et_phone.text.toString())
                         .params("address", et_detail.text.trim().toString())
+                        .params("ym", ticket_time.text.toString())
                         .execute(object : StringDialogCallback(baseContext) {
 
                             override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
@@ -81,7 +88,7 @@ class AccountTicketActivity : BaseActivity() {
 
                     override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
 
-                        val obj = JSONObject(response.body()).getJSONObject("object") ?: JSONObject()
+                        val obj = JSONObject(response.body()).optJSONObject("object") ?: JSONObject()
                         et_title.setText(obj.optString("invoiceTitle"))
                         et_title.setSelection(et_title.text.length)
                         et_content.setText(obj.optString("invoiceConet"))
@@ -96,7 +103,7 @@ class AccountTicketActivity : BaseActivity() {
 
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
         if (et_title.text.isNotBlank()
-                && et_content.text.isNotBlank()
+                && ticket_time.text.isNotBlank()
                 && et_name.text.isNotBlank()
                 && et_phone.text.isNotBlank()
                 && et_detail.text.isNotBlank()) {

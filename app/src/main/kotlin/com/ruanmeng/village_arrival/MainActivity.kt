@@ -355,7 +355,12 @@ class MainActivity : BaseActivity() {
                 intent.putExtra("city", nowCity)
                 startActivity(intent)
             }
-            R.id.main_often_ll -> if (listAddress.isEmpty()) startActivity<AddressActivity>()
+            R.id.main_often_ll -> {
+                if (listAddress.isEmpty()) startActivity<AddressActivity>()
+                else aMap.animateCamera(CameraUpdateFactory.changeLatLng(LatLng(
+                        listAddress[0].lat.toDouble(),
+                        listAddress[0].lng.toDouble())))
+            }
             R.id.main_location -> {
                 if (locationLatLng != null)
                     aMap.animateCamera(CameraUpdateFactory.changeLatLng(locationLatLng))

@@ -143,7 +143,8 @@ class GrabDetailActivity : BaseActivity() {
         val hintGrab = TimeHelper.getDiffTimeAfter(TimeHelper.getInstance().millisecondToLong(grabsingleTime))
         val hint = "您已接单$hintGrab<br>" +
                 "用户同意取消则取消成功<br>" +
-                "用户不同意您需要<font color='#F23030'>支付佣金的50%作为违约金</font>"
+                "用户不同意，接单一小时内需<font color='#F23030'>支付佣金的50%作为违约金</font><br>" +
+                "接单超过一小时需<font color='#F23030'>支付佣金的100%作为违约金</font>"
 
         DialogHelper.showHintDialog(baseContext,
                 "取消订单",

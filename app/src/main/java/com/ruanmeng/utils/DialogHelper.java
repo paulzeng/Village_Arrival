@@ -327,6 +327,72 @@ public class DialogHelper {
         dialog.show();
     }
 
+    public static void showTimeDialog(final Context context,
+                                      final DateItemCallBack callback) {
+
+        BottomBaseDialog dialog = new BottomBaseDialog(context) {
+
+            private LoopView loop_day, loop_hour, loop_minute;
+
+            @Override
+            public View onCreateView() {
+                View view = View.inflate(context, R.layout.dialog_send_time, null);
+
+                TextView tv_title = view.findViewById(R.id.tv_dialog_select_title);
+                TextView tv_cancel = view.findViewById(R.id.tv_dialog_select_cancle);
+                TextView tv_ok = view.findViewById(R.id.tv_dialog_select_ok);
+                loop_day = view.findViewById(R.id.lv_dialog_select_day);
+                loop_hour = view.findViewById(R.id.lv_dialog_select_hour);
+                loop_minute = view.findViewById(R.id.lv_dialog_select_minute);
+
+                loop_day.setTextSize(15f);
+                loop_hour.setTextSize(15f);
+                loop_minute.setTextSize(15f);
+                loop_day.setNotLoop();
+                loop_hour.setNotLoop();
+                loop_minute.setNotLoop();
+                loop_minute.setVisibility(View.GONE);
+
+                tv_cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dismiss();
+                    }
+                });
+
+                tv_ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dismiss();
+
+                        Calendar calendar = Calendar.getInstance();
+                        int year_now = calendar.get(Calendar.YEAR);
+                        int year = loop_day.getSelectedItem() + year_now - 4;
+                        int month = loop_hour.getSelectedItem() + 1;
+
+                        String date_new = year + (month < 10 ? "-0" : "-") + month;
+                        callback.doWork(date_new, date_new);
+                    }
+                });
+
+                return view;
+            }
+
+            @Override
+            public void setUiBeforShow() {
+                int year = Calendar.getInstance().get(Calendar.YEAR);
+                loop_day.setItems(dateToList(year - 4, year, "%d年"));
+                loop_hour.setItems(dateToList(1, 12, "%d月"));
+
+                loop_day.setInitPosition(4);
+                loop_hour.setInitPosition(Calendar.getInstance().get(Calendar.MONTH));
+            }
+
+        };
+
+        dialog.show();
+    }
+
     private static List<String> dateToList(int minValue, int maxValue, String format) {
         List<String> items = new ArrayList<>();
 

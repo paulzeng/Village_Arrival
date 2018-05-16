@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -48,37 +49,36 @@
             android:background="@color/divider" />
 
         <LinearLayout
+            android:id="@+id/ticket_time_ll"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="@dimen/line_height"
+            android:gravity="center_vertical"
+            android:onClick="doClick"
+            android:paddingLeft="@dimen/dimen_size_10"
+            android:paddingRight="@dimen/dimen_size_10">
 
             <TextView
                 style="@style/Font14_black"
                 android:layout_width="@dimen/dimen_size_75"
                 android:layout_height="@dimen/line_height"
-                android:layout_marginStart="@dimen/dimen_size_10"
                 android:gravity="center_vertical"
-                android:text="发票内容" />
+                android:text="发票时间" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/ticket_time"
+                style="@style/Font14_black"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dimen_size_10"
+                android:layout_weight="1"
+                android:hint="请选择发票时间" />
 
-                <EditText
-                    android:id="@+id/et_content"
-                    style="@style/Font14_black"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/white"
-                    android:gravity="top"
-                    android:hint="请输入发票内容"
-                    android:lineSpacingExtra="@dimen/dimen_size_3"
-                    android:minHeight="@dimen/line_height"
-                    android:paddingBottom="@dimen/dimen_size_13"
-                    android:paddingLeft="@dimen/dimen_size_10"
-                    android:paddingRight="@dimen/dimen_size_10"
-                    android:paddingTop="@dimen/dimen_size_13" />
-
-            </LinearLayout>
+            <ImageView
+                android:layout_width="@dimen/dimen_size_15"
+                android:layout_height="@dimen/dimen_size_15"
+                android:layout_marginStart="@dimen/dimen_size_5"
+                android:src="@mipmap/per_ent"
+                tools:ignore="ContentDescription" />
 
         </LinearLayout>
 
@@ -201,6 +201,48 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/divider_height"
+                android:layout_marginLeft="@dimen/dimen_size_10"
+                android:layout_marginRight="@dimen/dimen_size_10"
+                android:background="@color/divider" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/Font14_black"
+                    android:layout_width="@dimen/dimen_size_75"
+                    android:layout_height="@dimen/line_height"
+                    android:layout_marginStart="@dimen/dimen_size_10"
+                    android:gravity="center_vertical"
+                    android:text="发票备注" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/et_content"
+                        style="@style/Font14_black"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/white"
+                        android:gravity="top"
+                        android:hint="请输入票备注内容(非必填)"
+                        android:lineSpacingExtra="@dimen/dimen_size_3"
+                        android:minHeight="@dimen/line_height"
+                        android:paddingBottom="@dimen/dimen_size_13"
+                        android:paddingLeft="@dimen/dimen_size_10"
+                        android:paddingRight="@dimen/dimen_size_10"
+                        android:paddingTop="@dimen/dimen_size_13" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/divider_height"
                 android:background="@color/divider" />
 
             <EditText
@@ -232,6 +274,6 @@
         android:layout_margin="@dimen/dimen_size_20"
         android:background="@drawable/rec_bg_blue_shade"
         android:onClick="doClick"
-        android:text="保存信息" />
+        android:text="申请发票" />
 
 </LinearLayout>

@@ -116,10 +116,10 @@ class IssueDetailActivity : BaseActivity() {
                         "确定",
                         true) {
                     if (it == "right") {
-                    val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$sendTelephone"))
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(intent)
-                }
+                        val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$sendTelephone"))
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                        startActivity(intent)
+                    }
                 }
             }
             R.id.tv_nav_right -> {
@@ -222,7 +222,8 @@ class IssueDetailActivity : BaseActivity() {
     private fun showCancelAgreeDialog() {
         val hint = "骑手申请取消订单<br>" +
                 "您同意取消，此单将等待其他人抢单<br>" +
-                "您不同意取消，<font color='#F23030'>获得违约金金额为50%佣金</font>"
+                "您不同意取消，接单一小时内<font color='#F23030'>获得违约金金额为50%佣金</font><br>" +
+                "接单超过一小时<font color='#F23030'>获得违约金金额为100%佣金</font>"
 
         DialogHelper.showHintDialog(baseContext,
                 "骑手取消订单",
@@ -415,7 +416,8 @@ class IssueDetailActivity : BaseActivity() {
                     override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
 
                         val obj = JSONObject(response.body()).optString("object")
-                        val data = JSONObject(response.body()).optJSONObject("object") ?: JSONObject()
+                        val data = JSONObject(response.body()).optJSONObject("object")
+                                ?: JSONObject()
                         when (type) {
                             "AliPay" -> RxPay(baseContext).requestAlipay(obj)
                                     .observeOn(AndroidSchedulers.mainThread())
