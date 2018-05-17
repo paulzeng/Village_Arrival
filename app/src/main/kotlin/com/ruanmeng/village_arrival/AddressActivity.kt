@@ -28,7 +28,7 @@ class AddressActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_address)
-        init_title("常用地址", "变更")
+        init_title("常驻地址", "变更")
 
         EventBus.getDefault().register(this@AddressActivity)
 

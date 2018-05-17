@@ -235,7 +235,7 @@
                 app:sBottomLineMargin="@dimen/dimen_size_0"
                 app:sLeftTextColor="@color/black"
                 app:sLeftTextMarginLeft="@dimen/dimen_size_10"
-                app:sLeftTextString="常用地址"
+                app:sLeftTextString="常驻地址"
                 app:sLineShow="bottom"
                 app:sRightIconMarginRight="@dimen/dimen_size_10"
                 app:sRightIconRes="@mipmap/per_ent"

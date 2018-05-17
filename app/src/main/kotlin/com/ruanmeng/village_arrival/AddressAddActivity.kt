@@ -89,7 +89,7 @@ class AddressAddActivity : BaseActivity() {
                 })
 
                 address_expand.expand()
-                getData(pageNum)
+                if (!isDestroyed) getData(pageNum)
             }
         }, 2000)
     }

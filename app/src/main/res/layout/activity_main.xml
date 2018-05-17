@@ -118,7 +118,7 @@
                                 style="@style/Font13_black"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="您常用地址附近有0单可抢" />
+                                android:text="您常驻地址附近有0单可抢" />
 
                         </LinearLayout>
 
@@ -558,7 +558,7 @@
                         app:sLeftIconSize="@dimen/dimen_size_20"
                         app:sLeftTextColor="@color/black"
                         app:sLeftTextMarginLeft="@dimen/dimen_size_10"
-                        app:sLeftTextString="常用地址"
+                        app:sLeftTextString="常驻地址"
                         app:sLineShow="bottom"
                         app:sRightIconMarginRight="@dimen/dimen_size_10"
                         app:sRightIconRes="@mipmap/per_ent"

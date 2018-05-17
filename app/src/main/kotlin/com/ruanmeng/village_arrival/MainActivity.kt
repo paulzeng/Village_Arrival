@@ -77,9 +77,9 @@ class MainActivity : BaseActivity() {
                     main_order1.text = "${if (nowCtn.isEmpty()) "0" else nowCtn}单"
                     main_address.text = nowAddress
 
-                    if (listAddress.isEmpty()) main_order2.text = "您还没有添加常用地址"
+                    if (listAddress.isEmpty()) main_order2.text = "您还没有添加常驻地址"
                     else {
-                        val hint = "您常用地址附近有<font color='${resources.getColor(R.color.red)}'>${if (cyCtn.isEmpty()) "0" else cyCtn}单</font>可抢"
+                        val hint = "您常驻地址附近有<font color='${resources.getColor(R.color.red)}'>${if (cyCtn.isEmpty()) "0" else cyCtn}单</font>可抢"
                         main_order2.text = Html.fromHtml(hint)
                     }
                 }
