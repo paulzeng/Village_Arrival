@@ -55,14 +55,14 @@ android {
         debug {
             //显示Log打印输出
             buildConfigField "boolean", "LOG_DEBUG", "true"
-            buildConfigField "String", "API_HOST", "\"http://122.114.212.120:8085\""
+            buildConfigField "String", "API_HOST", "\"https://ebringhome.com\""
             minifyEnabled false   //混淆编译
             zipAlignEnabled false //Zip代码压缩优化
         }
         release {
             //不显示Log打印输出
             buildConfigField "boolean", "LOG_DEBUG", "false"
-            buildConfigField "String", "API_HOST", "\"http://122.114.212.120:8085\""
+            buildConfigField "String", "API_HOST", "\"https://ebringhome.com\""
             minifyEnabled false  //混淆编译
             zipAlignEnabled true //Zip代码压缩优化
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -101,7 +101,7 @@ dependencies {
     implementation 'com.android.support:design:' + versions.supportLibraryVersion
     implementation 'com.android.support:support-v4:' + versions.supportLibraryVersion
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:' + versions.kotlinPlugin
-    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:' + versions.constraintLayoutVersion
     implementation 'com.android.support:multidex:' + versions.multidexVersion
     testImplementation 'junit:junit:4.12'
 
