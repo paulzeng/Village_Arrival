@@ -203,10 +203,9 @@ class IssueDetailActivity : BaseActivity() {
     @Suppress("DEPRECATION")
     private fun showCancelDialog() {
         val hintAgree = DecimalFormat("0.##").format(agreeCancel.toDouble() * 100)
-        val hintUnAgree = DecimalFormat("0.##").format(unAgreeCancel.toDouble() * 100)
         val hint = "订单派送中，您确定要取消订单？<br>" +
                 "骑手同意取消，<font color='#F23030'>支付违约金金额为$hintAgree%佣金</font><br>" +
-                "骑手不同意取消，<font color='#F23030'>支付违约金金额为$hintUnAgree%佣金</font>"
+                "骑手不同意取消，<font color='#F23030'>订单继续派送</font>"
 
         DialogHelper.showHintDialog(baseContext,
                 "取消订单",
