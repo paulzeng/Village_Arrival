@@ -18,7 +18,7 @@ class WithdrawResultActivity : BaseActivity() {
             "提现成功" -> {
                 result_img.setImageResource(R.mipmap.ass_lab_icon09)
                 result_hint.text = "提现成功"
-                result_content.text = "佣金将在2个工作日内到账"
+                result_content.text = "顺送费将在2个工作日内到账"
             }
             "提现失败" -> {
                 result_img.setImageResource(R.mipmap.ass_lab_icon10)

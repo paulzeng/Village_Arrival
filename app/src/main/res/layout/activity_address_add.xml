@@ -87,7 +87,6 @@
                         android:layout_weight="1"
                         android:background="@color/white"
                         android:hint="请输入姓名"
-                        android:lineSpacingExtra="@dimen/dimen_size_3"
                         android:maxLength="12"
                         android:paddingBottom="@dimen/dimen_size_15"
                         android:paddingTop="@dimen/dimen_size_15"
@@ -106,12 +105,12 @@
                         android:layout_marginStart="@dimen/dimen_size_10"
                         android:layout_weight="1"
                         android:background="@color/white"
+                        android:digits="0123456789+-"
                         android:hint="请输入手机号"
                         android:inputType="phone"
-                        android:lineSpacingExtra="@dimen/dimen_size_3"
-                        android:maxLength="11"
                         android:paddingBottom="@dimen/dimen_size_15"
-                        android:paddingTop="@dimen/dimen_size_15" />
+                        android:paddingTop="@dimen/dimen_size_15"
+                        android:singleLine="true" />
 
                     <ImageView
                         android:id="@+id/address_img"

@@ -75,7 +75,7 @@
                     style="@style/Font14_white"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="佣金金额(元)" />
+                    android:text="跑腿费(元)" />
 
                 <TextView
                     android:id="@+id/account_commission"

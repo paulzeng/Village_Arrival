@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimen_size_10"
-            android:text="佣金将在2个工作日内到账" />
+            android:text="顺送费将在2个工作日内到账" />
 
     </LinearLayout>
 

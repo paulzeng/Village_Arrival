@@ -143,8 +143,8 @@ class GrabDetailActivity : BaseActivity() {
         val hintGrab = TimeHelper.getDiffTimeAfter(TimeHelper.getInstance().millisecondToLong(grabsingleTime))
         val hint = "您已接单$hintGrab<br>" +
                 "用户同意取消则取消成功<br>" +
-                "用户不同意，接单一小时内需<font color='#F23030'>支付佣金的50%作为违约金</font><br>" +
-                "接单超过一小时需<font color='#F23030'>支付佣金的100%作为违约金</font>"
+                "用户不同意，接单一小时内需<font color='#F23030'>支付顺送费的50%作为违约金</font><br>" +
+                "接单超过一小时需<font color='#F23030'>支付顺送费的100%作为违约金</font>"
 
         DialogHelper.showHintDialog(baseContext,
                 "取消订单",
@@ -174,10 +174,9 @@ class GrabDetailActivity : BaseActivity() {
     @Suppress("DEPRECATION")
     private fun showCancelAgreeDialog() {
         val hintAgree = DecimalFormat("0.##").format(agreeCancel.toDouble() * 100)
-        val hintUnAgree = DecimalFormat("0.##").format(unAgreeCancel.toDouble() * 100)
         val hint = "客户取消订单<br>" +
-                "您同意取消，<font color='#F23030'>获得违约金金额为$hintAgree%佣金</font><br>" +
-                "您不同意取消，<font color='#F23030'>获得违约金金额为$hintUnAgree%佣金</font>"
+                "您同意取消，<font color='#F23030'>获得违约金金额为$hintAgree%顺送费</font><br>" +
+                "您不同意取消，<font color='#F23030'>继续派送该订单</font>"
 
         DialogHelper.showHintDialog(baseContext,
                 "客户取消订单通知",

@@ -96,7 +96,7 @@ class KAlertDialogBuilder(private val ctx: Context) {
         builder.setView(view)
     }
 
-    fun cancellable(value: Boolean = true) {
+    fun cancelable(value: Boolean = true) {
         builder.setCancelable(value)
     }
 

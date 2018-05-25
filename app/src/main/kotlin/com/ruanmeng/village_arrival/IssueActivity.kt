@@ -189,7 +189,7 @@ class IssueActivity : BaseActivity() {
     @Subscribe
     fun onMessageEvent(event: RefreshMessageEvent) {
         when (event.type) {
-            "支付成功", "客户取消", "客户同意" -> updateList()
+            "支付成功", "客户取消", "客户同意", "客户推送" -> updateList()
         }
     }
 }

@@ -218,7 +218,7 @@ class GrabActivity : BaseActivity() {
     @Subscribe
     fun onMessageEvent(event: RefreshMessageEvent) {
         when (event.type) {
-            "完成订单", "取消抢单", "骑手取消", "骑手同意" -> updateList()
+            "完成订单", "取消抢单", "骑手取消", "骑手同意", "骑手推送" -> updateList()
         }
     }
 }

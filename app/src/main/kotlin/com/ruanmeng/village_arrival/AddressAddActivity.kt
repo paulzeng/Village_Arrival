@@ -281,12 +281,12 @@ class AddressAddActivity : BaseActivity() {
                 return@setOnClickListener
             }
 
-            if (mTitle != "购买地址" && !CommonUtil.isMobile(et_tel.text.toString())) {
+            /*if (mTitle != "购买地址" && !CommonUtil.isMobile(et_tel.text.toString())) {
                 et_tel.requestFocus()
                 et_tel.setText("")
                 showToast("手机号码格式错误，请重新输入")
                 return@setOnClickListener
-            }
+            }*/
 
             if (mTitle == "我的地址") {
                 OkGo.post<String>(BaseHttp.add_commonaddress)

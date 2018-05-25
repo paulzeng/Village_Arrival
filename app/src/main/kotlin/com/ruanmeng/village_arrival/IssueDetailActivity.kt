@@ -204,7 +204,7 @@ class IssueDetailActivity : BaseActivity() {
     private fun showCancelDialog() {
         val hintAgree = DecimalFormat("0.##").format(agreeCancel.toDouble() * 100)
         val hint = "订单派送中，您确定要取消订单？<br>" +
-                "骑手同意取消，<font color='#F23030'>支付违约金金额为$hintAgree%佣金</font><br>" +
+                "骑手同意取消，<font color='#F23030'>支付违约金金额为$hintAgree%顺送费</font><br>" +
                 "骑手不同意取消，<font color='#F23030'>订单继续派送</font>"
 
         DialogHelper.showHintDialog(baseContext,
@@ -221,8 +221,8 @@ class IssueDetailActivity : BaseActivity() {
     private fun showCancelAgreeDialog() {
         val hint = "骑手申请取消订单<br>" +
                 "您同意取消，此单将等待其他人抢单<br>" +
-                "您不同意取消，接单一小时内<font color='#F23030'>获得违约金金额为50%佣金</font><br>" +
-                "接单超过一小时<font color='#F23030'>获得违约金金额为100%佣金</font>"
+                "您不同意取消，接单一小时内<font color='#F23030'>获得违约金金额为50%顺送费</font><br>" +
+                "接单超过一小时<font color='#F23030'>获得违约金金额为100%顺送费</font>"
 
         DialogHelper.showHintDialog(baseContext,
                 "骑手取消订单",

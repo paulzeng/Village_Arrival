@@ -1,10 +1,14 @@
 package com.ruanmeng.village_arrival
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.support.v7.app.AlertDialog
 import com.luck.picture.lib.tools.PictureFileUtils
+import com.lzg.extend.StringDialogCallback
+import com.lzy.okgo.OkGo
+import com.lzy.okgo.model.Response
 import com.ruanmeng.base.*
 import com.ruanmeng.share.BaseHttp
 import com.ruanmeng.share.Const
@@ -44,7 +48,7 @@ class SettingActivity : BaseActivity() {
             intent.putExtra("title", "在线咨询")
             startActivity(intent)
         }
-        setting_version.setOnClickListener { checkUpdate() }
+        setting_version.setOnClickListener { getData() }
         setting_cache.setOnClickListener {
             AlertDialog.Builder(this)
                     .setTitle("清空缓存")
@@ -75,9 +79,43 @@ class SettingActivity : BaseActivity() {
         }
     }
 
+    override fun getData() {
+        OkGo.post<String>(BaseHttp.get_versioninfo)
+                .tag(this@SettingActivity)
+                .execute(object : StringDialogCallback(baseContext) {
+
+                    override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
+
+                        val obj = JSONObject(response.body())
+                        val versionNew = obj.optString("versionNo").replace(".", "").toInt()
+                        val versionOld = Tools.getVerCode(baseContext)
+                        val url = "http://a.app.qq.com/o/simple.jsp?pkgname=com.ruanmeng.village_arrival"
+                        val content = obj.optString("content")
+                        val forces = obj.optString("forces") != "1"
+
+                        if (versionNew > versionOld) {
+                            dialog("版本更新", "是否升级到v${obj.optString("versionNo")}版本？\n\n$content") {
+                                positiveButton("升级") { }
+                                cancelable(forces)
+                                onKey { _, _ -> return@onKey forces }
+                                if (forces) negativeButton("暂不升级") { }
+                                show()
+                                // 必须要先调show()方法，后面的getButton才有效
+                                getPositiveButton().setOnClickListener {
+                                    if (forces) dismiss()
+                                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                                }
+                            }
+                        } else showToast("当前已是最新版本！")
+                    }
+
+                })
+    }
+
     /**
      * 版本更新
      */
+    @Suppress("unused")
     private fun checkUpdate() {
         //下载路径
         val path = Environment.getExternalStorageDirectory().absolutePath + Const.SAVE_FILE

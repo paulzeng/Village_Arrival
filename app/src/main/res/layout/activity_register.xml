@@ -187,7 +187,7 @@
             style="@style/Font13_gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="注册或使用账户登录即视为同意" />
+            android:text="注册或账户登录即视为同意" />
 
         <TextView
             android:id="@+id/register_xieyi"
@@ -196,7 +196,7 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:onClick="doClick"
-            android:text="《用户服务协议》"
+            android:text="《嘿噗顺送平台注册协议》"
             android:textColor="@color/colorAccent" />
 
     </LinearLayout>

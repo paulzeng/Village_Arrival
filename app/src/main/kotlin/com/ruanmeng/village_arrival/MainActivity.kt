@@ -3,6 +3,7 @@ package com.ruanmeng.village_arrival
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
@@ -110,6 +111,8 @@ class MainActivity : BaseActivity() {
                 getString("token"))
 
         EventBus.getDefault().register(this@MainActivity)
+
+        getVersionData()
     }
 
     override fun onStart() {
@@ -547,6 +550,39 @@ class MainActivity : BaseActivity() {
                             addItems(response.body().`object`)
                         }
                         handler.sendEmptyMessage(0)
+                    }
+
+                })
+    }
+
+    private fun getVersionData() {
+        OkGo.post<String>(BaseHttp.get_versioninfo)
+                .tag(this@MainActivity)
+                .execute(object : StringDialogCallback(baseContext, false) {
+
+                    override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
+
+                        val obj = JSONObject(response.body())
+                        val versionNew = obj.optString("versionNo").replace(".", "").toInt()
+                        val versionOld = Tools.getVerCode(baseContext)
+                        val url = "http://a.app.qq.com/o/simple.jsp?pkgname=com.ruanmeng.village_arrival"
+                        val content = obj.optString("content")
+                        val forces = obj.optString("forces") != "1"
+
+                        if (versionNew > versionOld) {
+                            dialog("版本更新", "是否升级到v${obj.optString("versionNo")}版本？\n\n$content") {
+                                positiveButton("升级") { }
+                                cancelable(forces)
+                                onKey { _, _ -> return@onKey forces }
+                                if (forces) negativeButton("暂不升级") { }
+                                show()
+                                // 必须要先调show()方法，后面的getButton才有效
+                                getPositiveButton().setOnClickListener {
+                                    if (forces) dismiss()
+                                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                                }
+                            }
+                        }
                     }
 
                 })
