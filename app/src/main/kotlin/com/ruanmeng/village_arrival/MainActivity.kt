@@ -345,19 +345,13 @@ class MainActivity : BaseActivity() {
         when (v.id) {
             R.id.main_msg -> startActivity<MessageActivity>()
             R.id.main_grab -> {
-                val intent = Intent(baseContext, TaskGrabActivity::class.java)
-                intent.putExtra("lat", aMap.cameraPosition.target.latitude.toString())
-                intent.putExtra("lng", aMap.cameraPosition.target.longitude.toString())
-                intent.putExtra("city", nowCity)
-                intent.putExtra("district", nowDistrict)
-                startActivity(intent)
+                startActivity<TaskGrabActivity>(
+                        "lat" to aMap.cameraPosition.target.latitude.toString(),
+                        "lng" to aMap.cameraPosition.target.longitude.toString(),
+                        "city" to nowCity,
+                        "district" to nowDistrict)
             }
-            R.id.main_live -> {
-                val intent = Intent(baseContext, LiveHomeActivity::class.java)
-                intent.putExtra("title", nowDistrict)
-                intent.putExtra("city", nowCity)
-                startActivity(intent)
-            }
+            R.id.main_live -> startActivity<LiveHomeActivity>("title" to nowDistrict, "city" to nowCity)
             R.id.main_often_ll -> {
                 if (listAddress.isEmpty()) startActivity<AddressActivity>()
                 else aMap.animateCamera(CameraUpdateFactory.changeLatLng(LatLng(
@@ -368,12 +362,7 @@ class MainActivity : BaseActivity() {
                 if (locationLatLng != null)
                     aMap.animateCamera(CameraUpdateFactory.changeLatLng(locationLatLng))
             }
-            R.id.main_search -> {
-                val intent = Intent(baseContext, AddressSearchActivity::class.java)
-                intent.putExtra("title", "首页地址")
-                intent.putExtra("city", nowCity)
-                startActivity(intent)
-            }
+            R.id.main_search -> startActivity<AddressSearchActivity>("title" to "首页地址", "city" to nowCity)
             R.id.main_issue -> {
                 val inflate = View.inflate(baseContext, R.layout.pop_main_issue, null)
                 val popBuy = inflate.findViewById<LinearLayout>(R.id.pop_buy)
@@ -397,10 +386,9 @@ class MainActivity : BaseActivity() {
                     bubblePopup.dismiss()
                     window.decorView.postDelayed({
                         runOnUiThread {
-                            val intent = Intent(baseContext, TaskActivity::class.java)
-                            intent.putExtra("type", "buy")
-                            intent.putExtra("title", main_title.text.toString())
-                            startActivity(intent)
+                            startActivity<TaskActivity>(
+                                    "type" to "buy",
+                                    "title" to main_title.text.toString())
                         }
                     }, 500)
                 }
@@ -408,10 +396,9 @@ class MainActivity : BaseActivity() {
                     bubblePopup.dismiss()
                     window.decorView.postDelayed({
                         runOnUiThread {
-                            val intent = Intent(baseContext, TaskActivity::class.java)
-                            intent.putExtra("type", "get")
-                            intent.putExtra("title", main_title.text.toString())
-                            startActivity(intent)
+                            startActivity<TaskActivity>(
+                                    "type" to "get",
+                                    "title" to main_title.text.toString())
                         }
                     }, 300)
                 }
@@ -425,17 +412,17 @@ class MainActivity : BaseActivity() {
         window.decorView.postDelayed({
             runOnUiThread {
                 when (v.id) {
-                    R.id.nav_msg -> startActivity<MessageActivity>()
+                    R.id.nav_msg ->     startActivity<MessageActivity>()
                     R.id.nav_setting -> startActivity<SettingActivity>()
-                    R.id.nav_info -> startActivity<InfoActivity>()
-                    R.id.nav_issue -> startActivity<IssueActivity>()
-                    R.id.nav_grab -> startActivity<GrabActivity>()
-                    R.id.nav_person -> startActivity<InfoActivity>()
+                    R.id.nav_info ->    startActivity<InfoActivity>()
+                    R.id.nav_issue ->   startActivity<IssueActivity>()
+                    R.id.nav_grab ->    startActivity<GrabActivity>()
+                    R.id.nav_person ->  startActivity<InfoActivity>()
                     R.id.nav_account -> startActivity<AccountActivity>()
-                    R.id.nav_addr -> startActivity<AddressActivity>()
-                    R.id.nav_status -> startActivity<RealActivity>()
-                    R.id.nav_share -> startActivity<ShareActivity>()
-                    R.id.nav_live -> startActivity<LiveMineActivity>()
+                    R.id.nav_addr ->    startActivity<AddressActivity>()
+                    R.id.nav_status ->  startActivity<RealActivity>()
+                    R.id.nav_share ->   startActivity<ShareActivity>()
+                    R.id.nav_live ->    startActivity<LiveMineActivity>()
                 }
             }
         }, 300)
