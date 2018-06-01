@@ -50,7 +50,7 @@ class SettingActivity : BaseActivity() {
         }
         setting_version.setOnClickListener { getData() }
         setting_cache.setOnClickListener {
-            AlertDialog.Builder(this)
+            AlertDialog.Builder(baseContext)
                     .setTitle("清空缓存")
                     .setMessage("确定要清空缓存吗？")
                     .setPositiveButton("清空") { dialog, _ ->
