@@ -78,8 +78,8 @@ class AccountActivity : BaseActivity() {
                         mEnsureSum = obj.optString("ensureSum", "0").toDouble()
                         val profitSum = obj.optString("profitSum", "0").toDouble()
 
-                        val mProfitSum = BigDecimal(profitSum).setScale(2, BigDecimal.ROUND_DOWN).toDouble()
-                        mBalance = BigDecimal(balance.toDouble()).setScale(2, BigDecimal.ROUND_DOWN).toFloat()
+                        val mProfitSum = BigDecimal(profitSum).setScale(2, BigDecimal.ROUND_HALF_UP).toDouble()
+                        mBalance = BigDecimal(balance.toDouble()).setScale(2, BigDecimal.ROUND_HALF_UP).toFloat()
 
                         account_total.startIncreaseAnimator(mBalance)
                         account_commission.text = DecimalFormat(",##0.##").format(mProfitSum)
