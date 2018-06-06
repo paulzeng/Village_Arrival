@@ -11,7 +11,8 @@ public class BaseHttp {
 
     private static String baseUrl = BuildConfig.API_HOST;
     private static String baseIp = baseUrl + "/api";
-    public static String baseImg = baseUrl + "/";
+    // public static String baseImg = baseUrl + "/";
+    public static String baseImg = "http://ebringhome.com/";
 
     public static String login_sub = baseIp + "/login_sub.rm";                       //登录√
     public static String identify_get = baseIp + "/identify_get.rm";                 //注册验证码√

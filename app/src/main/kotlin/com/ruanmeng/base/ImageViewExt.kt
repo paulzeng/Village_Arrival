@@ -42,15 +42,13 @@ import com.sunfusheng.glideimageview.GlideImageView
         .resourceOption(R.mipmap.default_user)
         .into(this)*/
 
-fun ImageView.setImageURL(url: String, @DrawableRes resourceId: Int) = Glide.with(context)
-        .load(url)
-        .apply(RequestOptions
-                .centerCropTransform()
-                .placeholder(resourceId)
-                .error(resourceId)
-                .dontAnimate())
-        .into(this)
+fun ImageView.setImageURL(url: String, @DrawableRes resourceId: Int = R.mipmap.default_user) =
+        Glide.with(context).load(url)
+                .apply(RequestOptions
+                        .centerCropTransform()
+                        .placeholder(resourceId)
+                        .error(resourceId)
+                        .dontAnimate())
+                .into(this)
 
 fun GlideImageView.loadImage(url: String) = this.loadImage(url, R.mipmap.default_user)
-
-fun GlideImageView.loadImage(url: String, @DrawableRes resourceId: Int) = loadImage(url, resourceId)

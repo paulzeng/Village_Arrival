@@ -2,7 +2,6 @@ package com.ruanmeng.village_arrival
 
 import android.os.Bundle
 import com.ruanmeng.base.BaseActivity
-import com.ruanmeng.base.loadImage
 import com.ruanmeng.base.startActivity
 import com.ruanmeng.model.CommonData
 import com.ruanmeng.share.BaseHttp
@@ -11,7 +10,7 @@ import com.ruanmeng.view.FullyGridLayoutManager
 import com.sunfusheng.glideimageview.GlideImageView
 import kotlinx.android.synthetic.main.activity_live_more.*
 import net.idik.lib.slimadapter.SlimAdapter
-import java.util.ArrayList
+import java.util.*
 
 class LiveMoreActivity : BaseActivity() {
 
@@ -37,7 +36,7 @@ class LiveMoreActivity : BaseActivity() {
                     .register<CommonData>(R.layout.item_live_grid) { data, injector ->
                         injector.text(R.id.item_live_name, data.moduleName)
                                 .with<GlideImageView>(R.id.item_live_img) {
-                                    it.loadImage(BaseHttp.baseImg + data.moduleIcon)
+                                    it.loadImage(BaseHttp.baseImg + data.moduleIcon, R.mipmap.default_logo)
                                 }
                                 .clicked(R.id.item_live) {
                                     when (data.moduleType) {

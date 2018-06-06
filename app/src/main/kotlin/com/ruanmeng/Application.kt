@@ -90,10 +90,13 @@ class Application : MultiDexApplication() {
 
         //自动管理cookie（或者叫session的保持），以下几种任选其一就行
         builder.cookieJar(CookieJarImpl(DBCookieStore(this))) //使用数据库保持cookie，如果cookie不过期，则一直有效
+        // builder.cookieJar(CookieJarImpl(SPCookieStore(this)))    //使用sp保持cookie，如果cookie不过期，则一直有效
+        // builder.cookieJar(CookieJarImpl(MemoryCookieStore()))    //使用内存保持cookie，app退出后，cookie消失
 
-        //https相关设置，以下几种方案根据需要自己设置：信任所有证书,不安全有风险
+        //https相关设置，信任所有证书，不安全有风险
         val sslParams1 = HttpsUtils.getSslSocketFactory()
         builder.sslSocketFactory(sslParams1.sSLSocketFactory, sslParams1.trustManager)
+        builder.hostnameVerifier(HttpsUtils.UnSafeHostnameVerifier) //配置https的域名匹配规则
 
         // 其他统一的配置
         OkGo.getInstance().init(this@Application)              //必须调用初始化
