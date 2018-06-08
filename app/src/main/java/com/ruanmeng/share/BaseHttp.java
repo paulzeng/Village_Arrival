@@ -87,6 +87,6 @@ public class BaseHttp {
     public static String get_versioninfo = baseIp + "/get_versioninfo.rm";     //版本信息√
     public static String commonphone_list = baseIp + "/commonphone_list.rm";   //常用电话√
 
-    public static String invite_index = baseUrl + "/forend/invite_index.hm";   //分享√
+    public static String invite_index = baseImg + "/forend/invite_index.hm";   //分享√
     public static String version = "https://www.pgyer.com/apiv2/app/view";     //版本更新(蒲公英)√
 }

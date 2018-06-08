@@ -118,7 +118,7 @@ class RegisterActivity : BaseActivity() {
                 }
 
                 if (et_pwd.text.length < 6) {
-                    showToast("密码长度不少于6位")
+                    showToast("新密码长度不少于6位")
                     return
                 }
 
