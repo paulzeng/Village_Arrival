@@ -123,6 +123,10 @@ data class CommonData(
         var sliderId: String = "",
         var sliderImg: String = "",
         var href: String = "",
+        //活动
+        var activityImg: String = "",
+        var activityUrl: String = "",
+        var activityTitle: String = "",
         //评论列表
         var commentId: String = "",
         var content: String = "",

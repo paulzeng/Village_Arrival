@@ -47,6 +47,7 @@ public class BaseHttp {
     public static String add_invoice = baseIp + "/add_invoice.rm";                           //开发票√
 
     public static String frist_index_data = baseIp + "/frist_index_data.rm";                   //首页√
+    public static String activity_list = baseIp + "/activity_list.rm";                         //首页活动√
     public static String weightprice_list_data = baseIp + "/weightprice_address_list_data.rm"; //商品重量√
     public static String order_commission = baseIp + "/order_commission.rm";                   //获取佣金√
     public static String add_goodsorde = baseIp + "/add_goodsorde.rm";                         //新增订单√

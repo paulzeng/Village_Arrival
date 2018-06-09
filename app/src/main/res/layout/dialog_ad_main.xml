@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/dialog_ad_img"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:scaleType="centerCrop" />
+
+    <ImageView
+        android:id="@+id/dialog_ad_close"
+        android:layout_width="@dimen/dimen_size_45"
+        android:layout_height="@dimen/dimen_size_45"
+        android:layout_gravity="end"
+        android:padding="@dimen/dimen_size_10"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_highlight_off_white_24dp"
+        tools:ignore="ContentDescription" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="#AA000000"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/dialog_ad_title"
+            style="@style/Font15_white"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:lineSpacingMultiplier="1.2"
+            android:paddingBottom="@dimen/dimen_size_15"
+            android:paddingEnd="@dimen/dimen_size_0"
+            android:paddingStart="@dimen/dimen_size_15"
+            android:paddingTop="@dimen/dimen_size_15" />
+
+        <TextView
+            android:id="@+id/dialog_ad_look"
+            style="@style/Font15_white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dimen_size_15"
+            android:text="查看" />
+
+    </LinearLayout>
+
+</FrameLayout>

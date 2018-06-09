@@ -61,6 +61,7 @@ class MainActivity : BaseActivity() {
     private var locationLatLng: LatLng? = null
     private lateinit var geocoderSearch: GeocodeSearch
 
+    private val listAd = ArrayList<CommonData>()      //活动广告
     private val listAddress = ArrayList<CommonData>() //常用地址
     private var nowAddress = ""   //当前地址
     private var nowCity = ""      //当前市
@@ -113,6 +114,7 @@ class MainActivity : BaseActivity() {
         EventBus.getDefault().register(this@MainActivity)
 
         getVersionData()
+        getAdData()
     }
 
     override fun onStart() {
@@ -569,6 +571,44 @@ class MainActivity : BaseActivity() {
                                     startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
                                 }
                             }
+                        }
+                    }
+
+                })
+    }
+
+    private fun getAdData() {
+        OkGo.post<BaseResponse<ArrayList<CommonData>>>(BaseHttp.activity_list)
+                .tag(this@MainActivity)
+                .execute(object : JacksonDialogCallback<BaseResponse<ArrayList<CommonData>>>(baseContext) {
+
+                    override fun onSuccess(response: Response<BaseResponse<ArrayList<CommonData>>>) {
+                        listAd.addItems(response.body().`object`)
+                        if (listAd.isNotEmpty()) {
+                            val dialog = object : BaseDialog(baseContext) {
+
+                                override fun onCreateView(): View {
+                                    widthScale(0.7f)
+                                    val view = View.inflate(mContext, R.layout.dialog_ad_main, null)
+                                    val dialogImg = view.findViewById<ImageView>(R.id.dialog_ad_img)
+                                    val dialogClose = view.findViewById<ImageView>(R.id.dialog_ad_close)
+                                    val dialogTitle = view.findViewById<TextView>(R.id.dialog_ad_title)
+                                    val dialogLook = view.findViewById<TextView>(R.id.dialog_ad_look)
+
+                                    dialogTitle.text = listAd[0].activityTitle
+                                    dialogImg.setImageURL(BaseHttp.baseImg + listAd[0].activityImg, -1)
+                                    dialogClose.setOnClickListener { dismiss() }
+                                    dialogLook.setOnClickListener {
+                                        if (listAd[0].activityUrl.isNotEmpty())
+                                            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(listAd[0].activityUrl)))
+                                    }
+
+                                    return view
+                                }
+
+                            }
+                            dialog.setCanceledOnTouchOutside(false)
+                            dialog.show()
                         }
                     }
 
