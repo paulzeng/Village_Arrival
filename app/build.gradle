@@ -16,8 +16,8 @@ android {
         applicationId "com.ruanmeng.village_arrival"
         minSdkVersion versions.minSdkVersion
         targetSdkVersion versions.targetSdkVersion
-        versionCode 105
-        versionName "1.0.5"
+        versionCode 106
+        versionName "1.0.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -55,7 +55,7 @@ android {
         debug {
             //显示Log打印输出
             buildConfigField "boolean", "LOG_DEBUG", "true"
-            buildConfigField "String", "API_HOST", "\"https://ebringhome.com\""
+            buildConfigField "String", "API_HOST", "\"http://122.114.212.120:8097\""
             minifyEnabled false   //混淆编译
             zipAlignEnabled false //Zip代码压缩优化
         }
@@ -142,6 +142,11 @@ dependencies {
     //在线支付
     implementation 'com.cuieney:rxpay-api:2.1.7'
     kapt 'com.cuieney:rxpay-compiler:2.1.1'
+
+    //二维码扫描和生成
+    implementation 'com.google.zxing:core:3.3.1'
+    implementation 'cn.bingoogolapple:bga-qrcodecore:1.1.9@aar'
+    implementation 'cn.bingoogolapple:bga-zxing:1.1.9@aar'
 
     implementation 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1'
     implementation 'com.github.lguipeng:BubbleView:1.0.1'

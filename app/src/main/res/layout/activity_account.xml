@@ -130,7 +130,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_size_46"
         android:layout_marginTop="@dimen/dimen_size_10"
-        app:sBothLineMargin="@dimen/dimen_size_0"
+        app:sBothLineMargin="@dimen/dimen_size_10"
         app:sLeftIconRes="@mipmap/per_acc_icon01"
         app:sLeftIconSize="@dimen/dimen_size_20"
         app:sLeftTextColor="@color/black"
@@ -144,6 +144,21 @@
         app:sRightTextMarginRight="@dimen/dimen_size_30"
         app:sRightTextString="未缴纳保证金，立即充值缴纳"
         app:sTopLineMargin="@dimen/dimen_size_10" />
+
+    <com.allen.library.SuperTextView
+        android:id="@+id/account_coupon"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_size_45.5"
+        app:sBottomLineMargin="@dimen/dimen_size_10"
+        app:sLeftIconRes="@mipmap/per_acc_icon07"
+        app:sLeftIconSize="@dimen/dimen_size_20"
+        app:sLeftTextColor="@color/black"
+        app:sLeftTextMarginLeft="@dimen/dimen_size_10"
+        app:sLeftTextString="我的优惠券"
+        app:sLineShow="bottom"
+        app:sRightIconMarginRight="@dimen/dimen_size_10"
+        app:sRightIconRes="@mipmap/per_ent"
+        app:sRightIconSize="@dimen/dimen_size_15" />
 
     <com.allen.library.SuperTextView
         android:id="@+id/account_detail"

@@ -50,6 +50,9 @@ class AccountActivity : BaseActivity() {
 
         account_promise.setOnClickListener { startActivity<MarginActivity>() }
         account_detail.setOnClickListener { startActivity<AccountDetailActivity>() }
+        account_coupon.setOnClickListener {
+            startActivity<TaskCouponActivity>("isAccount" to true)
+        }
         bt_withdraw.setOnClickListener {
             val intent = Intent(baseContext, WithdrawActivity::class.java)
             intent.putExtra("balance", (mBalance - mEnsureSum).toString())

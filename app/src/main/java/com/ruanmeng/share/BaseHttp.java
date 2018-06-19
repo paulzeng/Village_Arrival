@@ -12,7 +12,7 @@ public class BaseHttp {
     private static String baseUrl = BuildConfig.API_HOST;
     private static String baseIp = baseUrl + "/api";
     // public static String baseImg = baseUrl + "/";
-    public static String baseImg = "http://ebringhome.com/";
+    public static String baseImg = BuildConfig.LOG_DEBUG ? "http://122.114.212.120:8097/" : "http://ebringhome.com/";
 
     public static String login_sub = baseIp + "/login_sub.rm";                       //登录√
     public static String identify_get = baseIp + "/identify_get.rm";                 //注册验证码√
@@ -87,6 +87,7 @@ public class BaseHttp {
     public static String newsnotice_Info = baseIp + "/newsnotice_Info.rm";     //公告详情√
     public static String get_versioninfo = baseIp + "/get_versioninfo.rm";     //版本信息√
     public static String commonphone_list = baseIp + "/commonphone_list.rm";   //常用电话√
+    public static String new_user_course = baseIp + "/new_user_course.rm";     //常用电话√
 
     public static String invite_index = baseImg + "/forend/invite_index.hm";   //分享√
     public static String version = "https://www.pgyer.com/apiv2/app/view";     //版本更新(蒲公英)√

@@ -43,6 +43,9 @@
             android:name=".InfoActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".InfoCodeActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".NicknameActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -51,6 +54,9 @@
         <activity
             android:name=".WebActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".WebX5Activity"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
         <activity
             android:name=".AccountActivity"
             android:screenOrientation="portrait" />
@@ -229,6 +235,7 @@
             tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE" />
+
                 <category android:name="${applicationId}" />
             </intent-filter>
         </receiver>

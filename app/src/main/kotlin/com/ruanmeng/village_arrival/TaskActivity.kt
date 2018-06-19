@@ -25,7 +25,6 @@ import com.ruanmeng.model.RefreshMessageEvent
 import com.ruanmeng.share.BaseHttp
 import com.ruanmeng.utils.ActivityStack
 import com.ruanmeng.utils.DialogHelper
-import com.ruanmeng.utils.TimeHelper
 import kotlinx.android.synthetic.main.activity_task.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -65,7 +64,7 @@ class TaskActivity : BaseActivity() {
     private var receiptMobile = ""
     private var weightPriceId = ""
     private var voucherId = ""
-    private lateinit var deliveryTime: String
+    private var deliveryTime: String = ""
     private val list = ArrayList<CommonData>()
     private val listCoupon = ArrayList<CommonData>()
 
@@ -86,7 +85,6 @@ class TaskActivity : BaseActivity() {
     override fun init_title() {
         super.init_title()
 
-        deliveryTime = TimeHelper.getInstance().getNowTime("yyyy-MM-dd HH:mm")
         task_group.setOnCheckedChangeListener(this@TaskActivity)
         task_get_name.gone()
         task_put_name.gone()
@@ -139,7 +137,7 @@ class TaskActivity : BaseActivity() {
                 return@setOnClickListener
             }
 
-            if (task_put_addr.text.isEmpty()) {
+            if (deliveryTime.isEmpty()) {
                 showToast("请选择收货地址")
                 return@setOnClickListener
             }
@@ -213,6 +211,11 @@ class TaskActivity : BaseActivity() {
 
                 if (task_put_addr.text.isEmpty()) {
                     showToast("请选择收货地址")
+                    return
+                }
+
+                if (task_time.text.isEmpty()) {
+                    showToast("请选择送货时间")
                     return
                 }
 
@@ -310,10 +313,10 @@ class TaskActivity : BaseActivity() {
 
                     override fun onSuccess(response: Response<BaseResponse<ArrayList<CommonData>>>) {
                         list.addItems(response.body().`object`)
-                        if (list.isNotEmpty()) {
+                        /*if (list.isNotEmpty()) {
                             weightPriceId = list[0].weightPriceId
                             task_weight.text = list[0].weightDescribe
-                        }
+                        }*/
                     }
 
                 })
@@ -413,11 +416,11 @@ class TaskActivity : BaseActivity() {
         task_put_name.text = ""
         task_get_name.gone()
         task_put_name.gone()
-        task_time.text = "现在送货"
-        deliveryTime = TimeHelper.getInstance().getNowTime("yyyy-MM-dd HH:mm")
+        task_time.text = ""
+        deliveryTime = ""
         // val hint = "商品重量<small><font color='${resources.getColor(R.color.light)}'>（默认2公斤以内）</font></small>"
-        weightPriceId = if (list.isNotEmpty()) list[0].weightPriceId else ""
-        task_weight.text = if (list.isNotEmpty()) list[0].weightDescribe else ""
+        weightPriceId = ""
+        task_weight.text = ""
         task_memo.setText("")
         task_price.setText("")
         task_open.check(R.id.task_open2)

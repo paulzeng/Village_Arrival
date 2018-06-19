@@ -1,6 +1,7 @@
 package com.ruanmeng.village_arrival
 
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.webkit.WebSettings
 import android.webkit.WebView
@@ -9,6 +10,8 @@ import com.lzg.extend.StringDialogCallback
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 import com.ruanmeng.base.BaseActivity
+import com.ruanmeng.base.cancelLoadingDialog
+import com.ruanmeng.base.showLoadingDialog
 import com.ruanmeng.share.BaseHttp
 import com.ruanmeng.utils.CommonUtil
 import kotlinx.android.synthetic.main.activity_web.*
@@ -26,7 +29,7 @@ class WebActivity : BaseActivity() {
             "关于我们", "注册协议", "在线咨询" -> {
                 OkGo.post<String>(BaseHttp.help_center)
                         .tag(this@WebActivity)
-                        .params("htmlKey", when(intent.getStringExtra("title")) {
+                        .params("htmlKey", when (intent.getStringExtra("title")) {
                             "账户说明" -> "ZHSM"
                             "保证金说明" -> "BZJSM"
                             "提现说明" -> "TXSM"
@@ -153,7 +156,7 @@ class WebActivity : BaseActivity() {
                 wv_web.loadDataWithBaseURL(BaseHttp.baseImg, str, "text/html", "utf-8", "")
             }
         }
-     }
+    }
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun init_title() {
@@ -187,6 +190,22 @@ class WebActivity : BaseActivity() {
                     val isWeb = CommonUtil.isWeb(url)
                     if (isWeb) view.loadUrl(url)
                     return isWeb
+                }
+
+                /*
+                 * 在开始加载网页时会回调
+                 */
+                override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                    super.onPageStarted(view, url, favicon)
+                    showLoadingDialog()
+                }
+
+                /*
+                 * 在结束加载网页时会回调
+                 */
+                override fun onPageFinished(view: WebView?, url: String?) {
+                    super.onPageFinished(view, url)
+                    cancelLoadingDialog()
                 }
             }
         }

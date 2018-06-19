@@ -91,7 +91,7 @@
         android:id="@+id/info_real"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_size_45.5"
-        app:sBottomLineMargin="@dimen/dimen_size_0"
+        app:sBottomLineMargin="@dimen/dimen_size_10"
         app:sLeftTextColor="@color/black"
         app:sLeftTextMarginLeft="@dimen/dimen_size_10"
         app:sLeftTextString="实名认证"
@@ -102,5 +102,18 @@
         app:sRightTextColor="@color/light"
         app:sRightTextMarginRight="@dimen/dimen_size_30"
         app:sRightTextString="未认证" />
+
+    <com.allen.library.SuperTextView
+        android:id="@+id/info_qrcode"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_size_45.5"
+        app:sBottomLineMargin="@dimen/dimen_size_0"
+        app:sLeftTextColor="@color/black"
+        app:sLeftTextMarginLeft="@dimen/dimen_size_10"
+        app:sLeftTextString="我的二维码"
+        app:sLineShow="bottom"
+        app:sRightIconMarginRight="@dimen/dimen_size_10"
+        app:sRightIconRes="@mipmap/per_ent"
+        app:sRightIconSize="@dimen/dimen_size_15" />
 
 </LinearLayout>

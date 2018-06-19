@@ -136,6 +136,7 @@ class InfoActivity : BaseActivity() {
             }
         }
         info_real.setOnClickListener { startActivity<RealActivity>() }
+        info_qrcode.setOnClickListener { startActivity<InfoCodeActivity>() }
     }
 
     private fun loadUserHead(path: String) = info_img.loadImage(BaseHttp.baseImg + path)

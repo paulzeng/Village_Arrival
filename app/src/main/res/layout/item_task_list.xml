@@ -56,13 +56,30 @@
             android:id="@+id/item_task_name"
             style="@style/Font15_black"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/line_height"
-            android:gravity="center_vertical"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_size_10"
             android:text="代买/顺风商品：名称" />
+
+        <TextView
+            android:id="@+id/item_task_weight"
+            style="@style/Font14_gray"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_size_10"
+            android:text="商品重量：" />
+
+        <TextView
+            android:id="@+id/item_task_send"
+            style="@style/Font14_gray"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_size_10"
+            android:text="送货时间：" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_size_10"
             android:gravity="center_vertical">
 
             <ImageView

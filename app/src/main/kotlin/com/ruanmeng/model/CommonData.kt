@@ -64,6 +64,7 @@ data class CommonData(
         var receiptTownship: String = "",
         var receiptName: String = "",
         var receiptMobile: String = "",
+        var receiptTime: String = "",
         var goodsOrderId: String = "",
         var goods: String = "",
         var type: String = "",

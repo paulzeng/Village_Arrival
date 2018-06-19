@@ -36,12 +36,7 @@ class SettingActivity : BaseActivity() {
         setting_cache.setRightString(GlideCacheUtil.getInstance().getCacheSize(this@SettingActivity))
 
         setting_feedback.setOnClickListener { startActivity<FeedbackActivity>() }
-        setting_about.setOnClickListener {
-            // startActivity<AboutActivity>()
-            val intent = Intent(baseContext, WebActivity::class.java)
-            intent.putExtra("title", "关于我们")
-            startActivity(intent)
-        }
+        setting_about.setOnClickListener { startActivity<WebActivity>("title" to "关于我们") }
         setting_problem.setOnClickListener { startActivity<ProblemActivity>() }
         setting_online.setOnClickListener {
             val intent = Intent(baseContext, WebActivity::class.java)
@@ -87,7 +82,8 @@ class SettingActivity : BaseActivity() {
                     override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
 
                         val obj = JSONObject(response.body())
-                        val versionNew = obj.optString("versionNo").replace(".", "").toInt()
+                        val versionObj = obj.optString("versionNo")
+                        val versionNew = if (versionObj.isEmpty()) 100 else versionObj.replace(".", "").toInt()
                         val versionOld = Tools.getVerCode(baseContext)
                         val url = "http://a.app.qq.com/o/simple.jsp?pkgname=com.ruanmeng.village_arrival"
                         val content = obj.optString("content")

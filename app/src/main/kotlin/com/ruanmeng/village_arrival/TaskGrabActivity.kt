@@ -107,6 +107,8 @@ class TaskGrabActivity : BaseActivity() {
                                 }
                             }
                             .image(R.id.item_task_img1, if (data.type == "1") R.mipmap.index_lab05 else R.mipmap.index_lab01)
+                            .text(R.id.item_task_weight, "商品重量：${data.weightDescribe}")
+                            .text(R.id.item_task_send, "送货时间：${data.receiptTime}")
                             .text(R.id.item_task_addr1, data.buyAddress + data.buyDetailAdress)
                             .text(R.id.item_task_addr2, data.receiptAddress + data.receiptDetailAdress)
                             .text(R.id.item_task_yong, data.commission)

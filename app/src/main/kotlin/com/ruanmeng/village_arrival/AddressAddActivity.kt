@@ -242,8 +242,8 @@ class AddressAddActivity : BaseActivity() {
                             address_card.goneAnimation()
                             mPosition = tab.position
                             when (tab.position) {
-                                0 -> mAdapter.updateData(list)
-                                1 -> {
+                                1 -> mAdapter.updateData(list)
+                                0 -> {
                                     if (listAddress.isEmpty()) getAddressData()
                                     else mAdapter.updateData(listAddress)
                                 }
@@ -252,8 +252,8 @@ class AddressAddActivity : BaseActivity() {
 
                     })
 
-                    addTab(this.newTab().setText("附近地址"), true)
-                    addTab(this.newTab().setText("常用地址"), false)
+                    addTab(this.newTab().setText("常用地址"), true)
+                    addTab(this.newTab().setText("附近地址"), false)
 
                     post { Tools.setIndicator(this, 40, 40) }
                 }
@@ -269,13 +269,13 @@ class AddressAddActivity : BaseActivity() {
                 return@setOnClickListener
             }
 
-            if (mTitle != "购买地址" && et_name.text.isEmpty()) {
+            if (mTitle == "收货地址" && et_name.text.isEmpty()) {
                 et_name.requestFocus()
                 showToast("请输入姓名")
                 return@setOnClickListener
             }
 
-            if (mTitle != "购买地址" && et_tel.text.isEmpty()) {
+            if (mTitle == "收货地址" && et_tel.text.isEmpty()) {
                 et_tel.requestFocus()
                 showToast("请输入手机号")
                 return@setOnClickListener
@@ -353,7 +353,7 @@ class AddressAddActivity : BaseActivity() {
                     if (result.pois.isNotEmpty()) pageNum++
                     list.addItems(result.pois)
 
-                    if (mPosition == 1) return
+                    if (mPosition == 0 && mTitle != "我的地址") return
                     mAdapter.updateData(list)
 
                     empty_view.apply { if (list.isEmpty()) visible() else gone() }
@@ -386,7 +386,7 @@ class AddressAddActivity : BaseActivity() {
                             addItems(response.body().`object`)
                         }
 
-                        if (mPosition == 1) mAdapter.updateData(listAddress)
+                        if (mPosition == 0) mAdapter.updateData(listAddress)
                     }
 
                 })

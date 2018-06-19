@@ -114,15 +114,31 @@ class MainActivity : BaseActivity() {
         EventBus.getDefault().register(this@MainActivity)
 
         getVersionData()
-        getAdData()
+        if (!getBoolean("isInstall")) {
+            putBoolean("isInstall", true)
+
+            AlertDialog.Builder(baseContext)
+                    .setTitle("温馨提示")
+                    .setMessage("是否要查看新手教程？")
+                    .setPositiveButton("查看") { dialog, _ ->
+                        dialog.dismiss()
+                        getAdData()
+                        startActivity<WebX5Activity>("title" to "新手教程")
+                    }
+                    .setNegativeButton("取消") { dialog, _ ->
+                        dialog.dismiss()
+                        getAdData()
+                    }
+                    .create()
+                    .apply { setCanceledOnTouchOutside(false) }
+                    .show()
+        } else getAdData()
     }
 
     override fun onStart() {
         super.onStart()
         getPersonData()
         getAddressData()
-
-        // if (locationLatLng != null) getNearData(aMap.cameraPosition.target.latitude, aMap.cameraPosition.target.longitude)
     }
 
     override fun init_title() {
@@ -339,6 +355,7 @@ class MainActivity : BaseActivity() {
         nav_status.setOnClickListener(this@MainActivity)
         nav_share.setOnClickListener(this@MainActivity)
         nav_live.setOnClickListener(this@MainActivity)
+        nav_rule.setOnClickListener(this@MainActivity)
     }
 
     @Suppress("DEPRECATION")
@@ -414,17 +431,18 @@ class MainActivity : BaseActivity() {
         window.decorView.postDelayed({
             runOnUiThread {
                 when (v.id) {
-                    R.id.nav_msg ->     startActivity<MessageActivity>()
+                    R.id.nav_msg -> startActivity<MessageActivity>()
                     R.id.nav_setting -> startActivity<SettingActivity>()
-                    R.id.nav_info ->    startActivity<InfoActivity>()
-                    R.id.nav_issue ->   startActivity<IssueActivity>()
-                    R.id.nav_grab ->    startActivity<GrabActivity>()
-                    R.id.nav_person ->  startActivity<InfoActivity>()
+                    R.id.nav_info -> startActivity<InfoActivity>()
+                    R.id.nav_issue -> startActivity<IssueActivity>()
+                    R.id.nav_grab -> startActivity<GrabActivity>()
+                    R.id.nav_person -> startActivity<InfoActivity>()
                     R.id.nav_account -> startActivity<AccountActivity>()
-                    R.id.nav_addr ->    startActivity<AddressActivity>()
-                    R.id.nav_status ->  startActivity<RealActivity>()
-                    R.id.nav_share ->   startActivity<ShareActivity>()
-                    R.id.nav_live ->    startActivity<LiveMineActivity>()
+                    R.id.nav_addr -> startActivity<AddressActivity>()
+                    R.id.nav_status -> startActivity<RealActivity>()
+                    R.id.nav_share -> startActivity<ShareActivity>()
+                    R.id.nav_live -> startActivity<LiveMineActivity>()
+                    R.id.nav_rule -> startActivity<WebX5Activity>("title" to "新手教程")
                 }
             }
         }, 300)
@@ -439,7 +457,8 @@ class MainActivity : BaseActivity() {
                     @SuppressLint("SetTextI18n")
                     override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
 
-                        val obj = JSONObject(response.body()).getJSONObject("userMsg") ?: JSONObject()
+                        val obj = JSONObject(response.body()).getJSONObject("userMsg")
+                                ?: JSONObject()
                         putString("nickName", Tools.decodeUnicode(obj.optString("nickName")))
                         putString("userhead", obj.optString("userhead"))
                         putString("sex", obj.optString("sex"))
@@ -552,7 +571,10 @@ class MainActivity : BaseActivity() {
                     override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
 
                         val obj = JSONObject(response.body())
-                        val versionNew = obj.optString("versionNo").replace(".", "").toInt()
+
+                        val versionObj = obj.optString("versionNo")
+
+                        val versionNew = if (versionObj.isEmpty()) 100 else versionObj.replace(".", "").toInt()
                         val versionOld = Tools.getVerCode(baseContext)
                         val url = "http://a.app.qq.com/o/simple.jsp?pkgname=com.ruanmeng.village_arrival"
                         val content = obj.optString("content")

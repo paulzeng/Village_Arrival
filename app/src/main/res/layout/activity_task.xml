@@ -282,7 +282,7 @@
                             android:layout_height="@dimen/line_height"
                             android:layout_weight="1"
                             android:gravity="center_vertical"
-                            android:text="现在送货" />
+                            android:hint="请选择送货时间"/>
 
                         <ImageView
                             android:layout_width="@dimen/dimen_size_15"
