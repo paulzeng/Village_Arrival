@@ -55,7 +55,7 @@ android {
         debug {
             //显示Log打印输出
             buildConfigField "boolean", "LOG_DEBUG", "true"
-            buildConfigField "String", "API_HOST", "\"http://122.114.212.120:8097\""
+            buildConfigField "String", "API_HOST", "\"https://ebringhome.com\""
             minifyEnabled false   //混淆编译
             zipAlignEnabled false //Zip代码压缩优化
         }
