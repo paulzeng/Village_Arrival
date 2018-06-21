@@ -44,7 +44,7 @@ class AccountTicketActivity : BaseActivity() {
         super.doClick(v)
         when (v.id) {
             R.id.ticket_time_ll -> {
-                DialogHelper.showTimeDialog(baseContext) { _, date ->
+                DialogHelper.showTimeDialog(baseContext, "选择发票时间") { _, date ->
                     ticket_time.text = date
                 }
             }

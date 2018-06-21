@@ -329,6 +329,12 @@ public class DialogHelper {
 
     public static void showTimeDialog(final Context context,
                                       final DateItemCallBack callback) {
+        showTimeDialog(context, "选择时间", callback);
+    }
+
+    public static void showTimeDialog(final Context context,
+                                      final String title,
+                                      final DateItemCallBack callback) {
 
         BottomBaseDialog dialog = new BottomBaseDialog(context) {
 
@@ -345,6 +351,7 @@ public class DialogHelper {
                 loop_hour = view.findViewById(R.id.lv_dialog_select_hour);
                 loop_minute = view.findViewById(R.id.lv_dialog_select_minute);
 
+                tv_title.setText(title);
                 loop_day.setTextSize(15f);
                 loop_hour.setTextSize(15f);
                 loop_minute.setTextSize(15f);
