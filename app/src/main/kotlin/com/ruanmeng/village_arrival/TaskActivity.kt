@@ -25,6 +25,7 @@ import com.ruanmeng.model.RefreshMessageEvent
 import com.ruanmeng.share.BaseHttp
 import com.ruanmeng.utils.ActivityStack
 import com.ruanmeng.utils.DialogHelper
+import com.ruanmeng.utils.TimeHelper
 import kotlinx.android.synthetic.main.activity_task.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -137,7 +138,7 @@ class TaskActivity : BaseActivity() {
                 return@setOnClickListener
             }
 
-            if (deliveryTime.isEmpty()) {
+            if (task_put_addr.text.isEmpty()) {
                 showToast("请选择收货地址")
                 return@setOnClickListener
             }
@@ -146,7 +147,6 @@ class TaskActivity : BaseActivity() {
                 showToast("请选择商品重量")
                 return@setOnClickListener
             }
-
 
             val intent = Intent(baseContext, TaskCouponActivity::class.java)
             intent.putExtra("list", listCoupon)
@@ -214,15 +214,13 @@ class TaskActivity : BaseActivity() {
                     return
                 }
 
-                if (task_time.text.isEmpty()) {
-                    showToast("请选择送货时间")
-                    return
-                }
-
                 if (task_weight.text.isEmpty()) {
                     showToast("请选择商品重量")
                     return
                 }
+
+                if (deliveryTime.isEmpty())
+                    deliveryTime = TimeHelper.getInstance().getNowTime("yyyy-MM-dd HH:mm")
 
                 OkGo.post<String>(BaseHttp.add_goodsorde)
                         .tag(this@TaskActivity)
@@ -416,7 +414,7 @@ class TaskActivity : BaseActivity() {
         task_put_name.text = ""
         task_get_name.gone()
         task_put_name.gone()
-        task_time.text = ""
+        task_time.text = "现在送货"
         deliveryTime = ""
         // val hint = "商品重量<small><font color='${resources.getColor(R.color.light)}'>（默认2公斤以内）</font></small>"
         weightPriceId = ""
