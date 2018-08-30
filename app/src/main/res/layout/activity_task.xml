@@ -341,7 +341,7 @@
                     android:layout_height="wrap_content"
                     android:background="@color/white"
                     android:gravity="top"
-                    android:hint="备注信息"
+                    android:hint="备注信息：取件码等快递特殊信息"
                     android:minLines="3"
                     android:padding="@dimen/dimen_size_10" />
 

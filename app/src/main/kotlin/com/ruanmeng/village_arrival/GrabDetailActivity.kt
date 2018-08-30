@@ -264,6 +264,7 @@ class GrabDetailActivity : BaseActivity() {
                             "1" -> "是"
                             else -> ""
                         }
+                        if (intent.getBooleanExtra("isAll", false)) grab_memo_ll.gone()
                         grab_memo.text = data.mome
                         grab_order.text = "订单编号：${data.goodsOrderId}"
                         grab_submit.text = "下单时间：${data.createDate}"

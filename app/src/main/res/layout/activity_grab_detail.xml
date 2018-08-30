@@ -229,32 +229,40 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/grab_memo_ll"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                    <TextView
-                        style="@style/Font14_light"
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/line_height"
-                        android:gravity="center_vertical"
-                        android:text="备注信息：" />
-
-                    <TextView
-                        android:id="@+id/grab_memo"
-                        style="@style/Font14_black_dark"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:lineSpacingExtra="@dimen/dimen_size_3"
-                        android:minHeight="@dimen/line_height"
-                        android:paddingBottom="@dimen/dimen_size_13"
-                        android:paddingTop="@dimen/dimen_size_13" />
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/Font14_light"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/line_height"
+                            android:gravity="center_vertical"
+                            android:text="备注信息：" />
+
+                        <TextView
+                            android:id="@+id/grab_memo"
+                            style="@style/Font14_black_dark"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:lineSpacingExtra="@dimen/dimen_size_3"
+                            android:minHeight="@dimen/line_height"
+                            android:paddingBottom="@dimen/dimen_size_13"
+                            android:paddingTop="@dimen/dimen_size_13" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/divider_height"
+                        android:background="@color/divider" />
 
                 </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/divider_height"
-                    android:background="@color/divider" />
 
                 <LinearLayout
                     android:id="@+id/grab_total_ll"
