@@ -20,6 +20,16 @@ fun String.phoneReplaceWithStar(): String = when {
 }
 
 /**
+ * 手机号号替换，保留前三位
+ * 如果身手机号为空 或者 null ,返回null ；否则，返回替换后的字符串；
+ */
+fun String.phoneReplaceWithStarFirst(): String = when {
+    isNullOrEmpty() -> ""
+    length < 3 -> this
+    else -> replaceAction("(?<=\\d{3})\\d(?=\\d{0})")
+}
+
+/**
  * 身份证号替换，保留前四位和后四位
  * 如果身份证号为空 或者 null ,返回null ；否则，返回替换后的字符串；
  */

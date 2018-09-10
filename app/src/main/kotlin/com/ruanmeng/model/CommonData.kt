@@ -87,6 +87,8 @@ data class CommonData(
         var unAgreeCancel: String = "",
         var agreeCancel: String = "",
         var cancelType: String = "",
+        //货物类型
+        var goodstypeId: String = "",
         //商品重量
         var weightPriceId: String = "",
         var weightDescribe: String = "",

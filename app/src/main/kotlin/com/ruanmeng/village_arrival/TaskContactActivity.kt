@@ -8,7 +8,6 @@ import android.view.View
 import com.ruanmeng.base.*
 import com.ruanmeng.utils.ActivityStack
 import com.ruanmeng.utils.DialogHelper
-import com.ruanmeng.utils.phoneReplaceWithStar
 import kotlinx.android.synthetic.main.activity_task_contact.*
 
 class TaskContactActivity : BaseActivity() {
@@ -44,9 +43,9 @@ class TaskContactActivity : BaseActivity() {
 
                 task_img1.setImageResource(if (type == "1") R.mipmap.index_lab05 else R.mipmap.index_lab01)
                 task_addr1.text = buyAddress
-                task_name1.text = "$buyName  ${buyMobile.phoneReplaceWithStar()}"
+                task_name1.text = "$buyName  $buyMobile"
                 task_addr2.text = receiptAddress
-                task_name2.text = "$receiptName  ${receiptMobile.phoneReplaceWithStar()}"
+                task_name2.text = "$receiptName  $receiptMobile"
                 if (buyMobile.isEmpty()) {
                     task_name1.gone()
                     task_call1.gone()

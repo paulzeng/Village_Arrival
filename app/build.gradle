@@ -16,8 +16,8 @@ android {
         applicationId "com.ruanmeng.village_arrival"
         minSdkVersion versions.minSdkVersion
         targetSdkVersion versions.targetSdkVersion
-        versionCode 108
-        versionName "1.0.8"
+        versionCode 109
+        versionName "1.0.9"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -55,7 +55,7 @@ android {
         debug {
             //显示Log打印输出
             buildConfigField "boolean", "LOG_DEBUG", "true"
-            buildConfigField "String", "API_HOST", "\"https://ebringhome.com\""
+            buildConfigField "String", "API_HOST", "\"http://192.168.1.166\""
             minifyEnabled false   //混淆编译
             zipAlignEnabled false //Zip代码压缩优化
         }

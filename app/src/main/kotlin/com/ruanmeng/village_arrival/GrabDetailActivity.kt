@@ -16,9 +16,7 @@ import com.ruanmeng.base.*
 import com.ruanmeng.model.CommonData
 import com.ruanmeng.model.RefreshMessageEvent
 import com.ruanmeng.share.BaseHttp
-import com.ruanmeng.utils.DialogHelper
-import com.ruanmeng.utils.TimeHelper
-import com.ruanmeng.utils.phoneReplaceWithStar
+import com.ruanmeng.utils.*
 import kotlinx.android.synthetic.main.activity_grab_detail.*
 import org.greenrobot.eventbus.EventBus
 import java.text.DecimalFormat
@@ -31,6 +29,7 @@ class GrabDetailActivity : BaseActivity() {
     private var buyMobile = ""
     private var receiptName = ""
     private var receiptMobile = ""
+    private var isAll = false
 
     private var agreeCancel = "0.0"
     private var unAgreeCancel = "0.0"
@@ -54,6 +53,7 @@ class GrabDetailActivity : BaseActivity() {
 
     override fun init_title() {
         super.init_title()
+        isAll = intent.getBooleanExtra("isAll", false)
         @Suppress("DEPRECATION")
         tvRight.setTextColor(resources.getColor(R.color.light))
         bt_done.gone()
@@ -75,6 +75,7 @@ class GrabDetailActivity : BaseActivity() {
                                         .execute(object : StringDialogCallback(baseContext) {
 
                                             override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
+                                                isAll = false
                                                 handler.sendEmptyMessage(0)
                                                 EventBus.getDefault().post(RefreshMessageEvent("抢单成功"))
 
@@ -229,7 +230,7 @@ class GrabDetailActivity : BaseActivity() {
                                 tvRight.text = ""
                             }
                             "1" -> {
-                                if (intent.getBooleanExtra("isAll", false)) {
+                                if (isAll) {
                                     bt_done.visible()
                                     bt_done.setBackgroundResource(if (mType == "0") R.drawable.rec_bg_red_shade else R.drawable.rec_bg_blue_shade)
                                     bt_done.text = if (mType == "0") "代买抢单" else "顺风抢单"
@@ -254,17 +255,26 @@ class GrabDetailActivity : BaseActivity() {
                         grab_product.text = data.goods
                         grab_time.text = data.createDate
                         grab_img1.setImageResource(if (mType == "1") R.mipmap.index_lab05 else R.mipmap.index_lab01)
-                        grab_addr1.text = data.buyAddress + data.buyDetailAdress
-                        grab_name1.text = "${data.buyname}  ${data.buyMobile.phoneReplaceWithStar()}"
-                        if (data.buyMobile.isEmpty()) grab_name1.gone()
-                        grab_addr2.text = data.receiptAddress + data.receiptDetailAdress
-                        grab_name2.text = "${data.receiptName}  ${data.receiptMobile.phoneReplaceWithStar()}"
+                        if (isAll) {
+                            grab_memo_ll.gone()
+                            grab_addr1.text = data.buyAddress
+                            grab_name1.text = "${data.buyname.nameReplaceWithStar()}  ${data.buyMobile.phoneReplaceWithStarFirst()}"
+                            if (data.buyMobile.isEmpty()) grab_name1.gone()
+                            grab_addr2.text = data.receiptAddress
+                            grab_name2.text = "${data.receiptName.nameReplaceWithStar()}  ${data.receiptMobile.phoneReplaceWithStarFirst()}"
+                        } else {
+                            grab_memo_ll.visible()
+                            grab_addr1.text = data.buyAddress + data.buyDetailAdress
+                            grab_name1.text = "${data.buyname}  ${data.buyMobile}"
+                            if (data.buyMobile.isEmpty()) grab_name1.gone()
+                            grab_addr2.text = data.receiptAddress + data.receiptDetailAdress
+                            grab_name2.text = "${data.receiptName}  ${data.receiptMobile}"
+                        }
                         grab_check.text = when (data.inspection) {
                             "0" -> "否"
                             "1" -> "是"
                             else -> ""
                         }
-                        if (intent.getBooleanExtra("isAll", false)) grab_memo_ll.gone()
                         grab_memo.text = data.mome
                         grab_order.text = "订单编号：${data.goodsOrderId}"
                         grab_submit.text = "下单时间：${data.createDate}"

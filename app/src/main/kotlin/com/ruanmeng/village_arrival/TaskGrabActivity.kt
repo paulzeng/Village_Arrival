@@ -52,6 +52,7 @@ class TaskGrabActivity : BaseActivity() {
         getData(pageNum)
     }
 
+    @Suppress("DEPRECATION")
     override fun init_title() {
         super.init_title()
         empty_hint.text = "暂无相关抢单信息"
@@ -82,12 +83,10 @@ class TaskGrabActivity : BaseActivity() {
                                 when (data.type) {
                                     "0" -> {
                                         it.text = "代买订单"
-                                        @Suppress("DEPRECATION")
                                         it.setTextColor(resources.getColor(R.color.red))
                                     }
                                     "1" -> {
                                         it.text = "顺风订单"
-                                        @Suppress("DEPRECATION")
                                         it.setTextColor(resources.getColor(R.color.colorAccent))
                                     }
                                 }
@@ -96,12 +95,10 @@ class TaskGrabActivity : BaseActivity() {
                                 when (data.type) {
                                     "0" -> {
                                         it.text = "代买抢单"
-                                        @Suppress("DEPRECATION")
                                         it.background = resources.getDrawable(R.drawable.rec_bg_red_shade)
                                     }
                                     "1" -> {
                                         it.text = "顺风抢单"
-                                        @Suppress("DEPRECATION")
                                         it.background = resources.getDrawable(R.drawable.rec_bg_blue_shade)
                                     }
                                 }
@@ -109,8 +106,8 @@ class TaskGrabActivity : BaseActivity() {
                             .image(R.id.item_task_img1, if (data.type == "1") R.mipmap.index_lab05 else R.mipmap.index_lab01)
                             .text(R.id.item_task_weight, "商品重量：${data.weightDescribe}")
                             .text(R.id.item_task_send, "送货时间：${data.receiptTime}")
-                            .text(R.id.item_task_addr1, data.buyAddress + data.buyDetailAdress)
-                            .text(R.id.item_task_addr2, data.receiptAddress + data.receiptDetailAdress)
+                            .text(R.id.item_task_addr1, data.buyAddress)
+                            .text(R.id.item_task_addr2, data.receiptAddress)
                             .text(R.id.item_task_yong, data.commission)
                             .text(R.id.item_task_yu, data.goodsPrice)
 
@@ -291,7 +288,7 @@ class TaskGrabActivity : BaseActivity() {
                                         .visibility(R.id.item_area_divider2,
                                                 if (listArea.indexOf(data) != listArea.size - 1) View.GONE else View.VISIBLE)
 
-                                        .clicked(R.id.item_area) {
+                                        .clicked(R.id.item_area) { _ ->
                                             listArea.filter { it.isChecked }.forEach { it.isChecked = false }
                                             data.isChecked = true
                                             task_qu.text = data.areaName

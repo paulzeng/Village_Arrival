@@ -20,6 +20,7 @@ import com.lzy.okgo.OkGo
 import com.lzy.okgo.model.Response
 import com.ruanmeng.base.*
 import com.ruanmeng.model.CommonData
+import com.ruanmeng.model.CommonModel
 import com.ruanmeng.model.LocationMessageEvent
 import com.ruanmeng.model.RefreshMessageEvent
 import com.ruanmeng.share.BaseHttp
@@ -64,9 +65,11 @@ class TaskActivity : BaseActivity() {
     private var receiptName = ""
     private var receiptMobile = ""
     private var weightPriceId = ""
+    private var goodstypeId = ""
     private var voucherId = ""
     private var deliveryTime: String = ""
     private val list = ArrayList<CommonData>()
+    private val listType = ArrayList<CommonData>()
     private val listCoupon = ArrayList<CommonData>()
 
     private lateinit var geocoderSearch: GeocodeSearch
@@ -85,10 +88,9 @@ class TaskActivity : BaseActivity() {
 
     override fun init_title() {
         super.init_title()
-
-        task_group.setOnCheckedChangeListener(this@TaskActivity)
         task_get_name.gone()
         task_put_name.gone()
+        task_group.setOnCheckedChangeListener(this@TaskActivity)
 
         when (intent.getStringExtra("type")) {
             "buy" -> task_check1.isChecked = true
@@ -152,6 +154,21 @@ class TaskActivity : BaseActivity() {
             intent.putExtra("list", listCoupon)
             startActivity(intent)
         }
+
+        task_type.setOnClickListener { _ ->
+            if (listType.isEmpty()) showToast("暂无相关数据")
+            else {
+                val listItems = ArrayList<String>()
+                listType.mapTo(listItems) { it.goodstypeId }
+                DialogHelper.showItemDialog(
+                        baseContext,
+                        "选择货物类型",
+                        listItems) { _, name ->
+                    goodstypeId = name
+                    task_type.setRightString(name)
+                }
+            }
+        }
     }
 
     override fun doClick(v: View) {
@@ -198,9 +215,14 @@ class TaskActivity : BaseActivity() {
                     return
                 }
 
-                if (task_name.text.isBlank()) {
+                if (task_check1.isChecked && task_name.text.isBlank()) {
                     task_name.requestFocus()
-                    showToast(if (task_check1.isChecked) "请输入商品信息" else "请输入货物类型")
+                    showToast("请输入商品信息")
+                    return
+                }
+
+                if (task_check2.isChecked && goodstypeId.isEmpty()) {
+                    showToast("请选择货物类型")
                     return
                 }
 
@@ -227,7 +249,7 @@ class TaskActivity : BaseActivity() {
                         .isMultipart(true)
                         .headers("token", getString("token"))
                         .params("type", type)
-                        .params("goods", task_name.text.toString())
+                        .params("goods", if (task_check1.isChecked) task_name.text.toString() else goodstypeId)
                         .params("receiptTime", deliveryTime)
                         .params("weightPriceId", weightPriceId)
                         .params("mome", task_memo.text.toString())
@@ -304,13 +326,15 @@ class TaskActivity : BaseActivity() {
     }
 
     override fun getData() {
-        OkGo.post<BaseResponse<ArrayList<CommonData>>>(BaseHttp.weightprice_list_data)
+        OkGo.post<BaseResponse<CommonModel>>(BaseHttp.weightprice_list_data)
                 .tag(this@TaskActivity)
                 .headers("token", getString("token"))
-                .execute(object : JacksonDialogCallback<BaseResponse<ArrayList<CommonData>>>(baseContext) {
+                .params("flage", "new")
+                .execute(object : JacksonDialogCallback<BaseResponse<CommonModel>>(baseContext) {
 
-                    override fun onSuccess(response: Response<BaseResponse<ArrayList<CommonData>>>) {
-                        list.addItems(response.body().`object`)
+                    override fun onSuccess(response: Response<BaseResponse<CommonModel>>) {
+                        listType.addItems(response.body().`object`.goodstype)
+                        list.addItems(response.body().`object`.weightprice)
                         /*if (list.isNotEmpty()) {
                             weightPriceId = list[0].weightPriceId
                             task_weight.text = list[0].weightDescribe
@@ -369,8 +393,10 @@ class TaskActivity : BaseActivity() {
                 task_get_hint.text = "购买地址"
                 task_get_addr.hint = "未填写则就近购买(2公里内)"
                 task_get_addr.setHintTextColor(resources.getColor(R.color.orange))
-                task_price_ll.visibility = View.VISIBLE
-                task_open.visibility = View.GONE
+                task_name.visible()
+                task_type.gone()
+                task_price_ll.visible()
+                task_open.gone()
 
                 buyLat = locationLat
                 buyLng = locationLng
@@ -387,12 +413,16 @@ class TaskActivity : BaseActivity() {
             R.id.task_check2 -> {
                 type = "1"
                 task_name.hint = "请输入货物类型"
+                task_type.setRightString("请选择货物类型")
                 task_get_hint.text = "取货地址"
                 task_get_addr.hint = "请选择取货地址"
                 task_get_addr.setHintTextColor(resources.getColor(R.color.colorControlNormal))
-                task_price_ll.visibility = View.GONE
-                task_open.visibility = View.VISIBLE
+                task_name.gone()
+                task_type.visible()
+                task_price_ll.gone()
+                task_open.visible()
 
+                goodstypeId = ""
                 receiptLat = ""
                 receiptLng = ""
                 receiptProvince = ""

@@ -607,7 +607,7 @@
                         app:sLeftTextColor="@color/black"
                         app:sLeftTextMarginLeft="@dimen/dimen_size_10"
                         app:sLeftTextString="生活互助"
-                        app:sLineShow="bottom"
+                        app:sLineShow="none"
                         app:sRightIconMarginRight="@dimen/dimen_size_10"
                         app:sRightIconRes="@mipmap/per_ent"
                         app:sRightIconSize="@dimen/dimen_size_15" />
@@ -616,6 +616,7 @@
                         android:id="@+id/nav_rule"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dimen_size_45.5"
+                        android:visibility="gone"
                         app:sBottomLineMargin="@dimen/dimen_size_15"
                         app:sLeftIconRes="@mipmap/per_list_icon07"
                         app:sLeftIconSize="@dimen/dimen_size_20"

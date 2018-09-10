@@ -30,7 +30,6 @@ import com.ruanmeng.model.RefreshMessageEvent
 import com.ruanmeng.share.BaseHttp
 import com.ruanmeng.utils.DialogHelper
 import com.ruanmeng.utils.Tools
-import com.ruanmeng.utils.phoneReplaceWithStar
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_issue_detail.*
 import org.greenrobot.eventbus.EventBus
@@ -355,10 +354,10 @@ class IssueDetailActivity : BaseActivity() {
                         issue_time.text = data.createDate
                         issue_img1.setImageResource(if (mType == "1") R.mipmap.index_lab05 else R.mipmap.index_lab01)
                         issue_addr1.text = data.buyAddress + data.buyDetailAdress
-                        issue_name1.text = "${data.buyname}  ${data.buyMobile.phoneReplaceWithStar()}"
+                        issue_name1.text = "${data.buyname}  ${data.buyMobile}"
                         if (data.buyMobile.isEmpty()) issue_name1.gone()
                         issue_addr2.text = data.receiptAddress + data.receiptDetailAdress
-                        issue_name2.text = "${data.receiptName}  ${data.receiptMobile.phoneReplaceWithStar()}"
+                        issue_name2.text = "${data.receiptName}  ${data.receiptMobile}"
                         issue_check.text = when (data.inspection) {
                             "0" -> "否"
                             "1" -> "是"

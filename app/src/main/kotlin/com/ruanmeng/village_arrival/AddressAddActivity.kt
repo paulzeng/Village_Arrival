@@ -331,6 +331,8 @@ class AddressAddActivity : BaseActivity() {
                     ContactsContract.Contacts.CONTENT_URI),
                     10)
         }
+
+        address_title.setOnClickListener { /*防止点击隐藏*/ }
     }
 
     private fun initPoiSearch() {

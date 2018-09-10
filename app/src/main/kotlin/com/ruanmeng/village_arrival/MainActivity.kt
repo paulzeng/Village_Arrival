@@ -114,6 +114,7 @@ class MainActivity : BaseActivity() {
         EventBus.getDefault().register(this@MainActivity)
 
         getVersionData()
+        putBoolean("isInstall", true)
         if (!getBoolean("isInstall")) {
             putBoolean("isInstall", true)
 
@@ -213,8 +214,8 @@ class MainActivity : BaseActivity() {
 
                     val data = list[marker.snippet.toInt()]
                     img1.setImageResource(if (data.type == "1") R.mipmap.index_lab05 else R.mipmap.index_lab01)
-                    addr1.text = data.buyAddress + data.buyDetailAdress
-                    addr2.text = data.receiptAddress + data.receiptDetailAdress
+                    addr1.text = data.buyAddress
+                    addr2.text = data.receiptAddress
                     money.text = data.commission + "元"
                     grab.setBackgroundResource(if (data.type == "1") R.drawable.rec_bg_blue_shade else R.drawable.rec_bg_red_shade)
 

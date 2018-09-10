@@ -105,8 +105,8 @@ class GrabActivity : BaseActivity() {
                             .image(R.id.item_grab_img1, if (data.type == "1") R.mipmap.index_lab05 else R.mipmap.index_lab01)
                             .text(R.id.item_grab_addr1, data.buyAddress + data.buyDetailAdress)
                             .text(R.id.item_grab_addr2, data.receiptAddress + data.receiptDetailAdress)
-                            .text(R.id.item_grab_name1, "${data.buyname}  ${data.buyMobile.phoneReplaceWithStar()}")
-                            .text(R.id.item_grab_name2, "${data.receiptName}  ${data.receiptMobile.phoneReplaceWithStar()}")
+                            .text(R.id.item_grab_name1, "${data.buyname}  ${data.buyMobile}")
+                            .text(R.id.item_grab_name2, "${data.receiptName}  ${data.receiptMobile}")
                             .text(R.id.item_grab_yong, data.commission)
                             .text(R.id.item_grab_yu, "（商品预估：${data.goodsPrice}元）")
 
@@ -115,7 +115,7 @@ class GrabActivity : BaseActivity() {
                             .visibility(R.id.item_grab_yu, if (data.goodsPrice.isEmpty()) View.GONE else View.VISIBLE)
                             .visibility(R.id.item_grab_divider, if (list.indexOf(data) != 0) View.GONE else View.VISIBLE)
 
-                            .clicked(R.id.item_grab_call1) {
+                            .clicked(R.id.item_grab_call1) { _ ->
                                 if (data.buyMobile.isEmpty()) {
                                     showToast("电话号码为空")
                                     return@clicked
@@ -135,7 +135,7 @@ class GrabActivity : BaseActivity() {
                                 }
                             }
 
-                            .clicked(R.id.item_grab_call2) {
+                            .clicked(R.id.item_grab_call2) { _ ->
                                 if (data.receiptMobile.isEmpty()) {
                                     showToast("电话号码为空")
                                     return@clicked

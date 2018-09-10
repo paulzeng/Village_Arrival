@@ -48,6 +48,8 @@ data class CommonModel(
         var sliders: List<CommonData> ?= ArrayList(),
         var modules: List<CommonData> ?= ArrayList(),
         var nnews: List<CommonData> ?= ArrayList(),
+        var goodstype: List<CommonData> ?= ArrayList(),
+        var weightprice: List<CommonData> ?= ArrayList(),
         var details: CommonData = CommonData(),
         var cooperationList: List<CommonData> ?= ArrayList()
 ): Serializable
