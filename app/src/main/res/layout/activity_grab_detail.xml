@@ -52,6 +52,27 @@
                     android:layout_marginTop="@dimen/dimen_size_10">
 
                     <TextView
+                        style="@style/Font14_light"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="商品重量：" />
+
+                    <TextView
+                        android:id="@+id/grab_weight"
+                        style="@style/Font14_black"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_size_10">
+
+                    <TextView
                         android:id="@+id/grab_type2"
                         style="@style/Font14_light"
                         android:layout_width="wrap_content"
@@ -61,6 +82,27 @@
 
                     <TextView
                         android:id="@+id/grab_time"
+                        style="@style/Font14_black"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_size_10">
+
+                    <TextView
+                        style="@style/Font14_light"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="送货时间：" />
+
+                    <TextView
+                        android:id="@+id/grab_send"
                         style="@style/Font14_black"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

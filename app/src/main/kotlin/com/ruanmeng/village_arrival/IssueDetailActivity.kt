@@ -351,7 +351,9 @@ class IssueDetailActivity : BaseActivity() {
                         issue_type1.text = if (mType == "1") "顺风商品：" else "代买商品："
                         issue_type2.text = if (mType == "1") "取件时间：" else "购买时间："
                         issue_product.text = data.goods
+                        issue_weight.text = data.weightDescribe
                         issue_time.text = data.createDate
+                        issue_send.text = data.receiptTime
                         issue_img1.setImageResource(if (mType == "1") R.mipmap.index_lab05 else R.mipmap.index_lab01)
                         issue_addr1.text = data.buyAddress + data.buyDetailAdress
                         issue_name1.text = "${data.buyname}  ${data.buyMobile}"

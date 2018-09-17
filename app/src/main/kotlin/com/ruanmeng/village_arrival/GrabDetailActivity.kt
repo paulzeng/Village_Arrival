@@ -253,7 +253,9 @@ class GrabDetailActivity : BaseActivity() {
                         grab_type1.text = if (mType == "1") "顺风商品：" else "代买商品："
                         grab_type2.text = if (mType == "1") "取件时间：" else "购买时间："
                         grab_product.text = data.goods
+                        grab_weight.text = data.weightDescribe
                         grab_time.text = data.createDate
+                        grab_send.text = data.receiptTime
                         grab_img1.setImageResource(if (mType == "1") R.mipmap.index_lab05 else R.mipmap.index_lab01)
                         if (isAll) {
                             grab_memo_ll.gone()
