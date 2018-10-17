@@ -499,7 +499,7 @@ class MainActivity : BaseActivity() {
                 .params("nowlng", lng)
                 .params("city", nowCity)
                 .params("district", nowDistrict)
-                .execute(object : JacksonDialogCallback<BaseResponse<CommonModel>>(baseContext, true) {
+                .execute(object : JacksonDialogCallback<BaseResponse<CommonModel>>(baseContext) {
 
                     @SuppressLint("SetTextI18n")
                     override fun onSuccess(response: Response<BaseResponse<CommonModel>>) {
