@@ -1,5 +1,6 @@
 package com.ruanmeng.village_arrival
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Html
 import android.view.View
@@ -85,6 +86,7 @@ class IssuePayActivity : BaseActivity() {
                                 .params("payType", "AliPay")
                                 .execute(object : StringDialogCallback(baseContext) {
 
+                                    @SuppressLint("CheckResult")
                                     override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
 
                                         val obj = JSONObject(response.body()).optString("object")
@@ -118,9 +120,10 @@ class IssuePayActivity : BaseActivity() {
                                 .params("payType", "WxPay")
                                 .execute(object : StringDialogCallback(baseContext) {
 
+                                    @SuppressLint("CheckResult")
                                     override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
 
-                                        val data = JSONObject(response.body()).optJSONObject("object") ?: JSONObject()
+                                        val data = JSONObject(response.body()).optString("object")
 
                                         RxPay(baseContext).requestWXpay(data)
                                                 .observeOn(AndroidSchedulers.mainThread())

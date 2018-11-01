@@ -149,7 +149,7 @@ class MarginActivity : BaseActivity() {
                     override fun onSuccessResponse(response: Response<String>, msg: String, msgCode: String) {
 
                         val obj = JSONObject(response.body()).optString("object")
-                        val data = JSONObject(response.body()).optJSONObject("object") ?: JSONObject()
+                        val data = JSONObject(response.body()).optString("object")
                         when (type) {
                             "AliPay" -> RxPay(baseContext).requestAlipay(obj)
                                     .observeOn(AndroidSchedulers.mainThread())

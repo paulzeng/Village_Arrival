@@ -140,7 +140,7 @@ dependencies {
     implementation 'cn.jiguang.sdk:jcore:' + versions.jpushCoreVersion
 
     //在线支付
-    implementation 'com.cuieney:rxpay-api:2.1.7'
+    implementation 'com.cuieney:rxpay-api:2.2.3'
     kapt 'com.cuieney:rxpay-compiler:2.1.1'
 
     //二维码扫描和生成
